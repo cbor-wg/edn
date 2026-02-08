@@ -79,6 +79,7 @@ escapable1      = %s"b" ; BS backspace U+0008
                 / %s"r" ; CR carriage return U+000D
                 / %s"t" ; HT horizontal tab U+0009
                 / "\"   ; \ backslash (reverse solidus) U+005C
+                / newline  ; swallow escaped newline
 
 escapable-d     = escapable1
                 / DQUOTE
@@ -128,6 +129,7 @@ unescaped       = %x0A ; new line
                 / %x5D-7F
                 / NONASCII
 
+newline         = [%x0D] %x0A
 DQUOTE          = %x22    ; " double quote
 SQUOTE          = "'"     ; ' single quote
 DIGIT           = %x30-39 ; 0-9
