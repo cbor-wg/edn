@@ -133,8 +133,12 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    The present `-20` includes the definition of raw strings.
-    `-20` is intended for use at IETF 125.
+    The present `-21` includes extending inline comments to C-style
+    comments, inspired by raw strings.
+    `-21` is intended for use at IETF 125.
+    Related updates for the integrated extension parsers will be
+    provided in the next revision.
+
 
 --- middle
 
@@ -520,6 +524,47 @@ the use of inline and end-of-line comments:
 ~~~
 
 This reduces to `{1: 4, 3: 5, -1: h'6684523AB17337F173500E5728C628547CB37DFE68449C65F885D1B73B49EAE1'}`.
+
+As a not quite backwards compatible change, this specification enables
+the use of extended delimiters in inline comments:
+
+When the opening slash is followed by one or more asterisks, this
+gives rise to an extended delimiter.
+The closing slash then needs to be immediately preceded by at least
+the same number of asterisks; slash characters that are not are not
+considered to be ending delimiters.
+
+This enables a comment explaining a COSE algorithm identifier, as in
+
+~~~ cbor-diag
+4 /* HMAC 256/64 */
+~~~
+
+instead of the conventional, but slightly confusing
+
+~~~ cbor-diag
+4 / HMAC 256//64 /
+~~~
+
+Similarly, it enables
+
+~~~ cbor-diag
+9216 /** 9*1024 **/
+~~~
+
+The backwards compatibility impact in practice should be limited, as
+the use of asterisks in inline-comments is quite conventional among
+users of the C language; the main problem will be with stylized
+comments such as
+
+~~~ cbor-diag
+/**
+ *
+ */
+~~~
+
+which now have an extended delimiter with two asterisks in the first
+line that is not matched by the closing delimiter in the third line.
 
 ## Encoding Indicators {#encoding-indicators}
 
@@ -1637,7 +1682,7 @@ The following additional items should help in the interpretation:
 
 7. {: #rawstring-grammar}
   The ABNF grammar for rawstrings is lenient; a parser needs to
-  implement the comments on `matchrawdelim` and `shortrawdelim` as
+  implement the ABNF comments on `matchrawdelim` and `shortrawdelim` as
   well.
   `shortrawdelim` only matches sequences of backquotes that are
   shorter than `startrawdelim`.
@@ -1653,6 +1698,13 @@ The following additional items should help in the interpretation:
   >      startrawdelim = rawdelim&{|(rd)|@rdlen = rd.text_value.length}
   >      shortrawdelim = rawdelim&{|(rd)|rd.text_value.length < @rdlen}
   >      matchrawdelim = rawdelim&{|(rd)|rd.text_value.length >= @rdlen}
+  >
+  >   Similarly, the lenient ABNF grammar for inline comments can be
+  >   implemented as follows:
+  >
+  >     c-comment-start = stars&{|(st)|@stars = st.text_value.length}
+  >     c-comment-short = stars&{|(st)|st.text_value.length < @stars}
+  >     c-comment-end   = stars&{|(st)|st.text_value.length >= @stars}
 
 8. {: #concat}
   Extended diagnostic notation allows a (text or byte) string to be
