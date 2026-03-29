@@ -2056,6 +2056,26 @@ TWOHEX1  = ("8"/"9" / HEXDIGA) HEXDIG / "7F"
 {: #abnf-grammar-sq sourcecode-name="cbor-edn-bricklets.abnf"
 title="ABNF Definitions Useful for Integrated Extension Parsers"}
 
+Similarly, for integrated parsers for raw strings, the ABNF
+definitions in {{abnf-grammar-rs}} can be useful.
+`fitrawdelim` only matches sequences of backquotes that are exactly as
+long as a previous `startrawdelim`.
+
+~~~ abnf
+fitrawdelim  = rawdelim
+r-non-lf = %x09 / %x0D / %x20-5f / %x61-7f / NONASCII / shortrawdelim
+~~~
+{: #abnf-grammar-rs sourcecode-name="cbor-edn-raw-bricklets.abnf"
+title="ABNF Definitions Useful for Raw String Integrated Extension Parsers"}
+
+
+  {:aside}
+  > In a PEG parser that implements predicates, the matching rules for fitrawdelim
+  > can for instance be implemented as follows:
+  >
+  >      fitrawdelim = rawdelim&{|(rd)|rd.text_value.length == @rdlen}
+
+
 Two subsections with ABNF for integrated parsers follow, one for `h''`,
 and one for `b64''`.
 There is no requirement for a new application-extension to supply ABNF
@@ -2067,7 +2087,7 @@ be written as a separate activity or also automatically derived.
 At the time of writing, one example for a tool performing such a
 derivation is available as open-source software {{ABNFROB}}.
 
-### h: ABNF Definition of Integrated Parser {#sq-h-grammar}
+### h'': ABNF Definition of Integrated Parser {#sq-h-grammar}
 
 With glue code similar to that in {{abnf-grammar-sq-glue}}, ABNF such as
 that shown in {{abnf-grammar-sq-h}} can be used as an integrated parser
@@ -2089,7 +2109,7 @@ title="ABNF Definition for Integrated Hex Parser"
 }
 
 
-### b64: ABNF Definition of Integrated Parser {#sq-b64-grammar}
+### b64'': ABNF Definition of Integrated Parser {#sq-b64-grammar}
 
 With glue code similar to that in {{abnf-grammar-sq-glue}}, ABNF such as
 that shown in {{abnf-grammar-sq-b64}} can be used as an integrated parser
@@ -2108,6 +2128,44 @@ b64-comment     = "#" *i-non-lf %x0A
 {: #abnf-grammar-sq-b64 sourcecode-name="cbor-edn-b64.abnf"
 title="ABNF Definition for Integrated Base64 Parser"
 }
+
+
+### h``: ABNF Definition of Integrated Parser {#sq-h-raw-grammar}
+
+With glue code similar to that in {{abnf-grammar-sq-glue}}, ABNF such as
+that shown in {{abnf-grammar-sq-h}} can be used as an integrated parser
+for `h''` prefixed single-quote strings.
+
+~~~ abnf
+raw-app-string-h = %s"h" startrawdelim r-app-string-h
+r-app-string-h = rh-S *(HEXDIG rh-S HEXDIG rh-S / ellipsis h-S)
+    ("#" *(r-non-lf) matchrawdelim / fitrawdelim)
+rh-S = *(blank) *(rh-comment *(blank))
+rh-non-slash = blank / %x21-2e / %x30-5f / %x61-7f / NONASCII / shortrawdelim
+rh-comment = "/" *(rh-non-slash) "/"
+          / "#" *(r-non-lf) %x0A
+~~~
+{: #abnf-grammar-rs-h sourcecode-name="cbor-edn-hraw.abnf"
+title="ABNF Definition for Integrated Raw String Hex Parser"
+}
+
+
+### b64``: ABNF Definition of Integrated Parser {#sq-b64-raw-grammar}
+
+
+~~~ abnf
+raw-app-string-b64 = %s"b64" startrawdelim r-app-string-b64
+r-app-string-b64  = b64-S *(4(b64dig b64-S))
+                  [b64dig rb64-S b64dig rb64-S
+                   ["=" rb64-S "=" / b64dig rb64-S ["="]] rb64-S]
+                  ("#" *r-non-lf matchrawdelim / fitrawdelim)
+rb64-S           = *blank *(rb64-comment *blank)
+rb64-comment     = "#" *r-non-lf %x0A
+~~~
+{: #abnf-grammar-rs-b64 sourcecode-name="cbor-edn-b64raw.abnf"
+title="ABNF Definition for Integrated Raw String Base64 Parser"
+}
+
 
 
 IANA Considerations {#sec-iana}
