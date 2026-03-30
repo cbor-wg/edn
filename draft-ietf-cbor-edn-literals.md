@@ -279,11 +279,11 @@ least some elements of the extended form are now near-universally
 used, the terms "diagnostic notation" and "EDN" have become
 synonyms in the context of CBOR.
 
-Therefore, when we refer to "_diagnostic notation_", we mean to
+Therefore, references to "_diagnostic notation_" generally mean to
 include the original notation from {{Section 8 of RFC8949@-cbor}} as well as the
 extensions from {{Appendix G of -cddl}}, {{Section 4.2 of -seq}}, and the
 present document.
-However, we stick to the abbreviation "_EDN_" as it has become quite
+However, this document sticks to the abbreviation "_EDN_" as it has become quite
 popular and is more sharply distinguishable from other meanings than
 "DN" would be.
 
@@ -454,7 +454,7 @@ base64url).
 > This syntax can be thought to establish a name space, with the names
 "h", "b32", "h32", and "b64" taken, but other names being unallocated.
 The present specification allows registering additional names for this namespace,
-which we call *application-extension identifiers*.
+which it calls *application-extension identifiers*.
 
 More precisely, an *application-extension identifier* is a name consisting of a
 lower-case ASCII letter (`[a-z]`) and zero or more additional ASCII
@@ -947,7 +947,7 @@ which is the same as `h'968C2C'`.
 
 In diagnostic notation, a sequence of zero or more CBOR data item literals can
 be enclosed in `<<` and `>>`, optionally prefixed by an
-application-extension prefix; we speak of *sequence literals*.
+application-extension prefix; this specification speaks of *sequence literals*.
 EDN mainly deals with individual data items, not with CBOR sequences
 {{-seq}}, so the CBOR sequence represented by the sequence literal needs
 to be further processed to obtain the value of the literal.
@@ -961,7 +961,8 @@ the definition of the application extension.
 An unprefixed sequence literal applies CBOR encoding to the
 data items in its content, taken as a CBOR sequence.
 The value of the
-literal thus is a byte string with the encoded content; we also speak of
+literal thus is a byte string with the encoded content; this is
+commonly referred to as
 *embedded CBOR*.
 For instance, each pair of columns in the following are equivalent:
 
@@ -1007,49 +1008,6 @@ Such processing, if offered, MUST NOT get in the way of processing the
 data item represented in EDN (i.e., it may be appropriate to issue
 warnings but not to error out or to generate output that does not match
 the input at the UTF-8 level).
-
-<!--
-## Concatenated Strings {#concatenated-strings}
-
-While the ability to include whitespace enables line-breaking of
-encoded byte strings, a mechanism is needed to be able to include
-text strings as well as byte strings in direct UTF-8 representation
-into line-based documents (such as RFCs and source code).
-
-We extend the diagnostic notation by allowing multiple text strings or
-multiple byte strings to be notated separated by whitespace; these
-are then concatenated into a single text or byte string, respectively.
-Text strings and byte strings do not mix within such a
-concatenation, except that byte string notation can be used inside a
-sequence of concatenated text string notation to encode characters
-that may be better represented in an encoded way.  The following four
-values are equivalent:
-
-
-~~~~
-   "Hello world"
-   "Hello " "world"
-   "Hello" h'20' "world"
-   "" h'48656c6c6f20776f726c64' ""
-~~~~
-
-Similarly, the following byte string values are equivalent:
-
-
-~~~~
-   'Hello world'
-   'Hello ' 'world'
-   'Hello ' h'776f726c64'
-   'Hello' h'20' 'world'
-   '' h'48656c6c6f20776f726c64' '' b64''
-   h'4 86 56c 6c6f' h' 20776 f726c64'
-~~~~
-
-(Note that the approach of separating by whitespace, while familiar
-from the C language, requires some attention — a single comma makes a
-big difference here.)
-
--->
 
 ## Arrays and Maps
 
