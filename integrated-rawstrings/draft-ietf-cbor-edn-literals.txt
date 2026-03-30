@@ -118,7 +118,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
        2.5.4.  Encoding Indicators of Strings  . . . . . . . . . . .  19
        2.5.5.  Base-Encoded Byte String Literals . . . . . . . . . .  20
        2.5.6.  CBOR Sequence Literals  . . . . . . . . . . . . . . .  21
-       2.5.7.  Validity of Text Strings  . . . . . . . . . . . . . .  21
+       2.5.7.  Validity of Text Strings  . . . . . . . . . . . . . .  22
      2.6.  Arrays and Maps . . . . . . . . . . . . . . . . . . . . .  22
        2.6.1.  Mandatory Separators, Optional Terminators  . . . . .  22
        2.6.2.  Encoding Indicators of Arrays and Maps  . . . . . . .  23
@@ -320,12 +320,12 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
    near-universally used, the terms "diagnostic notation" and "EDN" have
    become synonyms in the context of CBOR.
 
-   Therefore, when we refer to "_diagnostic notation_", we mean to
+   Therefore, references to "_diagnostic notation_" generally mean to
    include the original notation from Section 8 of RFC 8949 [STD94] as
    well as the extensions from Appendix G of [RFC8610], Section 4.2 of
-   [RFC8742], and the present document.  However, we stick to the
-   abbreviation "_EDN_" as it has become quite popular and is more
-   sharply distinguishable from other meanings than "DN" would be.
+   [RFC8742], and the present document.  However, this document sticks
+   to the abbreviation "_EDN_" as it has become quite popular and is
+   more sharply distinguishable from other meanings than "DN" would be.
 
 
 
@@ -531,7 +531,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
       |  This syntax can be thought to establish a name space, with the
       |  names "h", "b32", "h32", and "b64" taken, but other names being
       |  unallocated.  The present specification allows registering
-      |  additional names for this namespace, which we call
+      |  additional names for this namespace, which it calls
       |  _application-extension identifiers_.
 
    More precisely, an _application-extension identifier_ is a name
@@ -1140,10 +1140,11 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
 
    In diagnostic notation, a sequence of zero or more CBOR data item
    literals can be enclosed in << and >>, optionally prefixed by an
-   application-extension prefix; we speak of _sequence literals_. EDN
-   mainly deals with individual data items, not with CBOR sequences
-   [RFC8742], so the CBOR sequence represented by the sequence literal
-   needs to be further processed to obtain the value of the literal.
+   application-extension prefix; this specification speaks of _sequence
+   literals_. EDN mainly deals with individual data items, not with CBOR
+   sequences [RFC8742], so the CBOR sequence represented by the sequence
+   literal needs to be further processed to obtain the value of the
+   literal.
 
    Prefixed sequence literals refer to the application extension (see
    Section 2.1) identified by the prefix and apply the extension to its
@@ -1153,14 +1154,29 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
 
    An unprefixed sequence literal applies CBOR encoding to the data
    items in its content, taken as a CBOR sequence.  The value of the
-   literal thus is a byte string with the encoded content; we also speak
-   of _embedded CBOR_. For instance, each pair of columns in the
-   following are equivalent:
+   literal thus is a byte string with the encoded content; this is
+   commonly referred to as _embedded CBOR_. For instance, each pair of
+   columns in the following are equivalent:
 
       <<1>>              h'01'
       <<1, 2>>           h'0102'
       <<"hello", null>>  h'65 68656c6c6f f6'
       <<>>               h''
+
+
+
+
+
+
+
+
+
+
+
+Bormann                  Expires 1 October 2026                [Page 21]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
+
 
 2.5.7.  Validity of Text Strings
 
@@ -1170,14 +1186,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
    Paragraph 9, Item 1 for details).  These mechanisms might operate on
    subsequences that do not themselves constitute UTF-8, e.g., by
    building larger sequences out of concatenating the subsequences; for
-
-
-
-Bormann                  Expires 1 October 2026                [Page 21]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
-
-
    validity of a text string resulting from these mechanisms it is only
    of importance that the result is UTF-8.  Double-quoted, single-
    quoted, and raw string literals have been defined such that they lead
@@ -1218,14 +1226,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
    of a map.  (These commas also were required in the original
    diagnostic notation defined in [STD94] and [RFC8610].)  The separator
    commas are now optional in the places where EDN syntax allows commas;
-   however, where no comma is used in a separator position, there must
-   be blank space (composed of at least one space, newline, and/or
-   comment) instead.  (Stylistically, leaving out the commas is more
-   idiomatic when they occur at line breaks, which provide the blank
-   space.)
-
-
-
 
 
 
@@ -1233,6 +1233,12 @@ Bormann                  Expires 1 October 2026                [Page 22]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
 
+
+   however, where no comma is used in a separator position, there must
+   be blank space (composed of at least one space, newline, and/or
+   comment) instead.  (Stylistically, leaving out the commas is more
+   idiomatic when they occur at line breaks, which provide the blank
+   space.)
 
    In addition, EDN also allows, but does not require, a trailing comma
    before the closing bracket/brace, enabling an easier to maintain
@@ -1277,18 +1283,18 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
    contains an indicator that an indefinite-length representation was
    used to represent the data item [1, 2].
 
-   At the same position, encoding indicators for specifying the size of
-   the array or map head for definite-length format can be used instead,
-   specifically _i or _0 to _3.  For example [_0 false, true] can be
-   used to specify the encoding of the array [false, true] as 98 02 f4
-   f5.
-
 
 
 Bormann                  Expires 1 October 2026                [Page 23]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
 
+
+   At the same position, encoding indicators for specifying the size of
+   the array or map head for definite-length format can be used instead,
+   specifically _i or _0 to _3.  For example [_0 false, true] can be
+   used to specify the encoding of the array [false, true] as 98 02 f4
+   f5.
 
 2.6.3.  Validity of Maps
 
@@ -1329,12 +1335,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
    (»false«), and Null (»null«).  Undefined is written »undefined« as in
    JavaScript.
 
-   These and all other simple values can be given as "simple()" with the
-   appropriate integer in the parentheses.  For example, »simple(42)«
-   indicates major type 7, value 42, and »simple(0x14)« indicates
-   »false«, as does »simple(20)« or »simple(0b10100)«.
-
-
 
 
 
@@ -1345,6 +1345,11 @@ Bormann                  Expires 1 October 2026                [Page 24]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
 
+
+   These and all other simple values can be given as "simple()" with the
+   appropriate integer in the parentheses.  For example, »simple(42)«
+   indicates major type 7, value 42, and »simple(0x14)« indicates
+   »false«, as does »simple(20)« or »simple(0b10100)«.
 
 3.  Application-Oriented Extension Literals
 
@@ -1389,11 +1394,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
 
                  Table 3: dt and DT literals vs. plain EDN
 
-   See Section 5.2.3 for an ABNF definition for the content of dt
-   literals.
-
-
-
 
 
 
@@ -1401,6 +1401,9 @@ Bormann                  Expires 1 October 2026                [Page 25]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
 
+
+   See Section 5.2.3 for an ABNF definition for the content of dt
+   literals.
 
 3.2.  The "ip" Extension
 
@@ -1440,9 +1443,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      March 2026
 
    Each row of Table 4 shows an example of "ip" notation and equivalent
    notation not using an application-extension identifier.
-
-
-
 
 
 

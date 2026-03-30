@@ -1529,11 +1529,11 @@ obstacle, there is little point in not using these extensions; as at
 least some elements of the extended form are now near-universally
 used, the terms "diagnostic notation" and "EDN" have become
 synonyms in the context of CBOR.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
-<p id="section-1.2-2">Therefore, when we refer to "<em>diagnostic notation</em>", we mean to
+<p id="section-1.2-2">Therefore, references to "<em>diagnostic notation</em>" generally mean to
 include the original notation from Section <a href="https://rfc-editor.org/rfc/rfc8949#section-8" class="relref">8</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> as well as the
 extensions from <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G" class="relref">Appendix G</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>, <span><a href="https://rfc-editor.org/rfc/rfc8742#section-4.2" class="relref">Section 4.2</a> of [<a href="#RFC8742" class="cite xref">RFC8742</a>]</span>, and the
 present document.
-However, we stick to the abbreviation "<em>EDN</em>" as it has become quite
+However, this document sticks to the abbreviation "<em>EDN</em>" as it has become quite
 popular and is more sharply distinguishable from other meanings than
 "DN" would be.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
 <p id="section-1.2-3">In a similar vein, the term "ABNF" in this document refers to the
@@ -1725,7 +1725,7 @@ base64url).<a href="#section-2.1-3.1" class="pilcrow">¶</a></p>
 <p id="section-2.1-3.2">This syntax can be thought to establish a name space, with the names
 "h", "b32", "h32", and "b64" taken, but other names being unallocated.
 The present specification allows registering additional names for this namespace,
-which we call <em>application-extension identifiers</em>.<a href="#section-2.1-3.2" class="pilcrow">¶</a></p>
+which it calls <em>application-extension identifiers</em>.<a href="#section-2.1-3.2" class="pilcrow">¶</a></p>
 </aside>
 <p id="section-2.1-4">More precisely, an <em>application-extension identifier</em> is a name consisting of a
 lower-case ASCII letter (<code>[a-z]</code>) and zero or more additional ASCII
@@ -2334,7 +2334,7 @@ which is the same as <code>h'968C2C'</code>.<a href="#section-2.5.5-9" class="pi
           </h4>
 <p id="section-2.5.6-1">In diagnostic notation, a sequence of zero or more CBOR data item literals can
 be enclosed in <code>&lt;&lt;</code> and <code>&gt;&gt;</code>, optionally prefixed by an
-application-extension prefix; we speak of <em>sequence literals</em>.
+application-extension prefix; this specification speaks of <em>sequence literals</em>.
 EDN mainly deals with individual data items, not with CBOR sequences
 <span>[<a href="#RFC8742" class="cite xref">RFC8742</a>]</span>, so the CBOR sequence represented by the sequence literal needs
 to be further processed to obtain the value of the literal.<a href="#section-2.5.6-1" class="pilcrow">¶</a></p>
@@ -2346,7 +2346,8 @@ the definition of the application extension.<a href="#section-2.5.6-2" class="pi
 <p id="section-2.5.6-3">An unprefixed sequence literal applies CBOR encoding to the
 data items in its content, taken as a CBOR sequence.
 The value of the
-literal thus is a byte string with the encoded content; we also speak of
+literal thus is a byte string with the encoded content; this is
+commonly referred to as
 <em>embedded CBOR</em>.
 For instance, each pair of columns in the following are equivalent:<a href="#section-2.5.6-3" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-2.5.6-4">
