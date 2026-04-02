@@ -13,12 +13,15 @@ Diagnostic Notation (EDN) of the Concise Binary Object Representation
        Replacing EDN's previous informal descriptions, it updates
 RFC 8949, obsoleting its Section 8, and RFC 8610, obsoleting its
 Appendix G. 
-       It also specifies and uses registry-based extension points, using one
-to support text representations of epoch-based dates/times and of IP
+       It also specifies registry-based extension points and uses them
+to support text representations such as of epoch-based dates/times and of IP
 addresses and prefixes. 
        (This cref will be removed by the RFC editor:) 
-The present  -20  includes the definition of raw strings.
- -20  is intended for use at IETF 125. 
+The present  -21  incorporates pull request #84, including
+more integrated parsers for using application
+extensions with raw strings, as well as various cleanup.
+ -21  is intended for use at the 2026-04-01 CBOR interim, but
+contains no known April fools pranks. 
     " name="description">
 <meta content="xml2rfc 3.32.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -1056,11 +1059,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR Extended Diagnostic Notation (EDN)</td>
-<td class="right">March 2026</td>
+<td class="right">April 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Bormann</td>
-<td class="center">Expires 29 September 2026</td>
+<td class="center">Expires 4 October 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1076,12 +1079,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc8610" class="eref">8610</a>, <a href="https://www.rfc-editor.org/rfc/rfc8949" class="eref">8949</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-28" class="published">28 March 2026</time>
+<time datetime="2026-04-02" class="published">2 April 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-09-29">29 September 2026</time></dd>
+<dd class="expires"><time datetime="2026-10-04">4 October 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1100,12 +1103,15 @@ Diagnostic Notation (EDN) of the Concise Binary Object Representation
 <p id="section-abstract-2">Replacing EDN's previous informal descriptions, it updates
 RFC 8949, obsoleting its Section 8, and RFC 8610, obsoleting its
 Appendix G.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
-<p id="section-abstract-3">It also specifies and uses registry-based extension points, using one
-to support text representations of epoch-based dates/times and of IP
+<p id="section-abstract-3">It also specifies registry-based extension points and uses them
+to support text representations such as of epoch-based dates/times and of IP
 addresses and prefixes.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 <p id="section-abstract-4"><span class="cref" id="status">(This cref will be removed by the RFC editor:)<br>
-The present <code>-20</code> includes the definition of raw strings.
-<code>-20</code> is intended for use at IETF 125.</span><a href="#section-abstract-4" class="pilcrow">¶</a></p>
+The present <code>-21</code> incorporates pull request #84, including
+more integrated parsers for using application
+extensions with raw strings, as well as various cleanup.
+<code>-21</code> is intended for use at the 2026-04-01 CBOR interim, but
+contains no known April fools pranks.</span><a href="#section-abstract-4" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1142,7 +1148,7 @@ The present <code>-20</code> includes the definition of raw strings.
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 29 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 4 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1241,10 +1247,13 @@ The present <code>-20</code> includes the definition of raw strings.
                 <p id="section-toc.1-1.2.2.6.1"><a href="#section-2.6" class="auto internal xref">2.6</a>.  <a href="#name-arrays-and-maps" class="internal xref">Arrays and Maps</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.6.2.1">
-                    <p id="section-toc.1-1.2.2.6.2.1.1"><a href="#section-2.6.1" class="auto internal xref">2.6.1</a>.  <a href="#name-encoding-indicators-of-arra" class="internal xref">Encoding Indicators of Arrays and Maps</a></p>
+                    <p id="section-toc.1-1.2.2.6.2.1.1"><a href="#section-2.6.1" class="auto internal xref">2.6.1</a>.  <a href="#name-mandatory-separators-option" class="internal xref">Mandatory Separators, Optional Terminators</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.6.2.2">
-                    <p id="section-toc.1-1.2.2.6.2.2.1"><a href="#section-2.6.2" class="auto internal xref">2.6.2</a>.  <a href="#name-validity-of-maps" class="internal xref">Validity of Maps</a></p>
+                    <p id="section-toc.1-1.2.2.6.2.2.1"><a href="#section-2.6.2" class="auto internal xref">2.6.2</a>.  <a href="#name-encoding-indicators-of-arra" class="internal xref">Encoding Indicators of Arrays and Maps</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.6.2.3">
+                    <p id="section-toc.1-1.2.2.6.2.3.1"><a href="#section-2.6.3" class="auto internal xref">2.6.3</a>.  <a href="#name-validity-of-maps" class="internal xref">Validity of Maps</a></p>
 </li>
                 </ul>
 </li>
@@ -1314,10 +1323,16 @@ The present <code>-20</code> includes the definition of raw strings.
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-abnf-definitions-for-integr" class="internal xref">ABNF Definitions for Integrated Extension Parsers</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.1">
-                    <p id="section-toc.1-1.5.2.3.2.1.1"><a href="#section-5.3.1" class="auto internal xref">5.3.1</a>.  <a href="#name-h-abnf-definition-of-integr" class="internal xref">h: ABNF Definition of Integrated Parser</a></p>
+                    <p id="section-toc.1-1.5.2.3.2.1.1"><a href="#section-5.3.1" class="auto internal xref">5.3.1</a>.  <a href="#name-h-abnf-definition-of-integr" class="internal xref">h'': ABNF Definition of Integrated Parser</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.2">
-                    <p id="section-toc.1-1.5.2.3.2.2.1"><a href="#section-5.3.2" class="auto internal xref">5.3.2</a>.  <a href="#name-b64-abnf-definition-of-inte" class="internal xref">b64: ABNF Definition of Integrated Parser</a></p>
+                    <p id="section-toc.1-1.5.2.3.2.2.1"><a href="#section-5.3.2" class="auto internal xref">5.3.2</a>.  <a href="#name-b64-abnf-definition-of-inte" class="internal xref">b64'': ABNF Definition of Integrated Parser</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.3">
+                    <p id="section-toc.1-1.5.2.3.2.3.1"><a href="#section-5.3.3" class="auto internal xref">5.3.3</a>.  <a href="#name-h-abnf-definition-of-integra" class="internal xref">h``: ABNF Definition of Integrated Parser</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.4">
+                    <p id="section-toc.1-1.5.2.3.2.4.1"><a href="#section-5.3.4" class="auto internal xref">5.3.4</a>.  <a href="#name-b64-abnf-definition-of-integ" class="internal xref">b64``: ABNF Definition of Integrated Parser</a></p>
 </li>
                 </ul>
 </li>
@@ -1419,8 +1434,9 @@ one for adding application-oriented literal forms.
 It uses these registries to add encoding indicators for a more
 complete coverage of encoding variation,
 and to add application-oriented literal forms that enhance EDN with text
-representations of epoch-based date/times and of IP addresses
-and prefixes <span>[<a href="#RFC9164" class="cite xref">RFC9164</a>]</span> as well as an application-oriented literal that
+representations of epoch-based date/times, of IP addresses
+and prefixes <span>[<a href="#RFC9164" class="cite xref">RFC9164</a>]</span>, and of Concise Resource Identifiers (CRI
+<span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>), as well as an application-oriented literal that
 represents cryptographic hash values computed from byte strings.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">In addition, this document registers a media type identifier
 and a content-format for CBOR diagnostic notation.  This does not
@@ -1470,8 +1486,8 @@ and learning complexity.<a href="#section-1-8" class="pilcrow">¶</a></p>
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-structure-of-this-document" class="section-name selfRef">Structure of This Document</a>
         </h3>
 <p id="section-1.1-1"><a href="#diagnostic-notation" class="auto internal xref">Section 2</a> of this document has been built from Section <a href="https://rfc-editor.org/rfc/rfc8949#section-8" class="relref">8</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G" class="relref">Appendix G</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>.
-The latter provided a number of useful extensions to the
-diagnostic notation originally defined in <span><a href="https://rfc-editor.org/rfc/rfc7049#section-6" class="relref">Section 6</a> of [<a href="#RFC7049" class="cite xref">RFC7049</a>]</span>.
+The latter provided a number of useful extensions to the initial
+diagnostic notation that was originally defined in <span><a href="https://rfc-editor.org/rfc/rfc7049#section-6" class="relref">Section 6</a> of [<a href="#RFC7049" class="cite xref">RFC7049</a>]</span>.
 Section <a href="https://rfc-editor.org/rfc/rfc8949#section-8" class="relref">8</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G" class="relref">Appendix G</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> have
 collectively been called "Extended Diagnostic Notation" (EDN), giving
 the present document its name.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
@@ -1513,11 +1529,11 @@ obstacle, there is little point in not using these extensions; as at
 least some elements of the extended form are now near-universally
 used, the terms "diagnostic notation" and "EDN" have become
 synonyms in the context of CBOR.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
-<p id="section-1.2-2">Therefore, when we refer to "<em>diagnostic notation</em>", we mean to
+<p id="section-1.2-2">Therefore, references to "<em>diagnostic notation</em>" generally mean to
 include the original notation from Section <a href="https://rfc-editor.org/rfc/rfc8949#section-8" class="relref">8</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> as well as the
 extensions from <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G" class="relref">Appendix G</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>, <span><a href="https://rfc-editor.org/rfc/rfc8742#section-4.2" class="relref">Section 4.2</a> of [<a href="#RFC8742" class="cite xref">RFC8742</a>]</span>, and the
 present document.
-However, we stick to the abbreviation "<em>EDN</em>" as it has become quite
+However, this document sticks to the abbreviation "<em>EDN</em>" as it has become quite
 popular and is more sharply distinguishable from other meanings than
 "DN" would be.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
 <p id="section-1.2-3">In a similar vein, the term "ABNF" in this document refers to the
@@ -1527,8 +1543,8 @@ Brief snippets of grammar may be given in the text as I-Regexp regular
 expressions <span>[<a href="#RFC9485" class="cite xref">RFC9485</a>]</span>.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
 <p id="section-1.2-4">The term "CDDL" (Concise Data Definition Language) refers to the data
 definition language defined in
-<span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> and its registered extensions (such as those in <span>[<a href="#RFC9165" class="cite xref">RFC9165</a>]</span>), as
-well as <span>[<a href="#I-D.ietf-cbor-update-8610-grammar" class="cite xref">I-D.ietf-cbor-update-8610-grammar</a>]</span>.
+<span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> and its registered extensions (such as those documented in
+<span>[<a href="#RFC9165" class="cite xref">RFC9165</a>]</span> and <span>[<a href="#RFC9682" class="cite xref">RFC9682</a>]</span>).
 Additional information about the relationship between the two
 languages EDN and CDDL is captured in <a href="#edn-and-cddl" class="auto internal xref">Appendix A</a>.<a href="#section-1.2-4" class="pilcrow">¶</a></p>
 <p id="section-1.2-5">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
@@ -1676,7 +1692,7 @@ tag validity discussed in Section <a href="https://rfc-editor.org/rfc/rfc8949#se
 Tag validity is more likely a subject for individual
 application-oriented extensions, while the two cases of basic validity
 (for text strings and for maps) are addressed in Sections
-<a href="#text-validity" class="auto internal xref">2.5.7</a> and <a href="#map-validity" class="auto internal xref">2.6.2</a> under the heading
+<a href="#text-validity" class="auto internal xref">2.5.7</a> and <a href="#map-validity" class="auto internal xref">2.6.3</a> under the heading
 of <em>validity</em>.<a href="#section-2-5" class="pilcrow">¶</a></p>
 <p id="section-2-6">The rest of this section provides an overview over specific features
 of EDN, starting with certain common syntactical features and then
@@ -1696,7 +1712,7 @@ document, but it also defines an extension point that enables defining additiona
 <p id="section-2.1-2">Extension literals start with a <em>prefix</em> that identifies the
 application-oriented extension, immediately followed by a sequence
 literal (<a href="#embedded" class="auto internal xref">Section 2.5.6</a>) or a single-quoted or raw string literal (<a href="#strings" class="auto internal xref">Section 2.5</a>).
-The latter form uses its single-quoted string literal as a shorthand
+The latter form uses its string literal as a shorthand
 form for a sequence literal representing a sequence with exactly that
 one string data item.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <aside id="section-2.1-3">
@@ -1709,7 +1725,7 @@ base64url).<a href="#section-2.1-3.1" class="pilcrow">¶</a></p>
 <p id="section-2.1-3.2">This syntax can be thought to establish a name space, with the names
 "h", "b32", "h32", and "b64" taken, but other names being unallocated.
 The present specification allows registering additional names for this namespace,
-which we call <em>application-extension identifiers</em>.<a href="#section-2.1-3.2" class="pilcrow">¶</a></p>
+which it calls <em>application-extension identifiers</em>.<a href="#section-2.1-3.2" class="pilcrow">¶</a></p>
 </aside>
 <p id="section-2.1-4">More precisely, an <em>application-extension identifier</em> is a name consisting of a
 lower-case ASCII letter (<code>[a-z]</code>) and zero or more additional ASCII
@@ -1805,7 +1821,7 @@ a serialization variation by including encoding indicators.
 Implementations of EDN generally do not need to provide this
 functionality, but may want to be able to process EDN that contains
 encoding indicators, ignoring them just as a generic CBOR decoder
-ignores the presence of the serialization variants they express.<a href="#section-2.3-3" class="pilcrow">¶</a></p>
+ignores the presence of the serialization variants it encounters.<a href="#section-2.3-3" class="pilcrow">¶</a></p>
 <p id="section-2.3-4">Encoding indicators are placed immediately to the right of the data
 item or of a syntactic feature that can stand for the data item the
 encoding of which the encoding indicator is controlling.
@@ -1895,7 +1911,7 @@ form be <code>_7</code>, which is not used.
 Therefore, an underscore <code>_</code> on its own stands for indefinite length
 encoding (<code>ai=31</code>).
 (Note that this encoding indicator is only available behind the opening
-brace/bracket for <code>map</code> and <code>array</code> (<a href="#ei-container" class="auto internal xref">Section 2.6.1</a>): strings have a special syntax
+brace/bracket for <code>map</code> and <code>array</code> (<a href="#ei-container" class="auto internal xref">Section 2.6.2</a>): strings have a special syntax
 <code>streamstring</code> for indefinite length encoding except for the special
 cases <code>''_</code> and <code>""_</code> (<a href="#ei-string" class="auto internal xref">Section 2.5.4</a>).)<a href="#section-2.3-8" class="pilcrow">¶</a></p>
 <p id="section-2.3-9">The encoding indicators <code>_0</code> to <code>_3</code> can be used to indicate <code>ai=24</code>
@@ -1919,7 +1935,7 @@ of the CBOR item.<a href="#section-2.3-11" class="pilcrow">¶</a></p>
 comes to mind, this is an extension point for EDN; <a href="#reg-ei" class="auto internal xref">Section 6.2</a> defines
 a registry for additional values.<a href="#section-2.3-12" class="pilcrow">¶</a></p>
 <p id="section-2.3-13">Encoding Indicators are discussed in further detail in <a href="#ei-string" class="auto internal xref">Section 2.5.4</a> for
-indefinite length strings and in <a href="#ei-container" class="auto internal xref">Section 2.6.1</a> for arrays and maps.<a href="#section-2.3-13" class="pilcrow">¶</a></p>
+indefinite length strings and in <a href="#ei-container" class="auto internal xref">Section 2.6.2</a> for arrays and maps.<a href="#section-2.3-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="numbers">
@@ -1928,7 +1944,7 @@ indefinite length strings and in <a href="#ei-container" class="auto internal xr
 <a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-numbers" class="section-name selfRef">Numbers</a>
         </h3>
 <p id="section-2.4-1">In addition to JSON's decimal number literals, EDN provides hexadecimal, octal,
-and binary number literals in the usual C-language notation (octal with 0o
+and binary number literals in the usual C-language notation (octal with <code>0o</code>
 prefix present only).<a href="#section-2.4-1" class="pilcrow">¶</a></p>
 <p id="section-2.4-2">Numbers composed only of digits (of the respective base) are
 interpreted as CBOR integers (major type 0/1, or where the number
@@ -1999,7 +2015,7 @@ different row.<a href="#section-2.4-4" class="pilcrow">¶</a></p>
           </tbody>
         </table>
 </div>
-<p id="section-2.4-6">The non-finite floating-point numbers <code>Infinity</code>, <code>-Infinity</code>, and <code>NaN</code> are
+<p id="section-2.4-6">The non-finite floating-point values <code>Infinity</code>, <code>-Infinity</code>, and <code>NaN</code> are
 written exactly as in this sentence (this is also a way they can be
 written in JavaScript, although JSON does not allow them).<a href="#section-2.4-6" class="pilcrow">¶</a></p>
 <p id="section-2.4-7">See <a href="#decnumber" class="auto internal xref">Section 5.1, Paragraph 7, Item 3</a> for additional details of the EDN number syntax.<a href="#section-2.4-7" class="pilcrow">¶</a></p>
@@ -2087,7 +2103,7 @@ certain escaping mechanisms available for double-quoted strings:<a href="#sectio
 <li class="normal" id="section-2.5.2-4.1">
               <p id="section-2.5.2-4.1.1"><code>\/</code> is an escape in JSON that is available for EDN text strings as
 well to ensure all JSON texts are EDN literals.
-Since EDN's single-quoted strings to not occur in JSON, this legacy
+Since EDN's single-quoted strings do not occur in JSON, this legacy
 compatibility feature is not available for them.<a href="#section-2.5.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.5.2-4.2">
@@ -2104,8 +2120,8 @@ string literal is not used directly as a byte string, but is further
 processed in a way that is defined by the meaning given to the prefix.
 Depending on the prefix, the result of that processing can, but need
 not be, a byte string value.<a href="#section-2.5.2-6" class="pilcrow">¶</a></p>
-<p id="section-2.5.2-7">Prefixed string literals (which are always single-quoted after the
-prefix) are used both for base-encoded byte string literals (see <a href="#encoded-byte-strings" class="auto internal xref">Section 2.5.5</a>) and for
+<p id="section-2.5.2-7">Prefixed string literals (whether single-quoted after the
+prefix or a raw string (<a href="#raw-lit" class="auto internal xref">Section 2.5.3</a>)) are used both for base-encoded byte string literals (see <a href="#encoded-byte-strings" class="auto internal xref">Section 2.5.5</a>) and for
 application-oriented extension literals (see <a href="#app-lit" class="auto internal xref">Section 2.1</a>, called app-string).
 (Additional kinds of base-encoded string literals can be defined as
 application-oriented extension literals by registering their prefixes;
@@ -2123,7 +2139,7 @@ cases are referred to as "extension literals".)<a href="#section-2.5.2-7" class=
 <p id="section-2.5.3-1">Both double-quoted and single-quoted string literals handle
 backslashes in a special way.
 For string data items that employ backslashes themselves, possibly with additional layers
-of processing giving these "escaping" application semantics, this can
+of processing giving this "escaping" mechanism specific application semantics, this can
 lead to an exponential duplication of backslashes that has informally
 been described as "quoting hell".<a href="#section-2.5.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.5.3-2">EDN therefore also allows text strings to be notated as raw string
@@ -2252,14 +2268,14 @@ when it is desired to preserve the chunk structure.<a href="#section-2.5.4-2" cl
           </h4>
 <p id="section-2.5.5-1">Besides the unprefixed byte string literals that are analogous to JSON text
 string literals, EDN provides extension literals that can represent
-byte string by base-encoding them, typically notated as prefixed
+byte strings by base-encoding them, typically notated as prefixed
 string literals.
 The application-extension identifier selects one of the base encodings
 <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>, without padding.
 Most often, the base encoding is
 enclosed in a single-quoted or raw string literal, prefixed by »h« for base16 or
-»b64« for base64 or base64url (the actual encodings of the latter do
-not overlap, so the string remains unambiguous).
+»b64« for base64 or base64url (the actual encodings of the latter two
+have the same meaning where they overlap, so the string remains unambiguous).
 For example, the byte string consisting of the four bytes <code>12 34 56 78</code>
 (given in hexadecimal here) could be written <code>h'12345678'</code> or
 <code>b64'EjRWeA'</code> when using single-quoted string literals, or
@@ -2295,9 +2311,9 @@ as <code>h''</code> and <code>b64''</code> can also allow comments as blank spac
 </pre><a href="#section-2.5.5-6" class="pilcrow">¶</a>
 </div>
 <p id="section-2.5.5-7">Slash characters are part of the base64 classic alphabet (see
-Table 1 in <span><a href="https://rfc-editor.org/rfc/rfc4648#section-4" class="relref">Section 4</a> of [<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>), and they therefore need be in the
+Table 1 in <span><a href="https://rfc-editor.org/rfc/rfc4648#section-4" class="relref">Section 4</a> of [<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>), and they therefore need to be in the
 <code>b64''</code> set of characters that contribute to the byte string.
-Therefore, only end-of-line comments are available in b64 byte string
+Therefore, only end-of-line comments are available inside b64 byte string
 literals.<a href="#section-2.5.5-7" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-2.5.5-8">
 <pre>
@@ -2318,7 +2334,7 @@ which is the same as <code>h'968C2C'</code>.<a href="#section-2.5.5-9" class="pi
           </h4>
 <p id="section-2.5.6-1">In diagnostic notation, a sequence of zero or more CBOR data item literals can
 be enclosed in <code>&lt;&lt;</code> and <code>&gt;&gt;</code>, optionally prefixed by an
-application-extension prefix; we speak of <em>sequence literals</em>.
+application-extension prefix; this specification speaks of <em>sequence literals</em>.
 EDN mainly deals with individual data items, not with CBOR sequences
 <span>[<a href="#RFC8742" class="cite xref">RFC8742</a>]</span>, so the CBOR sequence represented by the sequence literal needs
 to be further processed to obtain the value of the literal.<a href="#section-2.5.6-1" class="pilcrow">¶</a></p>
@@ -2330,7 +2346,8 @@ the definition of the application extension.<a href="#section-2.5.6-2" class="pi
 <p id="section-2.5.6-3">An unprefixed sequence literal applies CBOR encoding to the
 data items in its content, taken as a CBOR sequence.
 The value of the
-literal thus is a byte string with the encoded content; we also speak of
+literal thus is a byte string with the encoded content; this is
+commonly referred to as
 <em>embedded CBOR</em>.
 For instance, each pair of columns in the following are equivalent:<a href="#section-2.5.6-3" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-2.5.6-4">
@@ -2357,7 +2374,7 @@ constitute UTF-8, e.g., by building larger sequences out of
 concatenating the subsequences; for validity of a text string
 resulting from these mechanisms it is only of importance that the
 result is UTF-8.
-Both double-quoted and single-quoted string literals have been defined
+Double-quoted, single-quoted, and raw string literals have been defined
 such that they lead to byte sequences that are UTF-8: the source
 language of EDN is UTF-8, and all escaping mechanisms lead only to
 adding further UTF-8 characters.
@@ -2390,21 +2407,28 @@ the input at the UTF-8 level).<a href="#section-2.5.7-3" class="pilcrow">¶</a><
         </h3>
 <p id="section-2.6-1">EDN borrows the JSON syntax for arrays and maps.
 (Maps are called objects in JSON.)<a href="#section-2.6-1" class="pilcrow">¶</a></p>
-<p id="section-2.6-2">For maps, EDN extends the JSON syntax by allowing any data item in the
-map key position (before the colon).<a href="#section-2.6-2" class="pilcrow">¶</a></p>
-<p id="section-2.6-3">JSON requires the use of a comma as a separator character between
+<div id="mandatory-separators-optional-terminators">
+<section id="section-2.6.1">
+          <h4 id="name-mandatory-separators-option">
+<a href="#section-2.6.1" class="section-number selfRef">2.6.1. </a><a href="#name-mandatory-separators-option" class="section-name selfRef">Mandatory Separators, Optional Terminators</a>
+          </h4>
+<p id="section-2.6.1-1">For maps, EDN extends the JSON syntax by allowing any data item in the
+map key position (before the colon).<a href="#section-2.6.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.6.1-2">JSON requires the use of a comma as a separator character between
 the elements of an array as well as between the members (key/value
 pairs) of a map.
 (These commas also were required in the original diagnostic
 notation defined in <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> and <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>.)
 The separator commas are now optional in the places where EDN syntax
-allows commas.
+allows commas; however, where no comma is used in a separator
+position, there must be blank space (composed of at least one space, newline, and/or
+comment) instead.
 (Stylistically, leaving out the commas is more idiomatic when they
-occur at line breaks.)<a href="#section-2.6-3" class="pilcrow">¶</a></p>
-<p id="section-2.6-4">In addition, EDN also allows, but does not require, a trailing comma before the closing bracket/brace,
-enabling an easier to maintain "terminator" style of their use.<a href="#section-2.6-4" class="pilcrow">¶</a></p>
-<p id="section-2.6-5">In summary, the following eight examples are all equivalent:<a href="#section-2.6-5" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-2.6-6">
+occur at line breaks, which provide the blank space.)<a href="#section-2.6.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.6.1-3">In addition, EDN also allows, but does not require, a trailing comma before the closing bracket/brace,
+enabling an easier to maintain "terminator" style of their use.<a href="#section-2.6.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.6.1-4">In summary, the following eight examples are all equivalent:<a href="#section-2.6.1-4" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-2.6.1-5">
 <pre>
 [1, 2, 3]
 [1, 2, 3,]
@@ -2414,54 +2438,62 @@ enabling an easier to maintain "terminator" style of their use.<a href="#section
 [1  2, 3,]
 [1, 2  3]
 [1, 2  3,]
-</pre><a href="#section-2.6-6" class="pilcrow">¶</a>
+</pre><a href="#section-2.6.1-5" class="pilcrow">¶</a>
 </div>
-<p id="section-2.6-7">as are<a href="#section-2.6-7" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-2.6-8">
+<p id="section-2.6.1-6">as are<a href="#section-2.6.1-6" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-2.6.1-7">
 <pre>
 {1: "n", "x": "a"}
 {1: "n", "x": "a",}
 {1: "n"  "x": "a"}
 # etc.
-</pre><a href="#section-2.6-8" class="pilcrow">¶</a>
+</pre><a href="#section-2.6.1-7" class="pilcrow">¶</a>
 </div>
-<aside id="section-2.6-9">
-          <p id="section-2.6-9.1">CDDL's comma separators in the equivalent contexts (CDDL groups) are
+<p id="section-2.6.1-8">As a comma and/or blank/comment is mandatory in a separator position,
+»<code>[11]</code>« is unambiguously an array with a single element (the
+integer 11), different from »<code>[1 1]</code>« or »<code>[1,1]</code>«.
+As this is a general rule, »<code>[[] []]</code>« or »<code>[[],[]]</code>« are well-formed
+EDN, while »<code>[[][]]</code>« is not.<a href="#section-2.6.1-8" class="pilcrow">¶</a></p>
+<aside id="section-2.6.1-9">
+            <p id="section-2.6.1-9.1">CDDL's comma separators in the equivalent contexts (CDDL groups) are
   entirely optional
   (and actually are terminators, which together with their optionality
   allows them to be used like separators as well, or even not at all).
   In summary, comma use is now aligned between EDN and CDDL, in a
-  fully backwards compatible way.<a href="#section-2.6-9.1" class="pilcrow">¶</a></p>
+  fully backwards compatible way.
+  (CDDL does allow the stylistically questionable »<code>a = [[][]]</code>«, though.)<a href="#section-2.6.1-9.1" class="pilcrow">¶</a></p>
 </aside>
+</section>
+</div>
 <div id="ei-container">
-<section id="section-2.6.1">
+<section id="section-2.6.2">
           <h4 id="name-encoding-indicators-of-arra">
-<a href="#section-2.6.1" class="section-number selfRef">2.6.1. </a><a href="#name-encoding-indicators-of-arra" class="section-name selfRef">Encoding Indicators of Arrays and Maps</a>
+<a href="#section-2.6.2" class="section-number selfRef">2.6.2. </a><a href="#name-encoding-indicators-of-arra" class="section-name selfRef">Encoding Indicators of Arrays and Maps</a>
           </h4>
-<p id="section-2.6.1-1">A single underscore can be written after the opening brace of a map or
+<p id="section-2.6.2-1">A single underscore can be written after the opening brace of a map or
 the opening bracket of an array to indicate that the data item was
 represented in indefinite-length format.  For example, <code>[_ 1, 2]</code>
 contains an indicator that an indefinite-length representation was
-used to represent the data item <code>[1, 2]</code>.<a href="#section-2.6.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.6.1-2">At the same position, encoding indicators for specifying the size of
+used to represent the data item <code>[1, 2]</code>.<a href="#section-2.6.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.6.2-2">At the same position, encoding indicators for specifying the size of
 the array or map head for definite-length format can be used instead,
 specifically <code>_i</code> or <code>_0</code> to <code>_3</code>.  For example <code>[_0 false, true]</code> can be
-used to specify the encoding of the array <code>[false, true]</code> as <code>98 02 f4 f5</code>.<a href="#section-2.6.1-2" class="pilcrow">¶</a></p>
+used to specify the encoding of the array <code>[false, true]</code> as <code>98 02 f4 f5</code>.<a href="#section-2.6.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="map-validity">
-<section id="section-2.6.2">
+<section id="section-2.6.3">
           <h4 id="name-validity-of-maps">
-<a href="#section-2.6.2" class="section-number selfRef">2.6.2. </a><a href="#name-validity-of-maps" class="section-name selfRef">Validity of Maps</a>
+<a href="#section-2.6.3" class="section-number selfRef">2.6.3. </a><a href="#name-validity-of-maps" class="section-name selfRef">Validity of Maps</a>
           </h4>
-<p id="section-2.6.2-1">As discussed at the start of <a href="#diagnostic-notation" class="auto internal xref">Section 2</a>, EDN implementations <span class="bcp14">MAY</span> support
+<p id="section-2.6.3-1">As discussed at the start of <a href="#diagnostic-notation" class="auto internal xref">Section 2</a>, EDN implementations <span class="bcp14">MAY</span> support
 generation and possibly ingestion of EDN for CBOR data items that are
-well-formed but not valid (Section <a href="https://rfc-editor.org/rfc/rfc8949#section-5.3" class="relref">5.3</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>).<a href="#section-2.6.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.6.2-2">For maps, this is relevant for map keys that occur more than once, as in:<a href="#section-2.6.2-2" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-2.6.2-3">
+well-formed but not valid (Section <a href="https://rfc-editor.org/rfc/rfc8949#section-5.3" class="relref">5.3</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>).<a href="#section-2.6.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.6.3-2">For maps, this is relevant for map keys that occur more than once, as in:<a href="#section-2.6.3-2" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-2.6.3-3">
 <pre>
 {1: "to", 1: "fro"}
-</pre><a href="#section-2.6.2-3" class="pilcrow">¶</a>
+</pre><a href="#section-2.6.3-3" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2530,7 +2562,7 @@ Section <a href="https://rfc-editor.org/rfc/rfc8949#section-3.4.1" class="relref
 conversion of the given Standard Date/Time String to an Epoch-Based
 Date/Time.
 If fractional seconds are given in the text (production
-<code>time-secfrac</code> in <a href="#abnf-grammar-dt" class="auto internal xref">Figure 4</a>), the value is a
+<code>time-secfrac</code> in <a href="#abnf-grammar-dt" class="auto internal xref">Figure 5</a>), the value is a
 floating-point number; the value is an integer number otherwise.
 In the all-upper-case variant of the app-prefix, the value is enclosed
 in a tag number 1.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
@@ -2844,14 +2876,16 @@ data item, destructively replacing complete subtrees or possibly
 just parts of a lengthy string by <em>elisions</em> (<a href="#elision" class="auto internal xref">Section 4.2</a>).<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-4-3">Implementation note:
+<aside id="section-4-3">
+        <p id="section-4-3.1">Implementation note:
 Typically, the ultimate applications will fail if they encounter tags
 unknown to them, which the ones defined in this section likely are.
 Where chains of tools are involved in processing EDN, it may be useful
 to fail earlier than at the ultimate receiver in the chain unless
 specific processing options (e.g., command line flags) are given that
 indicate which of these stand-ins are expected at this stage in the
-chain.<a href="#section-4-3" class="pilcrow">¶</a></p>
+chain.<a href="#section-4-3.1" class="pilcrow">¶</a></p>
+</aside>
 <div id="unknown">
 <section id="section-4.1">
         <h3 id="name-handling-unknown-applicatio">
@@ -3012,9 +3046,11 @@ the elisions.<a href="#section-4.2-18" class="pilcrow">¶</a></p>
 <p id="section-5-1">This section collects grammars in ABNF form (<span>[<a href="#STD68" class="cite xref">STD68</a>]</span> as extended in
 <span>[<a href="#RFC7405" class="cite xref">RFC7405</a>]</span>) that serve to define the syntax of EDN and some
 application-oriented literals.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">Implementation note: The ABNF definitions in this section are
+<aside id="section-5-2">
+        <p id="section-5-2.1">Implementation note: The ABNF definitions in this section are
 intended to be useful in a Parsing Expression Grammar (PEG) parser
-interpretation (see <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-A" class="relref">Appendix A</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> for an introduction into PEG).<a href="#section-5-2" class="pilcrow">¶</a></p>
+interpretation (see <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-A" class="relref">Appendix A</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> for an introduction into PEG).<a href="#section-5-2.1" class="pilcrow">¶</a></p>
+</aside>
 <div id="grammar">
 <section id="section-5.1">
         <h3 id="name-overall-abnf-definition-for">
@@ -3039,10 +3075,10 @@ specification in <a href="#integrated-grammars" class="auto internal xref">Secti
 </aside>
 <p id="section-5.1-3">For simplicity, the internal parsing for the built-in EDN prefixes is
 specified in the same way.
-ABNF definitions for <code>h''</code> and <code>b64''</code> are provided in <a href="#h-grammar" class="auto internal xref">Section 5.2.1</a> and
-<a href="#b64-grammar" class="auto internal xref">Section 5.2.2</a>.
+ABNF definitions for <code>h''</code>/<code>h``</code> and <code>b64''</code>/<code>b64``</code> are
+provided in <a href="#h-grammar" class="auto internal xref">Section 5.2.1</a> and <a href="#b64-grammar" class="auto internal xref">Section 5.2.2</a>.
 However, the prefixes <code>b32''</code> and <code>h32''</code> are not in wide use and an
-ABNF definition in this document could therefore not be based on
+ABNF definition in this document would therefore not have been based on
 implementation experience.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 <span id="name-overall-abnf-definition-of-"></span><div id="abnf-grammar">
 <figure id="figure-1">
@@ -3095,7 +3131,7 @@ startrawdelim   = rawdelim
                   ; between following matchrawdelim and shortrawdelim
 matchrawdelim   = rawdelim ; width &gt;= previous startrawdelim
 shortrawdelim   = rawdelim ; width &lt; previous startrawdelim
-rawchars        = 1*(%x09/%x0a/%x0d / %x20-5f / %x61-7e / NONASCII)
+rawchars        = 1*(%x0a/%x0d / %x20-5f / %x61-7e / NONASCII)
 rawcontent      = 1*(rawchars / shortrawdelim)
 
 sqstr           = SQUOTE *single-quoted SQUOTE
@@ -3231,7 +3267,8 @@ obvious.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.1-7.2">
 <div id="cr">
-            <p id="section-5.1-7.2.1">Unicode CARRIAGE RETURN (U+000D, often seen escaped as "\r" in many
+            <p id="section-5.1-7.2.1">Unicode CARRIAGE RETURN characters (U+000D, often seen
+  escaped as "\r" in many
   programming languages) that exist in the input (unescaped) are
   ignored as if they were not in the input wherever they appear.
   This is most important when they are found in (text or byte) string
@@ -3309,7 +3346,7 @@ floating point literal.<a href="#section-5.1-7.5.2" class="pilcrow">¶</a></p>
           </li>
 <li id="section-5.1-7.7">
 <div id="rawstring-grammar">
-            <p id="section-5.1-7.7.1">The ABNF grammar for rawstrings is lenient; a parser needs to
+            <p id="section-5.1-7.7.1">The ABNF grammar for raw strings is lenient; a parser needs to
   implement the comments on <code>matchrawdelim</code> and <code>shortrawdelim</code> as
   well.
   <code>shortrawdelim</code> only matches sequences of backquotes that are
@@ -3332,7 +3369,7 @@ can for instance be implemented as follows:<a href="#section-5.1-8.1" class="pil
 </pre><a href="#section-5.1-8.2" class="pilcrow">¶</a>
 </div>
 </aside>
-<ol start="1" type="1" class="normal type-1" id="section-5.1-9">
+<ol start="8" type="1" class="normal type-1" id="section-5.1-9">
 <li id="section-5.1-9.1">
 <div id="concat">
             <p id="section-5.1-9.1.1">Extended diagnostic notation allows a (text or byte) string to be
@@ -3490,6 +3527,21 @@ which are not always repeated here.<a href="#section-5.2-1" class="pilcrow">¶</
               <td class="text-left" rowspan="1" colspan="1">"</td>
               <td class="text-left" rowspan="1" colspan="1">Tag 54 (IPv6) or 52 (IPv4) on the above</td>
             </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">hash</td>
+              <td class="text-left" rowspan="1" colspan="1">string (usually used with sequences)</td>
+              <td class="text-left" rowspan="1" colspan="1">byte string</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">cri</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC 3986 URI or URI reference</td>
+              <td class="text-left" rowspan="1" colspan="1">CBOR structure representing equivalent CRI</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">CRI</td>
+              <td class="text-left" rowspan="1" colspan="1">"</td>
+              <td class="text-left" rowspan="1" colspan="1">Tag 99 on the above</td>
+            </tr>
           </tbody>
         </table>
 </div>
@@ -3498,6 +3550,26 @@ of grammars used in application-extensions, such as of RFC 3339 for
 <code>dt''</code> and of IP address syntax for <code>ip''</code>.
 EDN-based tools may want to use these implementation libraries instead
 of using the grammars that are provided here as a reference.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-5">For convenience, the common definitions in <a href="#abnf-grammar-ext-common" class="auto internal xref">Figure 2</a>
+are not repeated in the below ABNF grammars.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<span id="name-common-rules-used-in-app-ex"></span><div id="abnf-grammar-ext-common">
+<figure id="figure-2">
+          <div class="lang-abnf sourcecode" id="section-5.2-6.1">
+<pre>
+ALPHA           = %x41-5a / %x61-7a
+DIGIT           = %x30-39 ; 0-9
+HEXDIG          = DIGIT / HEXDIGA
+HEXDIGA         = "A" / "B" / "C" / "D" / "E" / "F"
+; Note: double-quoted strings as in "A" are case-insensitive in ABNF
+lblank          = %x0A / %x20  ; Not HT or CR (gone)
+non-lf          = %x20-7F / NONASCII
+NONASCII        = %x80-D7FF / %xE000-10FFFF
+</pre>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-common-rules-used-in-app-ex" class="selfRef">Common Rules Used in app-extension ABNF grammars</a>
+          </figcaption></figure>
+</div>
 <div id="h-grammar">
 <section id="section-5.2.1">
           <h4 id="name-h-abnf-definition-of-hexade">
@@ -3505,27 +3577,23 @@ of using the grammars that are provided here as a reference.<a href="#section-5.
           </h4>
 <p id="section-5.2.1-1">The syntax of the content of byte strings represented in hex,
 such as <code>h''</code>, <code>h'0815'</code>, or <code>h'/head/ 63 /contents/ 66 6f 6f'</code>
-(another representation of <code>&lt;&lt; "foo" &gt;&gt;</code>), is described by the ABNF in <a href="#abnf-grammar-h" class="auto internal xref">Figure 2</a>.
+(another representation of <code>&lt;&lt; "foo" &gt;&gt;</code>), is described by the ABNF in <a href="#abnf-grammar-h" class="auto internal xref">Figure 3</a>.
 This syntax accommodates both lower case and upper case hex digits, as
 well as blank space (including comments) around each hex digit.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
 <span id="name-abnf-definition-of-hexadeci"></span><div id="abnf-grammar-h">
-<figure id="figure-2">
+<figure id="figure-3">
             <div class="lang-abnf sourcecode" id="section-5.2.1-2.1">
 <pre>
 app-string-h    = S *(HEXDIG S HEXDIG S / ellipsis S)
                   ["#" *non-lf]
 ellipsis        = 3*"."
-HEXDIG          = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
-DIGIT           = %x30-39 ; 0-9
-blank           = %x09 / %x0A / %x0D / %x20
-non-slash       = blank / %x21-2e / %x30-10FFFF
-non-lf          = %x09 / %x0D / %x20-D7FF / %xE000-10FFFF
-S               = *blank *(comment *blank )
+non-slash       = lblank / %x21-2e / %x30-7f / NONASCII
+S               = *lblank *(comment *lblank )
 comment         = "/" *non-slash "/"
                 / "#" *non-lf %x0A
 </pre>
 </div>
-<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
 <a href="#name-abnf-definition-of-hexadeci" class="selfRef">ABNF Definition of Hexadecimal Representation of a Byte String</a>
             </figcaption></figure>
 </div>
@@ -3537,29 +3605,25 @@ comment         = "/" *non-slash "/"
 <a href="#section-5.2.2" class="section-number selfRef">5.2.2. </a><a href="#name-b64-abnf-definition-of-base" class="section-name selfRef">b64: ABNF Definition of Base64 representation of a byte string</a>
           </h4>
 <p id="section-5.2.2-1">The syntax of the content of byte strings represented in base64 is
-described by the ABNF in <a href="#abnf-grammar-h" class="auto internal xref">Figure 2</a>.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
+described by the ABNF in <a href="#abnf-grammar-b64" class="auto internal xref">Figure 4</a>.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2.2-2">This syntax allows both the classic (<span><a href="https://rfc-editor.org/rfc/rfc4648#section-4" class="relref">Section 4</a> of [<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>) and the
 URL-safe (<span><a href="https://rfc-editor.org/rfc/rfc4648#section-5" class="relref">Section 5</a> of [<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>) alphabet to be used.
 It accommodates, but does not require base64 padding.
 Note that inclusion of classic base64 makes it impossible to have
 in-line comments in b64, as "/" is valid base64-classic.<a href="#section-5.2.2-2" class="pilcrow">¶</a></p>
 <span id="name-abnf-definition-of-base64-r"></span><div id="abnf-grammar-b64">
-<figure id="figure-3">
+<figure id="figure-4">
             <div class="lang-abnf sourcecode" id="section-5.2.2-3.1">
 <pre>
 app-string-b64  = B *(4(b64dig B))
                   [b64dig B b64dig B ["=" B "=" / b64dig B ["="]] B]
-                  ["#" *inon-lf]
+                  ["#" *non-lf]
 b64dig          = ALPHA / DIGIT / "-" / "_" / "+" / "/"
-B               = *iblank *(icomment *iblank)
-iblank          = %x0A / %x20  ; Not HT or CR (gone)
-icomment        = "#" *inon-lf %x0A
-inon-lf         = %x20-D7FF / %xE000-10FFFF
-ALPHA           = %x41-5a / %x61-7a
-DIGIT           = %x30-39
+B               = *lblank *(icomment *lblank)
+icomment        = "#" *non-lf %x0A
 </pre>
 </div>
-<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
 <a href="#name-abnf-definition-of-base64-r" class="selfRef">ABNF definition of Base64 Representation of a Byte String</a>
             </figcaption></figure>
 </div>
@@ -3571,9 +3635,10 @@ DIGIT           = %x30-39
 <a href="#section-5.2.3" class="section-number selfRef">5.2.3. </a><a href="#name-dt-abnf-definition-of-rfc-3" class="section-name selfRef">dt: ABNF Definition of RFC 3339 Representation of a Date/Time</a>
           </h4>
 <p id="section-5.2.3-1">The syntax of the content of <code>dt</code> literals can be described by the
-ABNF for <code>date-time</code> from <span>[<a href="#RFC3339" class="cite xref">RFC3339</a>]</span> as summarized in <span><a href="https://rfc-editor.org/rfc/rfc9165#section-3" class="relref">Section 3</a> of [<a href="#RFC9165" class="cite xref">RFC9165</a>]</span>:<a href="#section-5.2.3-1" class="pilcrow">¶</a></p>
+ABNF for <code>date-time</code> in <a href="#abnf-grammar-dt" class="auto internal xref">Figure 5</a>.
+This is derived from <span>[<a href="#RFC3339" class="cite xref">RFC3339</a>]</span> as summarized in <span><a href="https://rfc-editor.org/rfc/rfc9165#section-3" class="relref">Section 3</a> of [<a href="#RFC9165" class="cite xref">RFC9165</a>]</span>.<a href="#section-5.2.3-1" class="pilcrow">¶</a></p>
 <span id="name-abnf-definition-of-rfc3339-"></span><div id="abnf-grammar-dt">
-<figure id="figure-4">
+<figure id="figure-5">
             <div class="lang-abnf sourcecode" id="section-5.2.3-2.1">
 <pre>
 app-string-dt   = date-time
@@ -3596,10 +3661,9 @@ full-date       = date-fullyear "-" date-month "-" date-mday
 full-time       = partial-time time-offset
 
 date-time       = full-date "T" full-time
-DIGIT           =  %x30-39 ; 0-9
 </pre>
 </div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
 <a href="#name-abnf-definition-of-rfc3339-" class="selfRef">ABNF Definition of RFC3339 Representation of a Date/Time</a>
             </figcaption></figure>
 </div>
@@ -3612,9 +3676,9 @@ DIGIT           =  %x30-39 ; 0-9
           </h4>
 <p id="section-5.2.4-1">The syntax of the content of <code>ip</code> literals can be described by the
 ABNF for <code>IPv4address</code> and <code>IPv6address</code> in <span><a href="https://rfc-editor.org/rfc/rfc3986#section-3.2.2" class="relref">Section 3.2.2</a> of [<a href="#RFC3986" class="cite xref">RFC3986</a>]</span>,
-as included in slightly updated form in <a href="#abnf-grammar-ip" class="auto internal xref">Figure 5</a>.<a href="#section-5.2.4-1" class="pilcrow">¶</a></p>
+as included in slightly updated form in <a href="#abnf-grammar-ip" class="auto internal xref">Figure 6</a>.<a href="#section-5.2.4-1" class="pilcrow">¶</a></p>
 <span id="name-abnf-definition-of-textual-"></span><div id="abnf-grammar-ip">
-<figure id="figure-5">
+<figure id="figure-6">
             <div class="lang-abnf sourcecode" id="section-5.2.4-2.1">
 <pre>
 app-string-ip = IPaddress ["/" uint]
@@ -3643,13 +3707,11 @@ dec-octet     = "25" %x30-35         ; 250-255
               / %x31-39 DIGIT        ; 10-99
               / DIGIT                ; 0-9
 
-HEXDIG        = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
-DIGIT         = %x30-39 ; 0-9
 DIGIT1        = %x31-39 ; 1-9
 uint          = "0" / DIGIT1 *DIGIT
 </pre>
 </div>
-<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
 <a href="#name-abnf-definition-of-textual-" class="selfRef">ABNF Definition of Textual Representation of an IP Address</a>
             </figcaption></figure>
 </div>
@@ -3668,11 +3730,11 @@ integrate,
 a grammar of the content of <code>cri</code> literals is provided by the
 ABNF for <code>URI-reference</code> in Section <a href="https://rfc-editor.org/rfc/rfc3986#section-4.1" class="relref">4.1</a> of RFC 3986 <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> with certain
 re-arrangements taken from <a href="#ip-grammar" class="auto internal xref">Section 5.2.4</a>;
-these are reproduced in <a href="#abnf-grammar-cri" class="auto internal xref">Figure 6</a>.
+these are reproduced in <a href="#abnf-grammar-cri" class="auto internal xref">Figure 7</a>.
 If the content is not ASCII only (i.e., for IRIs), first apply
 <span><a href="https://rfc-editor.org/rfc/rfc3987#section-3.1" class="relref">Section 3.1</a> of [<a href="#RFC3987" class="cite xref">RFC3987</a>]</span> and apply this grammar to the result.<a href="#section-5.2.5-2" class="pilcrow">¶</a></p>
 <span id="name-abnf-definition-of-uri-repr"></span><div id="abnf-grammar-cri">
-<figure id="figure-6">
+<figure id="figure-7">
             <div class="breakable lang-abnf sourcecode" id="section-5.2.5-3.1">
 <pre>
 app-string-cri = URI-reference
@@ -3708,7 +3770,7 @@ IP-literal    = "[" ( IPv6address / IPvFuture  ) "]"
 IPvFuture     = "v" 1*HEXDIG "." 1*( unreserved / sub-delims / ":" )
 
 ; Use IPv6address, h16, ls32, IPv4adress, dec-octet as re-arranged
-; for PEG Compatibility in Figure 5 of [I-D.ietf-cbor-edn-literals]:
+; for PEG Compatibility in Figure 6 of [RFC XXXX]:
 
 IPv6address   =                            6( h16 ":" ) ls32
               /                       "::" 5( h16 ":" ) ls32
@@ -3728,10 +3790,6 @@ dec-octet     = "25" %x30-35         ; 250-255
               / "1" 2DIGIT           ; 100-199
               / %x31-39 DIGIT        ; 10-99
               / DIGIT                ; 0-9
-ALPHA         = %x41-5a / %x61-7a
-DIGIT         = %x30-39
-HEXDIG        = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
-; case insensitive matching, i.e., including lower case
 
 reg-name      = *( unreserved / pct-encoded / sub-delims )
 
@@ -3767,7 +3825,7 @@ sub-delims    = "!" / "$" / "&amp;" / "'" / "(" / ")"
                  / "*" / "+" / "," / ";" / "="
 </pre>
 </div>
-<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
 <a href="#name-abnf-definition-of-uri-repr" class="selfRef">ABNF Definition of URI Representation of a CRI</a>
             </figcaption></figure>
 </div>
@@ -3789,9 +3847,9 @@ as <code>\'</code> and <code>\\</code>) and the syntax of the extension content 
 such as that given in <a href="#app-grammars" class="auto internal xref">Section 5.2</a> can be directly used as an
 integrated parser, after adding some glue ABNF.
 For instance, for app-string-dt, add an alternative to <code>bstr</code> that
-points to a rule for prefixed single-quoted string literals (<a href="#abnf-grammar-sq-glue" class="auto internal xref">Figure 7</a>).<a href="#section-5.3-2" class="pilcrow">¶</a></p>
-<span id="name-glue-code-for-integrated-dt"></span><div id="abnf-grammar-sq-glue">
-<figure id="figure-7">
+points to a rule for prefixed single-quoted string literals (<a href="#abnf-grammar-sq-glue" class="auto internal xref">Figure 8</a>).<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+<span id="name-glue-abnf-for-integrated-dt"></span><div id="abnf-grammar-sq-glue">
+<figure id="figure-8">
           <div class="lang-abnf sourcecode" id="section-5.3-3.1">
 <pre>
 bstr            = sq-app-string-dt /
@@ -3799,15 +3857,15 @@ bstr            = sq-app-string-dt /
 sq-app-string-dt = (%s"dt'"/%s"DT'") app-string-dt "'"
 </pre>
 </div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
-<a href="#name-glue-code-for-integrated-dt" class="selfRef">Glue Code for Integrated DT Parser</a>
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<a href="#name-glue-abnf-for-integrated-dt" class="selfRef">Glue ABNF for Integrated DT Parser</a>
           </figcaption></figure>
 </div>
 <p id="section-5.3-4">To facilitate writing integrated ABNF for more complex prefixed
-string literals, the ABNF definitions in <a href="#abnf-grammar-sq" class="auto internal xref">Figure 8</a> may
+string literals, the ABNF definitions in <a href="#abnf-grammar-sq" class="auto internal xref">Figure 9</a> may
 be useful and are used in the rest of this section.<a href="#section-5.3-4" class="pilcrow">¶</a></p>
 <span id="name-abnf-definitions-useful-for"></span><div id="abnf-grammar-sq">
-<figure id="figure-8">
+<figure id="figure-9">
           <div class="lang-abnf sourcecode" id="section-5.3-5.1">
 <pre>
 i-HT =        %s"\t" / %s"\u" ("0009" / "{" *("0") "9}")
@@ -3836,12 +3894,37 @@ FOURHEX1 = (DIGIT1 / "A"/"B"/"C" / "E"/"F") 3HEXDIG
 TWOHEX1  = ("8"/"9" / HEXDIGA) HEXDIG / "7F"
 </pre>
 </div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-abnf-definitions-useful-for" class="selfRef">ABNF Definitions Useful for Integrated Extension Parsers</a>
           </figcaption></figure>
 </div>
-<p id="section-5.3-6">Two subsections with ABNF for integrated parsers follow, one for <code>h''</code>,
-and one for <code>b64''</code>.
+<p id="section-5.3-6">Similarly, for integrated parsers for extension literals built from raw strings, the ABNF
+definitions in <a href="#abnf-grammar-rs" class="auto internal xref">Figure 10</a> can be useful.
+<code>fitrawdelim</code> only matches sequences of backquotes that are exactly as
+long as a previous <code>startrawdelim</code>.<a href="#section-5.3-6" class="pilcrow">¶</a></p>
+<span id="name-abnf-definitions-useful-for-"></span><div id="abnf-grammar-rs">
+<figure id="figure-10">
+          <div class="lang-abnf sourcecode" id="section-5.3-7.1">
+<pre>
+fitrawdelim  = rawdelim ; width == previous startrawdelim
+r-non-lf = %x0D / %x20-5f / %x61-7f / NONASCII / shortrawdelim
+</pre>
+</div>
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<a href="#name-abnf-definitions-useful-for-" class="selfRef">ABNF Definitions Useful for Raw String Integrated Extension Parsers</a>
+          </figcaption></figure>
+</div>
+<aside id="section-5.3-8">
+          <p id="section-5.3-8.1">In a PEG parser that implements predicates, the matching rule for fitrawdelim
+can for instance be implemented as follows:<a href="#section-5.3-8.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3-8.2">
+<pre>
+ fitrawdelim = rawdelim&amp;{|(rd)|rd.text_value.length == @rdlen}
+</pre><a href="#section-5.3-8.2" class="pilcrow">¶</a>
+</div>
+</aside>
+<p id="section-5.3-9">Four subsections with ABNF for integrated parsers follow, a pair for
+<code>h''</code> and <code>b64''</code>, and a pair for <code>h``</code> and <code>b64``</code>.
 There is no requirement for a new application-extension to supply ABNF
 for an integrated parser (or any ABNF at all!), in particular if the
 parsing function is likely to be fulfilled by a platform library.
@@ -3849,21 +3932,22 @@ If ABNF for the content of a single-quoted string is available in an
 application-extension specification, ABNF for an integrated parser can
 be written as a separate activity or also automatically derived.
 At the time of writing, one example for a tool performing such a
-derivation is available as open-source software <span>[<a href="#ABNFROB" class="cite xref">ABNFROB</a>]</span>.<a href="#section-5.3-6" class="pilcrow">¶</a></p>
+derivation is available as open-source software <span>[<a href="#ABNFROB" class="cite xref">ABNFROB</a>]</span>.<a href="#section-5.3-9" class="pilcrow">¶</a></p>
 <div id="sq-h-grammar">
 <section id="section-5.3.1">
           <h4 id="name-h-abnf-definition-of-integr">
-<a href="#section-5.3.1" class="section-number selfRef">5.3.1. </a><a href="#name-h-abnf-definition-of-integr" class="section-name selfRef">h: ABNF Definition of Integrated Parser</a>
+<a href="#section-5.3.1" class="section-number selfRef">5.3.1. </a><a href="#name-h-abnf-definition-of-integr" class="section-name selfRef">h'': ABNF Definition of Integrated Parser</a>
           </h4>
-<p id="section-5.3.1-1">With glue code similar to that in <a href="#abnf-grammar-sq-glue" class="auto internal xref">Figure 7</a>, ABNF such as
-that shown in <a href="#abnf-grammar-sq-h" class="auto internal xref">Figure 9</a> can be used as an integrated parser
-for <code>h''</code> prefixed single-quote strings.<a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-1">With glue ABNF similar to that in <a href="#abnf-grammar-sq-glue" class="auto internal xref">Figure 8</a> and common
+definitions in Figures <a href="#abnf-grammar-ext-common" class="auto internal xref">2</a> and <a href="#abnf-grammar-sq" class="auto internal xref">9</a>, ABNF such as
+that shown in <a href="#abnf-grammar-sq-h" class="auto internal xref">Figure 11</a> can be used as an integrated parser
+for <code>h</code> prefixed single-quote strings.<a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
 <span id="name-abnf-definition-for-integra"></span><div id="abnf-grammar-sq-h">
-<figure id="figure-9">
+<figure id="figure-11">
             <div class="lang-abnf sourcecode" id="section-5.3.1-2.1">
 <pre>
-sq-app-string-h = %s"h'" app-string-h "'"
-app-string-h = h-S *(HEXDIG h-S HEXDIG h-S / ellipsis h-S)
+sq-app-string-h = %s"h'" s-app-string-h "'"
+s-app-string-h = h-S *(HEXDIG h-S HEXDIG h-S / ellipsis h-S)
     ["#" *(i-non-lf)]
 
 h-S = *(i-blank) *(h-comment *(i-blank))
@@ -3873,7 +3957,7 @@ h-comment = "/" *(h-non-slash) "/"
           / "#" *(i-non-lf) i-LF
 </pre>
 </div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
 <a href="#name-abnf-definition-for-integra" class="selfRef">ABNF Definition for Integrated Hex Parser</a>
             </figcaption></figure>
 </div>
@@ -3882,17 +3966,18 @@ h-comment = "/" *(h-non-slash) "/"
 <div id="sq-b64-grammar">
 <section id="section-5.3.2">
           <h4 id="name-b64-abnf-definition-of-inte">
-<a href="#section-5.3.2" class="section-number selfRef">5.3.2. </a><a href="#name-b64-abnf-definition-of-inte" class="section-name selfRef">b64: ABNF Definition of Integrated Parser</a>
+<a href="#section-5.3.2" class="section-number selfRef">5.3.2. </a><a href="#name-b64-abnf-definition-of-inte" class="section-name selfRef">b64'': ABNF Definition of Integrated Parser</a>
           </h4>
-<p id="section-5.3.2-1">With glue code similar to that in <a href="#abnf-grammar-sq-glue" class="auto internal xref">Figure 7</a>, ABNF such as
-that shown in <a href="#abnf-grammar-sq-b64" class="auto internal xref">Figure 10</a> can be used as an integrated parser
-for <code>h''</code> prefixed single-quote strings.<a href="#section-5.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.2-1">With glue ABNF similar to that in <a href="#abnf-grammar-sq-glue" class="auto internal xref">Figure 8</a> and common
+definitions in Figures <a href="#abnf-grammar-ext-common" class="auto internal xref">2</a> and <a href="#abnf-grammar-sq" class="auto internal xref">9</a>, ABNF such as
+that shown in <a href="#abnf-grammar-sq-b64" class="auto internal xref">Figure 12</a> can be used as an integrated parser
+for <code>b64</code> prefixed single-quote strings.<a href="#section-5.3.2-1" class="pilcrow">¶</a></p>
 <span id="name-abnf-definition-for-integrat"></span><div id="abnf-grammar-sq-b64">
-<figure id="figure-10">
+<figure id="figure-12">
             <div class="lang-abnf sourcecode" id="section-5.3.2-2.1">
 <pre>
-sq-app-string-b64 = %s"b64'" app-string-b64 "'"
-app-string-b64  = b64-S *(4(b64dig b64-S))
+sq-app-string-b64 = %s"b64'" s-app-string-b64 "'"
+s-app-string-b64  = b64-S *(4(b64dig b64-S))
                   [b64dig b64-S b64dig b64-S
                    ["=" b64-S "=" / b64dig b64-S ["="]] b64-S]
                   ["#" *i-non-lf]
@@ -3901,8 +3986,68 @@ b64-S           = *i-blank *(b64-comment *i-blank)
 b64-comment     = "#" *i-non-lf %x0A
 </pre>
 </div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
 <a href="#name-abnf-definition-for-integrat" class="selfRef">ABNF Definition for Integrated Base64 Parser</a>
+            </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="sq-h-raw-grammar">
+<section id="section-5.3.3">
+          <h4 id="name-h-abnf-definition-of-integra">
+<a href="#section-5.3.3" class="section-number selfRef">5.3.3. </a><a href="#name-h-abnf-definition-of-integra" class="section-name selfRef">h``: ABNF Definition of Integrated Parser</a>
+          </h4>
+<p id="section-5.3.3-1">With glue ABNF similar to that in <a href="#abnf-grammar-sq-glue" class="auto internal xref">Figure 8</a> and common
+definitions in Figures <a href="#abnf-grammar-ext-common" class="auto internal xref">2</a>, <a href="#abnf-grammar-sq" class="auto internal xref">9</a>
+and
+<a href="#abnf-grammar-rs" class="auto internal xref">10</a>, ABNF such as that shown in <a href="#abnf-grammar-rs-h" class="auto internal xref">Figure 13</a> can
+be used as an integrated parser for <code>h</code> prefixed raw strings.<a href="#section-5.3.3-1" class="pilcrow">¶</a></p>
+<span id="name-abnf-definition-for-integrate"></span><div id="abnf-grammar-rs-h">
+<figure id="figure-13">
+            <div class="lang-abnf sourcecode" id="section-5.3.3-2.1">
+<pre>
+raw-app-string-h = %s"h" startrawdelim r-app-string-h
+r-app-string-h = rh-S *(HEXDIG rh-S HEXDIG rh-S / ellipsis rh-S)
+    ("#" *(r-non-lf) matchrawdelim / fitrawdelim)
+rh-S = *(lblank) *(rh-comment *(lblank))
+rh-non-slash = lblank / %x21-2e / %x30-5f / %x61-7f
+             / NONASCII / shortrawdelim
+rh-comment = "/" *(rh-non-slash) "/"
+           / "#" *(r-non-lf) %x0A
+</pre>
+</div>
+<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<a href="#name-abnf-definition-for-integrate" class="selfRef">ABNF Definition for Integrated Raw String Hex Parser</a>
+            </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="sq-b64-raw-grammar">
+<section id="section-5.3.4">
+          <h4 id="name-b64-abnf-definition-of-integ">
+<a href="#section-5.3.4" class="section-number selfRef">5.3.4. </a><a href="#name-b64-abnf-definition-of-integ" class="section-name selfRef">b64``: ABNF Definition of Integrated Parser</a>
+          </h4>
+<p id="section-5.3.4-1">With glue ABNF similar to that in <a href="#abnf-grammar-sq-glue" class="auto internal xref">Figure 8</a>, common
+definitions in Figures <a href="#abnf-grammar-ext-common" class="auto internal xref">2</a>, <a href="#abnf-grammar-sq" class="auto internal xref">9</a>
+and <a href="#abnf-grammar-rs" class="auto internal xref">10</a> as well as the rule
+<code>b64dig</code> from <a href="#abnf-grammar-sq-b64" class="auto internal xref">Figure 12</a>, ABNF such as
+that shown in <a href="#abnf-grammar-rs-b64" class="auto internal xref">Figure 14</a> can be used as an integrated parser
+for <code>b64</code> prefixed raw strings.<a href="#section-5.3.4-1" class="pilcrow">¶</a></p>
+<span id="name-abnf-definition-for-integrated"></span><div id="abnf-grammar-rs-b64">
+<figure id="figure-14">
+            <div class="lang-abnf sourcecode" id="section-5.3.4-2.1">
+<pre>
+raw-app-string-b64 = %s"b64" startrawdelim r-app-string-b64
+r-app-string-b64  = rb64-S *(4(b64dig rb64-S))
+                  [b64dig rb64-S b64dig rb64-S
+                   ["=" rb64-S "=" / b64dig rb64-S ["="]] rb64-S]
+                  ("#" *r-non-lf matchrawdelim / fitrawdelim)
+rb64-S           = *lblank *(rb64-comment *lblank)
+rb64-comment     = "#" *r-non-lf %x0A
+</pre>
+</div>
+<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<a href="#name-abnf-definition-for-integrated" class="selfRef">ABNF Definition for Integrated Raw String Base64 Parser</a>
             </figcaption></figure>
 </div>
 </section>
@@ -4582,10 +4727,6 @@ The standard is widely known as C++23. Its technical content is also available v
         <dd>
 <span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"External References to Values in CBOR Diagnostic Notation (EDN)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-edn-e-ref-03</span>, <time datetime="2026-03-01" class="refDate">1 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-e-ref-03">https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-e-ref-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.ietf-cbor-update-8610-grammar">[I-D.ietf-cbor-update-8610-grammar]</dt>
-        <dd>
-<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"Updates to the CDDL grammar of RFC 8610"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-update-8610-grammar-06</span>, <time datetime="2024-06-24" class="refDate">24 June 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-update-8610-grammar-06">https://datatracker.ietf.org/doc/html/draft-ietf-cbor-update-8610-grammar-06</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC4648">[RFC4648]</dt>
         <dd>
 <span class="refAuthor">Josefsson, S.</span>, <span class="refTitle">"The Base16, Base32, and Base64 Data Encodings"</span>, <span class="seriesInfo">RFC 4648</span>, <span class="seriesInfo">DOI 10.17487/RFC4648</span>, <time datetime="2006-10" class="refDate">October 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4648">https://www.rfc-editor.org/rfc/rfc4648</a>&gt;</span>. </dd>
@@ -4613,6 +4754,10 @@ The standard is widely known as C++23. Its technical content is also available v
 <dt id="RFC9512">[RFC9512]</dt>
         <dd>
 <span class="refAuthor">Polli, R.</span>, <span class="refAuthor">Wilde, E.</span>, and <span class="refAuthor">E. Aro</span>, <span class="refTitle">"YAML Media Type"</span>, <span class="seriesInfo">RFC 9512</span>, <span class="seriesInfo">DOI 10.17487/RFC9512</span>, <time datetime="2024-02" class="refDate">February 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9512">https://www.rfc-editor.org/rfc/rfc9512</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9682">[RFC9682]</dt>
+        <dd>
+<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"Updates to the Concise Data Definition Language (CDDL) Grammar"</span>, <span class="seriesInfo">RFC 9682</span>, <span class="seriesInfo">DOI 10.17487/RFC9682</span>, <time datetime="2024-11" class="refDate">November 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9682">https://www.rfc-editor.org/rfc/rfc9682</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="STD90">[STD90]</dt>
         <dd>
@@ -4693,7 +4838,7 @@ starting with <code>#</code>.<a href="#appendix-A-7.1.1" class="pilcrow">¶</a><
         <li class="normal" id="appendix-A-7.2">
           <p id="appendix-A-7.2.1">Syntax for tags.  CDDL's tag syntax is part of the system for
 referring to CBOR's fundamentals (the major type 6, in this case)
-and (with <span>[<a href="#I-D.ietf-cbor-update-8610-grammar" class="cite xref">I-D.ietf-cbor-update-8610-grammar</a>]</span>) allows specifying the actual tag number
+and (with <span>[<a href="#RFC9682" class="cite xref">RFC9682</a>]</span>) allows specifying the actual tag number
 separately, while EDN's tag syntax is a simple decimal number and a
 pair of parentheses.<a href="#appendix-A-7.2.1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="appendix-A-7.2.2">
@@ -4755,57 +4900,81 @@ these with a control operator, which looks very different.<a href="#appendix-A-7
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-B-1.3">
-<a href="#abnf-grammar-h" class="auto internal xref">Figure 2</a>:</dt>
+<a href="#abnf-grammar-ext-common" class="auto internal xref">Figure 2</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-B-1.4">
-          <p id="appendix-B-1.4.1"><a href="#abnf-grammar-h" class="internal xref">ABNF Definition of Hexadecimal Representation of a Byte String</a><a href="#appendix-B-1.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.4.1"><a href="#abnf-grammar-ext-common" class="internal xref">Common Rules Used in app-extension ABNF grammars</a><a href="#appendix-B-1.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-B-1.5">
-<a href="#abnf-grammar-b64" class="auto internal xref">Figure 3</a>:</dt>
+<a href="#abnf-grammar-h" class="auto internal xref">Figure 3</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-B-1.6">
-          <p id="appendix-B-1.6.1"><a href="#abnf-grammar-b64" class="internal xref">ABNF definition of Base64 Representation of a Byte String</a><a href="#appendix-B-1.6.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.6.1"><a href="#abnf-grammar-h" class="internal xref">ABNF Definition of Hexadecimal Representation of a Byte String</a><a href="#appendix-B-1.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-B-1.7">
-<a href="#abnf-grammar-dt" class="auto internal xref">Figure 4</a>:</dt>
+<a href="#abnf-grammar-b64" class="auto internal xref">Figure 4</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-B-1.8">
-          <p id="appendix-B-1.8.1"><a href="#abnf-grammar-dt" class="internal xref">ABNF Definition of RFC3339 Representation of a Date/Time</a><a href="#appendix-B-1.8.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.8.1"><a href="#abnf-grammar-b64" class="internal xref">ABNF definition of Base64 Representation of a Byte String</a><a href="#appendix-B-1.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-B-1.9">
-<a href="#abnf-grammar-ip" class="auto internal xref">Figure 5</a>:</dt>
+<a href="#abnf-grammar-dt" class="auto internal xref">Figure 5</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-B-1.10">
-          <p id="appendix-B-1.10.1"><a href="#abnf-grammar-ip" class="internal xref">ABNF Definition of Textual Representation of an IP Address</a><a href="#appendix-B-1.10.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.10.1"><a href="#abnf-grammar-dt" class="internal xref">ABNF Definition of RFC3339 Representation of a Date/Time</a><a href="#appendix-B-1.10.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-B-1.11">
-<a href="#abnf-grammar-cri" class="auto internal xref">Figure 6</a>:</dt>
+<a href="#abnf-grammar-ip" class="auto internal xref">Figure 6</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-B-1.12">
-          <p id="appendix-B-1.12.1"><a href="#abnf-grammar-cri" class="internal xref">ABNF Definition of URI Representation of a CRI</a><a href="#appendix-B-1.12.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.12.1"><a href="#abnf-grammar-ip" class="internal xref">ABNF Definition of Textual Representation of an IP Address</a><a href="#appendix-B-1.12.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-B-1.13">
-<a href="#abnf-grammar-sq-glue" class="auto internal xref">Figure 7</a>:</dt>
+<a href="#abnf-grammar-cri" class="auto internal xref">Figure 7</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-B-1.14">
-          <p id="appendix-B-1.14.1"><a href="#abnf-grammar-sq-glue" class="internal xref">Glue Code for Integrated DT Parser</a><a href="#appendix-B-1.14.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.14.1"><a href="#abnf-grammar-cri" class="internal xref">ABNF Definition of URI Representation of a CRI</a><a href="#appendix-B-1.14.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-B-1.15">
-<a href="#abnf-grammar-sq" class="auto internal xref">Figure 8</a>:</dt>
+<a href="#abnf-grammar-sq-glue" class="auto internal xref">Figure 8</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-B-1.16">
-          <p id="appendix-B-1.16.1"><a href="#abnf-grammar-sq" class="internal xref">ABNF Definitions Useful for Integrated Extension Parsers</a><a href="#appendix-B-1.16.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.16.1"><a href="#abnf-grammar-sq-glue" class="internal xref">Glue ABNF for Integrated DT Parser</a><a href="#appendix-B-1.16.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-B-1.17">
-<a href="#abnf-grammar-sq-h" class="auto internal xref">Figure 9</a>:</dt>
+<a href="#abnf-grammar-sq" class="auto internal xref">Figure 9</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-B-1.18">
-          <p id="appendix-B-1.18.1"><a href="#abnf-grammar-sq-h" class="internal xref">ABNF Definition for Integrated Hex Parser</a><a href="#appendix-B-1.18.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.18.1"><a href="#abnf-grammar-sq" class="internal xref">ABNF Definitions Useful for Integrated Extension Parsers</a><a href="#appendix-B-1.18.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-B-1.19">
-<a href="#abnf-grammar-sq-b64" class="auto internal xref">Figure 10</a>:</dt>
+<a href="#abnf-grammar-rs" class="auto internal xref">Figure 10</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-B-1.20">
-          <p id="appendix-B-1.20.1"><a href="#abnf-grammar-sq-b64" class="internal xref">ABNF Definition for Integrated Base64 Parser</a><a href="#appendix-B-1.20.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.20.1"><a href="#abnf-grammar-rs" class="internal xref">ABNF Definitions Useful for Raw String Integrated Extension Parsers</a><a href="#appendix-B-1.20.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="appendix-B-1.21">
+<a href="#abnf-grammar-sq-h" class="auto internal xref">Figure 11</a>:</dt>
+        <dd style="margin-left: 5.5em" id="appendix-B-1.22">
+          <p id="appendix-B-1.22.1"><a href="#abnf-grammar-sq-h" class="internal xref">ABNF Definition for Integrated Hex Parser</a><a href="#appendix-B-1.22.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="appendix-B-1.23">
+<a href="#abnf-grammar-sq-b64" class="auto internal xref">Figure 12</a>:</dt>
+        <dd style="margin-left: 5.5em" id="appendix-B-1.24">
+          <p id="appendix-B-1.24.1"><a href="#abnf-grammar-sq-b64" class="internal xref">ABNF Definition for Integrated Base64 Parser</a><a href="#appendix-B-1.24.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="appendix-B-1.25">
+<a href="#abnf-grammar-rs-h" class="auto internal xref">Figure 13</a>:</dt>
+        <dd style="margin-left: 5.5em" id="appendix-B-1.26">
+          <p id="appendix-B-1.26.1"><a href="#abnf-grammar-rs-h" class="internal xref">ABNF Definition for Integrated Raw String Hex Parser</a><a href="#appendix-B-1.26.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="appendix-B-1.27">
+<a href="#abnf-grammar-rs-b64" class="auto internal xref">Figure 14</a>:</dt>
+        <dd style="margin-left: 5.5em" id="appendix-B-1.28">
+          <p id="appendix-B-1.28.1"><a href="#abnf-grammar-rs-b64" class="internal xref">ABNF Definition for Integrated Raw String Base64 Parser</a><a href="#appendix-B-1.28.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
