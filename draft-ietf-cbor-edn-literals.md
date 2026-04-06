@@ -4,7 +4,7 @@ v: 3
 title: >
   CBOR Extended Diagnostic Notation (EDN)
 docname: draft-ietf-cbor-edn-literals-latest
-# date: 2026-03-30
+# date: 2026-04-06
 
 keyword: Internet-Draft
 cat: std
@@ -135,9 +135,10 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    The present `-22` includes extending inline comments to C-style
-    comments, and end-of-line comments to C++-style comments.
-    `-22` is intended to act on the results of the 2026-04-01 CBOR interim.
+    The present `-22` is intended to present a complete specification that
+    can be used to confirm the results of the 2026-04-01 CBOR interim.
+    This includes extending inline comments to encompass C-style
+    comments, and end-of-line comments to encompass C++-style comments.
 
 --- middle
 
@@ -488,18 +489,22 @@ syntax allows blank space (outside of constructs such as numbers,
 string literals, etc.):
 
 
-* inline comments, delimited by slashes ("`/`"):
+* inline comments, delimited by slashes ("`/`") or by C-style "`/*`"
+  and "`*/`":
 
-  In a position that allows blank space, any text within and including
-  a pair of slashes is considered blank space (and thus effectively a
-  comment).
+  In a position that allows blank space, each of the following is
+  considered blank space (and thus effectively a comment:
 
-* end-of-line comments, delimited by "`#`" and an end of line (LINE
+    * any text that starts with a slash followed by a character that is not a
+      star or a slash, up to another slash, or
+    * any text that starts with "`/*`" up to and including the next following "`*/`"
+
+* end-of-line comments, delimited by "`#`" or "`//`" and an end of line (LINE
   FEED, U+000A):
 
-  In a position that allows blank space, any text within and including
-  a pair of a "`#`" and the end of the line is considered blank space
-  (and thus effectively a comment).
+  In a position that allows blank space, any text starting with "`#`"
+  or "`//`" and ending with and including the end of the line is
+  considered blank space (and thus effectively a comment).
 
 Comments can be used to annotate a CBOR structure as in:
 
@@ -525,53 +530,33 @@ the use of inline and end-of-line comments:
 
 This reduces to `{1: 4, 3: 5, -1: h'6684523AB17337F173500E5728C628547CB37DFE68449C65F885D1B73B49EAE1'}`.
 
-As a not quite backwards compatible change, this specification enables
-the use of extended delimiters in inline comments:
+### Discussion
 
-When the opening slash is followed by one or more asterisks, this
-gives rise to an extended delimiter.
-The closing slash then needs to be immediately preceded by at least
-the same number of asterisks; slash characters that are not are not
-considered to be ending delimiters.
+As a not quite backward compatible change, this specification
+restricts slash-delimited comments that were allowed in {{Section G.6 of RFC8610}} in two ways:
 
-This enables a comment explaining a COSE algorithm identifier, as in
+* Inline comments now longer can be empty: The construct "`//`" that was
+  an empty comment in {{Section G.6 of RFC8610}} is now used instead to introduce an
+  end-of-line comment.
+  (Note that "`//`" still can be used in what is visually "within" a
+  slash-delimited comment; its first slash actually ends the current comment and
+  the second slash starts a new one.)
+* EDN now enables the use of C-style inline comments; e.g., "`/*foo/`"
+  was a complete comment in {{Section G.6 of RFC8610}} and now is the beginning of a
+  C-style comment that goes on up to a "`*/`".
+
+The introduction of C-style inline comments for instance enables a
+comment explaining a COSE algorithm identifier, as in
 
 ~~~ cbor-diag
 4 /* HMAC 256/64 */
 ~~~
 
-instead of the conventional, but slightly confusing
+instead of the conventional, but often less familiar
 
 ~~~ cbor-diag
 4 / HMAC 256//64 /
 ~~~
-
-Similarly, it enables
-
-~~~ cbor-diag
-9216 /** 9*1024 **/
-~~~
-
-<aside markdown="1">
-
-The backwards compatibility impact in practice should be limited, as
-the use of asterisks in inline-comments is quite conventional among
-users of the C language; the main problem will be with stylized
-comments such as
-
-> ~~~ cbor-diag
-> /**
->  *
->  */
-> ~~~
-
-<!-- Need to indent sourcecode because of RFCXMLv3 bug: no sourcecode in aside -->
-
-for documentation blocks (as in Doxygen), which now have an extended
-delimiter with two asterisks in the first line that is not matched by
-the closing delimiter in the third line.
-
-</aside>
 
 ## Encoding Indicators {#encoding-indicators}
 
@@ -1114,7 +1099,7 @@ EDN, while »`[[][]]`« is not.
   (and actually are terminators, which together with their optionality
   allows them to be used like separators as well, or even not at all).
   In summary, comma use is now aligned between EDN and CDDL, in a
-  fully backwards compatible way.
+  fully backward compatible way.
   (CDDL does allow the stylistically questionable »`a = [[][]]`«, though.)
 
 ### Encoding Indicators of Arrays and Maps {#ei-container}
@@ -1679,13 +1664,6 @@ The following additional items should help in the interpretation:
   >      startrawdelim = rawdelim&{|(rd)|@rdlen = rd.text_value.length}
   >      shortrawdelim = rawdelim&{|(rd)|rd.text_value.length < @rdlen}
   >      matchrawdelim = rawdelim&{|(rd)|rd.text_value.length >= @rdlen}
-  >
-  >   Similarly, the lenient ABNF grammar for inline comments can be
-  >   implemented as follows:
-  >
-  >     c-comment-start = stars&{|(st)|@stars = st.text_value.length}
-  >     c-comment-short = stars&{|(st)|st.text_value.length < @stars}
-  >     c-comment-end   = stars&{|(st)|st.text_value.length >= @stars}
 
 8. {: #concat}
   Extended diagnostic notation allows a (text or byte) string to be
@@ -1696,12 +1674,6 @@ The following additional items should help in the interpretation:
     representation of strings in this form split up into multiple
     chunks, and (2) the use of ellipses to represent elisions
     ({{elision}}).
-
-    Note that the syntax defined here for concatenation of components
-    uses an explicit `+` operator between the components to be
-    concatenated ({{Section G.4 of -cddl}} used simple juxtaposition,
-    which was not widely implemented and got in the way of making the use
-    of commas optional in other places via the rule `OC`).
 
     Text strings and byte strings do not mix within such a
     concatenation, except that byte string literal notation can be used
@@ -1755,6 +1727,18 @@ The following additional items should help in the interpretation:
       (This determination must be made at the time the app-string is
       interpreted; see {{unknown}} for how this may not be immediately
       during parsing.)
+
+### Discussion
+
+Note that the syntax defined here for concatenation of components
+uses an explicit `+` operator between the components to be
+concatenated.
+
+{:aside}
+> This is not entirely backward compatible to {{Section G.4 of -cddl}},
+> which used simple juxtaposition to indicate concatenation of strings.
+> This was not widely implemented and got in the way of making the use
+> of commas optional in other places via the rule `OC`.
 
 ABNF Definitions for Application Extension Content {#app-grammars}
 ---------------------------------------
@@ -2537,8 +2521,9 @@ Important differences include:
   line characters, while EDN finds nothing in JSON that could be inherited here.
   Inspired by JavaScript, EDN simplifies JavaScript's copy of the
   original C comment syntax to be delimited by single slashes (where
-  line breaks are not of interest); it also adds end-of-line comments
-  starting with `#`.
+  line breaks are not of interest); it also adds traditional C-style
+  inline comments (`/*` ... `*/`) and end-of-line comments
+  that start with `#` or `//`.
 
   {:compact}
   EDN:
