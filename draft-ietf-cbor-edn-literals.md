@@ -1,4 +1,4 @@
----
+s---
 v: 3
 
 title: >
@@ -350,7 +350,7 @@ configured to some basic output format, which:
 
 * looks like JSON where that is possible;
 * inserts encoding indicators only where the binary form differs from
-  preferred encoding;
+  preferred serialization;
 * uses hexadecimal representation (`h''`) for byte strings, not
   `b64''` or embedded CBOR (`<<>>`);
 * does not generate elaborate blank space (newlines, indentation) for
@@ -670,7 +670,7 @@ different row.
 The non-finite floating-point values `Infinity`, `-Infinity`, and `NaN` are
 written exactly as in this sentence (this is also a way they can be
 written in JavaScript, although JSON does not allow them).
-`NaN` in EDN is represented as 0xF97E00 in CBOR preferred encoding.
+`NaN` in EDN is represented as 0xF97E00 in CBOR preferred serialization.
 
 See {{decnumber}} for additional details of the EDN number syntax.
 
@@ -1122,7 +1122,7 @@ encoding of the tag head.  For example:
 {: indent='5'}
 1_1(1363896240)
 
-(assuming preferred encoding for the tag content) is encoded as
+(assuming preferred serialization for the tag content) is encoded as
 
 ~~~ cbor-pretty
 d9 0001        # tag(1)
