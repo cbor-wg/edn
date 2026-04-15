@@ -4,9 +4,9 @@
 
 Network Working Group                                         C. Bormann
 Internet-Draft                                    Universität Bremen TZI
-Updates: 8610, 8949 (if approved)                           2 April 2026
+Updates: 8610, 8949 (if approved)                          15 April 2026
 Intended status: Standards Track                                        
-Expires: 4 October 2026
+Expires: 17 October 2026
 
 
                 CBOR Extended Diagnostic Notation (EDN)
@@ -53,7 +53,7 @@ About This Document
 
 
 
-Bormann                  Expires 4 October 2026                 [Page 1]
+Bormann                  Expires 17 October 2026                [Page 1]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -73,7 +73,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 October 2026.
+   This Internet-Draft will expire on 17 October 2026.
 
 Copyright Notice
 
@@ -109,34 +109,34 @@ Table of Contents
 
 
 
-Bormann                  Expires 4 October 2026                 [Page 2]
+Bormann                  Expires 17 October 2026                [Page 2]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
        2.5.3.  Raw String Literals . . . . . . . . . . . . . . . . .  18
-       2.5.4.  Encoding Indicators of Strings  . . . . . . . . . . .  19
+       2.5.4.  Encoding Indicators of Strings  . . . . . . . . . . .  20
        2.5.5.  Base-Encoded Byte String Literals . . . . . . . . . .  20
        2.5.6.  CBOR Sequence Literals  . . . . . . . . . . . . . . .  21
        2.5.7.  Validity of Text Strings  . . . . . . . . . . . . . .  22
      2.6.  Arrays and Maps . . . . . . . . . . . . . . . . . . . . .  22
-       2.6.1.  Mandatory Separators, Optional Terminators  . . . . .  22
-       2.6.2.  Encoding Indicators of Arrays and Maps  . . . . . . .  23
+       2.6.1.  Mandatory Separators, Optional Terminators  . . . . .  23
+       2.6.2.  Encoding Indicators of Arrays and Maps  . . . . . . .  24
        2.6.3.  Validity of Maps  . . . . . . . . . . . . . . . . . .  24
      2.7.  Tags  . . . . . . . . . . . . . . . . . . . . . . . . . .  24
-     2.8.  Simple values . . . . . . . . . . . . . . . . . . . . . .  24
+     2.8.  Simple values . . . . . . . . . . . . . . . . . . . . . .  25
    3.  Application-Oriented Extension Literals . . . . . . . . . . .  25
      3.1.  The "dt" Extension  . . . . . . . . . . . . . . . . . . .  25
      3.2.  The "ip" Extension  . . . . . . . . . . . . . . . . . . .  26
      3.3.  The "hash" Extension  . . . . . . . . . . . . . . . . . .  27
      3.4.  The "cri" Extension . . . . . . . . . . . . . . . . . . .  28
    4.  Stand-in Representations in Binary CBOR . . . . . . . . . . .  29
-     4.1.  Handling unknown application-extension identifiers  . . .  29
+     4.1.  Handling unknown application-extension identifiers  . . .  30
      4.2.  Handling information deliberately elided from an EDN
-           document  . . . . . . . . . . . . . . . . . . . . . . . .  30
+           document  . . . . . . . . . . . . . . . . . . . . . . . .  31
    5.  ABNF Definitions  . . . . . . . . . . . . . . . . . . . . . .  32
      5.1.  Overall ABNF Definition for Extended Diagnostic
-           Notation  . . . . . . . . . . . . . . . . . . . . . . . .  32
+           Notation  . . . . . . . . . . . . . . . . . . . . . . . .  33
      5.2.  ABNF Definitions for Application Extension Content  . . .  40
        5.2.1.  h: ABNF Definition of Hexadecimal representation of a
                byte string . . . . . . . . . . . . . . . . . . . . .  42
@@ -165,7 +165,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                 [Page 3]
+Bormann                  Expires 17 October 2026                [Page 3]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -221,7 +221,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                 [Page 4]
+Bormann                  Expires 17 October 2026                [Page 4]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -277,7 +277,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                 [Page 5]
+Bormann                  Expires 17 October 2026                [Page 5]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -333,7 +333,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                 [Page 6]
+Bormann                  Expires 17 October 2026                [Page 6]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -389,7 +389,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                 [Page 7]
+Bormann                  Expires 17 October 2026                [Page 7]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -412,7 +412,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    *  looks like JSON where that is possible;
 
    *  inserts encoding indicators only where the binary form differs
-      from preferred encoding;
+      from preferred serialization;
 
    *  uses hexadecimal representation (h'') for byte strings, not b64''
       or embedded CBOR (<<>>);
@@ -445,7 +445,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                 [Page 8]
+Bormann                  Expires 17 October 2026                [Page 8]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -501,7 +501,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                 [Page 9]
+Bormann                  Expires 17 October 2026                [Page 9]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -557,7 +557,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 10]
+Bormann                  Expires 17 October 2026               [Page 10]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -613,7 +613,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 11]
+Bormann                  Expires 17 October 2026               [Page 11]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -669,7 +669,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 12]
+Bormann                  Expires 17 October 2026               [Page 12]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -725,7 +725,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 13]
+Bormann                  Expires 17 October 2026               [Page 13]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -781,7 +781,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 14]
+Bormann                  Expires 17 October 2026               [Page 14]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -818,15 +818,29 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
       +----------------------------------------+-------------------+
       | -0.0                                   | F9 8000 # float16 |
       +----------------------------------------+-------------------+
+      | Infinity                               | F9 7C00 # float16 |
+      +----------------------------------------+-------------------+
+      | -Infinity                              | F9 FC00 # float16 |
+      +----------------------------------------+-------------------+
+      | NaN                                    | F9 7E00 # float16 |
+      +----------------------------------------+-------------------+
 
       Table 2: Example Sets of Equivalent Notations for Some Numbers
 
    The non-finite floating-point values Infinity, -Infinity, and NaN are
    written exactly as in this sentence (this is also a way they can be
-   written in JavaScript, although JSON does not allow them).
+   written in JavaScript, although JSON does not allow them).  NaN in
+   EDN is represented as 0xF97E00 in CBOR preferred serialization.
 
    See Section 5.1, Paragraph 7, Item 3 for additional details of the
    EDN number syntax.
+
+
+
+Bormann                  Expires 17 October 2026               [Page 15]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
 
    (Note that literals for further number formats, e.g., for
    representing rational numbers as fractions, or for NaNs with non-zero
@@ -834,13 +848,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    information beyond that in [STD94] about the representation of
    numbers in CBOR can be found in the informational document
    [I-D.bormann-cbor-numbers].)
-
-
-
-Bormann                  Expires 4 October 2026                [Page 15]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
 2.5.  Strings
 
@@ -882,21 +889,18 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    following are equivalent (the first o is escaped as \u{6f} for no
    particular reason):
 
-   "D\u{6f}mino's \u{1F073} + \u{2318}"   # \u{}-escape 3 chars
-   "Domino's \uD83C\uDC73 + \u2318"       # escape JSON-like
-   "Domino's 🁳 + ⌘"                       # unescaped
 
 
 
 
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 16]
+Bormann                  Expires 17 October 2026               [Page 16]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
+
+   "D\u{6f}mino's \u{1F073} + \u{2318}"   # \u{}-escape 3 chars
+   "Domino's \uD83C\uDC73 + \u2318"       # escape JSON-like
+   "Domino's 🁳 + ⌘"                       # unescaped
 
 2.5.2.  Single-Quoted String Literals
 
@@ -933,6 +937,23 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    prefix.  Depending on the prefix, the result of that processing can,
    but need not be, a byte string value.
 
+
+
+
+
+
+
+
+
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 17]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    Prefixed string literals (whether single-quoted after the prefix or a
    raw string (Section 2.5.3)) are used both for base-encoded byte
    string literals (see Section 2.5.5) and for application-oriented
@@ -943,16 +964,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    string literal prefixes (h, b64) and any such potential future
    extension literal prefixes; for simplicity of expression, both cases
    are referred to as "extension literals".)
-
-
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 17]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
 2.5.3.  Raw String Literals
 
@@ -991,6 +1002,14 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    This mechanism is easy to use for the large majority of cases.
    However:
 
+
+
+
+Bormann                  Expires 17 October 2026               [Page 18]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    *  Raw strings cannot be used for empty string data items, which
       therefore need to be notated using double- or single-quoted
       strings.  (Obviously, there is no need to escape the content of
@@ -1001,14 +1020,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
       amalgamate with the start and end delimiters.
 
    To address the latter cases, two additional rules are added:
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 18]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    *  After processing the backquotes used as delimiters, any single
       newline at the start of a raw string is removed.  As a result:
@@ -1041,6 +1052,20 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
    See Section 5.1 for a more formal approach to defining these rules.
 
+
+
+
+
+
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 19]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
 2.5.4.  Encoding Indicators of Strings
 
    For indefinite length encoding, strings (byte and text strings) have
@@ -1058,14 +1083,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    For an indefinite-length string with no chunks inside, (_ ) would be
    ambiguous as to whether a byte string (encoded 0x5fff) or a text
    string (encoded 0x7fff) is meant and is therefore not used.  The
-
-
-
-Bormann                  Expires 4 October 2026                [Page 19]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
-
    basic forms ''_ and ""_ can be used instead and are reserved for the
    case of no chunks only — not as short forms for the (permitted, but
    not really useful) encodings with only empty chunks, which need to be
@@ -1095,6 +1112,16 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
       |  can easily be added back as application-oriented extension
       |  literals.)
 
+
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 20]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    Examples often benefit from some blank space (spaces, line breaks) in
    byte strings literals.  In certain EDN prefixed byte string literals,
    blank space is ignored; for instance, the following are equivalent:
@@ -1111,16 +1138,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
       h'68 65 6c /doubled l!/ 6c 6f # hello
         20 /space/
         77 6f 72 6c 64' /world/
-
-
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 20]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    Slash characters are part of the base64 classic alphabet (see Table 1
    in Section 4 of [RFC4648]), and they therefore need to be in the
@@ -1152,6 +1169,15 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    may be a string or may not (always) be, depending on the definition
    of the application extension.
 
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 21]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    An unprefixed sequence literal applies CBOR encoding to the data
    items in its content, taken as a CBOR sequence.  The value of the
    literal thus is a byte string with the encoded content; this is
@@ -1162,21 +1188,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
       <<1, 2>>           h'0102'
       <<"hello", null>>  h'65 68656c6c6f f6'
       <<>>               h''
-
-
-
-
-
-
-
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 21]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
 2.5.7.  Validity of Text Strings
 
@@ -1216,6 +1227,13 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    EDN borrows the JSON syntax for arrays and maps.  (Maps are called
    objects in JSON.)
 
+
+
+Bormann                  Expires 17 October 2026               [Page 22]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
 2.6.1.  Mandatory Separators, Optional Terminators
 
    For maps, EDN extends the JSON syntax by allowing any data item in
@@ -1226,14 +1244,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    of a map.  (These commas also were required in the original
    diagnostic notation defined in [STD94] and [RFC8610].)  The separator
    commas are now optional in the places where EDN syntax allows commas;
-
-
-
-Bormann                  Expires 4 October 2026                [Page 22]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
-
    however, where no comma is used in a separator position, there must
    be blank space (composed of at least one space, newline, and/or
    comment) instead.  (Stylistically, leaving out the commas is more
@@ -1267,6 +1277,19 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    11), different from »[1 1]« or »[1,1]«. As this is a general rule,
    »[[] []]« or »[[],[]]« are well-formed EDN, while »[[][]]« is not.
 
+
+
+
+
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 23]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
       |  CDDL's comma separators in the equivalent contexts (CDDL
       |  groups) are entirely optional (and actually are terminators,
       |  which together with their optionality allows them to be used
@@ -1282,13 +1305,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    represented in indefinite-length format.  For example, [_ 1, 2]
    contains an indicator that an indefinite-length representation was
    used to represent the data item [1, 2].
-
-
-
-Bormann                  Expires 4 October 2026                [Page 23]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    At the same position, encoding indicators for specifying the size of
    the array or map head for definite-length format can be used instead,
@@ -1322,9 +1338,17 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    The tag number can be followed by an encoding indicator giving the
    encoding of the tag head.  For example:
 
+
+
+
+Bormann                  Expires 17 October 2026               [Page 24]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
         1_1(1363896240)
 
-   (assuming preferred encoding for the tag content) is encoded as
+   (assuming preferred serialization for the tag content) is encoded as
 
    d9 0001        # tag(1)
       1a 514b67b0 # unsigned(1363896240)
@@ -1334,17 +1358,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    EDN uses JSON syntax for the simple values True (»true«), False
    (»false«), and Null (»null«).  Undefined is written »undefined« as in
    JavaScript.
-
-
-
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 24]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    These and all other simple values can be given as "simple()" with the
    appropriate integer in the parentheses.  For example, »simple(42)«
@@ -1376,6 +1389,19 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    Each row of Table 3 shows an example of "dt" notation and equivalent
    notation not using an application-extension identifier.
 
+
+
+
+
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 25]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
              +================================+==============+
              | dt literal                     | plain EDN    |
              +================================+==============+
@@ -1393,14 +1419,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
              +--------------------------------+--------------+
 
                  Table 3: dt and DT literals vs. plain EDN
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 25]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    See Section 5.2.3 for an ABNF definition for the content of dt
    literals.
@@ -1431,6 +1449,15 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    information on whether an address is IPv4 or IPv6 often needs to come
    from the context.
 
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 26]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    Note that this application-extension provides no direct
    representation of the "Interface format" defined in Section 3.1.3 of
    [RFC9164], an address combined with an optional prefix length and an
@@ -1443,20 +1470,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
    Each row of Table 4 shows an example of "ip" notation and equivalent
    notation not using an application-extension identifier.
-
-
-
-
-
-
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 26]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
      +====================+=========================================+
      | ip literal         | plain EDN                               |
@@ -1488,6 +1501,19 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    hash function to obtain a byte string that represents the output of
    that hash function.
 
+
+
+
+
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 27]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    The content of the literal is a string, optionally followed by either
    an integer or a text string that identifies the hash function in the
    COSE Algorithms registry of the CBOR Object Signing and Encryption
@@ -1498,21 +1524,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
    No uppercase variant prefix is defined for the application-extension
    identifier "hash".
-
-
-
-
-
-
-
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 27]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
           +===============+====================================+
           | hash literal  | plain EDN                          |
@@ -1550,6 +1561,15 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    The text of the literal is a URI Reference as per [RFC3986] or an IRI
    Reference as per [RFC3987].
 
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 28]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    The value of the literal is a CRI reference that can be converted to
    the text of the literal using the procedure of Section 6.1 of
    [I-D.ietf-core-href].  Note that there may be more than one CRI
@@ -1562,13 +1582,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
    cri'https://example.com/bottarga/shaved'
    CRI'https://example.com/bottarga/shaved'
-
-
-
-Bormann                  Expires 4 October 2026                [Page 28]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    is equivalent to
 
@@ -1604,6 +1617,15 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
       |  indicate which of these stand-ins are expected at this stage in
       |  the chain.
 
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 29]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
 4.1.  Handling unknown application-extension identifiers
 
    When ingesting CBOR diagnostic notation, any application-oriented
@@ -1616,15 +1638,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    an uninterpreted application-oriented extension literal in an
    ingested data item, allowing to postpone its decoding to a specific
    later stage of ingestion.
-
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 29]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    This specification defines a CBOR Tag for this purpose: The
    Diagnostic Notation Unresolved Application-Extension Tag, tag number
@@ -1657,6 +1670,18 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    // occurrences of the prefix "CPA" in the document.  Finally, please
    // remove this note.
 
+
+
+
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 30]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
 4.2.  Handling information deliberately elided from an EDN document
 
    When using EDN for exposition in a document or on a whiteboard, it is
@@ -1671,16 +1696,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    Upon ingesting EDN as a representation of a CBOR data item for
    further processing, the occurrence of an ellipsis usually is an error
    and processing has to stop.
-
-
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 30]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    However, it is useful to be able to process EDN documents with
    ellipses in the automation scripts for the documents using them.
@@ -1713,6 +1728,16 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    Subtree elisions can be represented in a CBOR data item by using
    /CPA/888(null) as the stand-in:
 
+
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 31]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    [1, 2, 888(null), 3]
    { "a": 1,
      "b": 888(null),
@@ -1730,13 +1755,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    operator (Section 5.1) with an ellipsis.  The example "signature"
    uses special syntax that allows the use of ellipses between the bytes
    notated _inside_ h'' literals.
-
-
-
-Bormann                  Expires 4 October 2026                [Page 31]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    String elisions can be represented in a CBOR data item by a stand-in
    that wraps an array of string fragments alternating with ellipsis
@@ -1767,6 +1785,15 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    [RFC7405]) that serve to define the syntax of EDN and some
    application-oriented literals.
 
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 32]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
       |  Implementation note: The ABNF definitions in this section are
       |  intended to be useful in a Parsing Expression Grammar (PEG)
       |  parser interpretation (see Appendix A of [RFC8610] for an
@@ -1786,14 +1813,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
       |  convention, the grammar for the content of an app-string with
       |  prefix, say, p, is described by an ABNF definition with the
       |  rule name app-string-p.
-
-
-
-Bormann                  Expires 4 October 2026                [Page 32]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
-
       |  
       |  As an implementation note, some implementations may want to
       |  integrate the parsing and processing of app-string content for
@@ -1823,6 +1842,14 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
                       / decnumber / nonfin) spec
    sign            = "+" / "-"
    decnumber       = [sign] (1*DIGIT ["." *DIGIT] / "." 1*DIGIT)
+
+
+
+Bormann                  Expires 17 October 2026               [Page 33]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
                             ["e" [sign] 1*DIGIT]
    hexfloat        = [sign] "0x" (1*HEXDIG ["." *HEXDIG] / "." 1*HEXDIG)
                             "p" [sign] 1*DIGIT
@@ -1842,14 +1869,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
    app-prefix      = lcalpha *lcldh ; including h and b64
                    / ucalpha *ucldh ; tagged variant, if defined
-
-
-
-Bormann                  Expires 4 October 2026                [Page 33]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
-
    app-string      = app-prefix sqstr
    app-sequence    = app-prefix "<<" seq ">>"
    app-rstring     = app-prefix rawstring
@@ -1879,6 +1898,14 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
    ; We allow %x09 HT in prose, but not in strings
    blank           = %x09 / %x0A / %x0D / %x20
+
+
+
+Bormann                  Expires 17 October 2026               [Page 34]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    non-slash       = blank / %x21-2e / %x30-7F / NONASCII
    non-lf          = %x09 / %x0D / %x20-7F / NONASCII
    comment         = "/" *non-slash "/"
@@ -1897,14 +1924,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    streamstring    = "(_" MS string *(MSC string) SOC ")"
    spec            = ["_" *wordchar]
    specms          = ["_" *wordchar MS]
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 34]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    double-quoted   = unescaped
                    / SQUOTE
@@ -1935,6 +1954,14 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
                    / two-surrogate
    non-surrogate   = ((DIGIT / "A"/"B"/"C" / "E"/"F") 3HEXDIG)
                    / ("D" ODIGIT 2HEXDIG )
+
+
+
+Bormann                  Expires 17 October 2026               [Page 35]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    two-surrogate   = high-surrogate "\" %s"u" low-surrogate
    high-surrogate  = "D" ("8"/"9"/"A"/"B") 2HEXDIG
    low-surrogate   = "D" ("C"/"D"/"E"/"F") 2HEXDIG
@@ -1954,14 +1981,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    hexscalar-s     = "10" 4HEXDIG / HEXDIG1 4HEXDIG
                    / non-surrogate-1 / HEXDIG1 2HEXDIG
                    / ("1"/"8"/"9"/HEXDIGA) HEXDIG
-
-
-
-Bormann                  Expires 4 October 2026                [Page 35]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
-
                    / "7F"
                    / HEXDIG1
 
@@ -1991,6 +2010,14 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    lcalpha         = %x61-7A ; a-z
    lcldh           = lcalpha / DIGIT / "-"
    ucalpha         = %x41-5A ; A-Z
+
+
+
+Bormann                  Expires 17 October 2026               [Page 36]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    ucldh           = ucalpha / DIGIT / "-"
    ALPHA           = lcalpha / ucalpha
    wordchar        = "_" / ALPHA / DIGIT ; [_a-z0-9A-Z]
@@ -2009,14 +2036,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
        values in this document define Unicode scalar values (characters)
        rather than their UTF-8 encoding.  For example, the Unicode PLACE
        OF INTEREST SIGN (U+2318) would be defined in ABNF as %x2318.
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 36]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
    2.  Unicode CARRIAGE RETURN characters (U+000D, often seen escaped as
        "\r" in many programming languages) that exist in the input
@@ -2045,6 +2064,16 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
        parsers accept only a subset of the floating point syntax in this
        document and may require some preprocessing to use here.
 
+
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 37]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
    4.  hexint, octint, and binint stand for an integer in the usual base
        16/hexadecimal ("0x"), base 8/octal ("0o"), or base 2/binary
        ("0b") notation.  hexfloat stands for a floating point number in
@@ -2066,13 +2095,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
        if leading zeros need to be added during serialization to obtain
        specific sizes for tag head, byte string head, and the overall
        byte string.
-
-
-
-Bormann                  Expires 4 October 2026                [Page 37]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
        When decnumber stands for a floating point value, and for
        hexfloat and nonfin, a floating point data item with major type 7
@@ -2100,6 +2122,14 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
      |  In a PEG parser that implements predicates, these matching
      |  rules can for instance be implemented as follows:
+
+
+
+Bormann                  Expires 17 October 2026               [Page 38]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
      |  
      |   startrawdelim = rawdelim&{|(rd)|@rdlen = rd.text_value.length}
      |   shortrawdelim = rawdelim&{|(rd)|rd.text_value.length < @rdlen}
@@ -2121,14 +2151,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
        juxtaposition, which was not widely implemented and got in the
        way of making the use of commas optional in other places via the
        rule OC).
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 38]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
        Text strings and byte strings do not mix within such a
        concatenation, except that byte string literal notation can be
@@ -2155,6 +2177,15 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
        The semantic processing of these constructs is governed by the
        following rules:
 
+
+
+
+
+Bormann                  Expires 17 October 2026               [Page 39]
+
+Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
+
+
        *  A single ... is a general ellipsis, which by itself can stand
           for any data item.  Multiple adjacent concatenated ellipses
           are equivalent to a single ellipsis.
@@ -2176,15 +2207,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
           CBOR data items that are well-formed but not valid.  If the
           left hand side is a byte string, the right hand side also
           needs to be a byte string.
-
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 39]
-
-Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
-
 
        *  Some of the strings may be app-strings.  If the result type of
           the app-string is an actual (text or byte) string, joining of
@@ -2215,29 +2237,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bormann                  Expires 4 October 2026                [Page 40]
+Bormann                  Expires 17 October 2026               [Page 40]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2293,7 +2293,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 41]
+Bormann                  Expires 17 October 2026               [Page 41]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2349,7 +2349,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 42]
+Bormann                  Expires 17 October 2026               [Page 42]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2405,7 +2405,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 43]
+Bormann                  Expires 17 October 2026               [Page 43]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2461,7 +2461,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 44]
+Bormann                  Expires 17 October 2026               [Page 44]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2517,7 +2517,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 45]
+Bormann                  Expires 17 October 2026               [Page 45]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2573,7 +2573,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 46]
+Bormann                  Expires 17 October 2026               [Page 46]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2629,7 +2629,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 47]
+Bormann                  Expires 17 October 2026               [Page 47]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2685,7 +2685,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 48]
+Bormann                  Expires 17 October 2026               [Page 48]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2741,7 +2741,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 49]
+Bormann                  Expires 17 October 2026               [Page 49]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2797,7 +2797,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 50]
+Bormann                  Expires 17 October 2026               [Page 50]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2853,7 +2853,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 51]
+Bormann                  Expires 17 October 2026               [Page 51]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2909,7 +2909,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 52]
+Bormann                  Expires 17 October 2026               [Page 52]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -2965,7 +2965,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 53]
+Bormann                  Expires 17 October 2026               [Page 53]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -3021,7 +3021,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 54]
+Bormann                  Expires 17 October 2026               [Page 54]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -3077,7 +3077,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 55]
+Bormann                  Expires 17 October 2026               [Page 55]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -3133,7 +3133,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 56]
+Bormann                  Expires 17 October 2026               [Page 56]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -3189,7 +3189,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 57]
+Bormann                  Expires 17 October 2026               [Page 57]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -3245,7 +3245,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 58]
+Bormann                  Expires 17 October 2026               [Page 58]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -3301,7 +3301,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 59]
+Bormann                  Expires 17 October 2026               [Page 59]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -3357,7 +3357,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-Bormann                  Expires 4 October 2026                [Page 60]
+Bormann                  Expires 17 October 2026               [Page 60]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -3413,7 +3413,7 @@ Appendix A.  EDN and CDDL
 
 
 
-Bormann                  Expires 4 October 2026                [Page 61]
+Bormann                  Expires 17 October 2026               [Page 61]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -3469,7 +3469,7 @@ List of Tables
 
 
 
-Bormann                  Expires 4 October 2026                [Page 62]
+Bormann                  Expires 17 October 2026               [Page 62]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
@@ -3525,4 +3525,4 @@ Author's Address
 
 
 
-Bormann                  Expires 4 October 2026                [Page 63]
+Bormann                  Expires 17 October 2026               [Page 63]
