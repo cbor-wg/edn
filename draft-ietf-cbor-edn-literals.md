@@ -50,7 +50,6 @@ normative:
   IANA.core-parameters:
   BCP26: ianacons
   STD80: ascii
-  I-D.ietf-core-href: cri
   IEEE754:
     target: https://ieeexplore.ieee.org/document/8766229
     title: IEEE Standard for Floating-Point Arithmetic
@@ -189,9 +188,8 @@ one for adding application-oriented literal forms.
 It uses these registries to add encoding indicators for a more
 complete coverage of encoding variation,
 and to add application-oriented literal forms that enhance EDN with text
-representations of epoch-based date/times, of IP addresses
-and prefixes {{-iptag}}, and of Concise Resource Identifiers (CRI
-{{-cri}}), as well as an application-oriented literal that
+representations of epoch-based date/times, and of IP addresses
+and prefixes {{-iptag}}, as well as an application-oriented literal that
 represents cryptographic hash values computed from byte strings.
 
 In addition, this document registers a media type identifier
@@ -246,7 +244,7 @@ provide documentation for NaN payloads, which are not covered in this document.
 
 After introductory material, {{app-ext}}
 illustrates the concept of application-oriented extension literals by
-defining the "dt", "ip", "hash", and "cri" extensions.
+defining the "dt", "ip", and "hash" extensions.
 {{stand-in}} defines mechanisms
 for dealing with unknown application-oriented literals and
 deliberately elided information.
@@ -1266,40 +1264,6 @@ identifier "hash".
 {: #tab-equiv-hash title="hash literals vs. plain EDN"}
 
 
-The "cri" Extension {#cri}
---------------------
-
-The
-application-extension identifier "`cri`" is used to notate
-an EDN literal for a CRI reference as defined in {{-cri}}.
-
-The text of the literal is a URI Reference as per {{-uri}} or an IRI
-Reference as per {{-iri}}.
-
-The value of the literal is a CRI reference that can be converted to
-the text of the literal using the procedure of {{Section 6.1 of -cri}}.  <!-- {{cri-to-uri}}. -->
-Note that there may be more than one CRI reference that can be
-converted to the URI/IRI reference given; implementations are expected
-to favor the simplest variant available and make non-surprising
-choices otherwise.
-In the all-upper-case variant of the app-prefix, the value is enclosed
-in a tag number 99.
-
-As an example, the CBOR diagnostic notation
-
-~~~ cbor-diag
-cri'https://example.com/bottarga/shaved'
-CRI'https://example.com/bottarga/shaved'
-~~~
-
-is equivalent to
-
-~~~ cbor-diag
-[-4, ["example", "com"], ["bottarga", "shaved"]]
-99([-4, ["example", "com"], ["bottarga", "shaved"]])
-~~~
-
-See {{cri-grammar}} for an ABNF definition for the content of `cri` literals.
 
 
 Stand-in Representations in Binary CBOR {#stand-in}
@@ -1728,8 +1692,6 @@ which are not always repeated here.
 | ip         | IP address or prefix                               | byte string, <br/>array of length and byte string |
 | IP         | "                                                  | Tag 54 (IPv6) or 52 (IPv4) on the above           |
 | hash       | string (usually used with sequences)               | byte string                                       |
-| cri        | RFC 3986 URI or URI reference                      | CBOR structure representing equivalent CRI        |
-| CRI        | "                                                  | Tag 99 on the above                               |
 {: #tab-prefixes title="App-prefix Values Defined in this Document"}
 
 Note that implementation platforms may already provide implementations
@@ -1874,115 +1836,6 @@ uint          = "0" / DIGIT1 *DIGIT
 ~~~
 {: #abnf-grammar-ip sourcecode-name="cbor-edn-ext-ip.abnf"
 title="ABNF Definition of Textual Representation of an IP Address"}
-
-
-### cri: ABNF Definition of URI Representation of a CRI {#cri-grammar}
-
-It can be expected that implementations of the application-extension
-identifier "`cri`" will make use of platform-provided URI
-implementations, which will include a URI parser.
-
-In case such a URI parser is not available or inconvenient to
-integrate,
-a grammar of the content of `cri` literals is provided by the
-ABNF for `URI-reference` in {{Section 4.1 of RFC3986@-uri}} with certain
-re-arrangements taken from {{ip-grammar}};
-these are reproduced in {{abnf-grammar-cri}}.
-If the content is not ASCII only (i.e., for IRIs), first apply
-{{Section 3.1 of RFC3987}} and apply this grammar to the result.
-
-~~~ abnf
-app-string-cri = URI-reference
-; ABNF from RFC 3986:
-
-URI           = scheme ":" hier-part [ "?" query ] [ "#" fragment ]
-
-hier-part     = "//" authority path-abempty
-                 / path-absolute
-                 / path-rootless
-                 / path-empty
-
-URI-reference = URI / relative-ref
-
-absolute-URI  = scheme ":" hier-part [ "?" query ]
-
-relative-ref  = relative-part [ "?" query ] [ "#" fragment ]
-
-relative-part = "//" authority path-abempty
-                 / path-absolute
-                 / path-noscheme
-                 / path-empty
-
-scheme        = ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
-
-authority     = [ userinfo "@" ] host [ ":" port ]
-userinfo      = *( unreserved / pct-encoded / sub-delims / ":" )
-host          = IP-literal / IPv4address / reg-name
-port          = *DIGIT
-
-IP-literal    = "[" ( IPv6address / IPvFuture  ) "]"
-
-IPvFuture     = "v" 1*HEXDIG "." 1*( unreserved / sub-delims / ":" )
-
-; Use IPv6address, h16, ls32, IPv4adress, dec-octet as re-arranged
-; for PEG Compatibility in Figure 6 of [RFC XXXX]:
-
-IPv6address   =                            6( h16 ":" ) ls32
-              /                       "::" 5( h16 ":" ) ls32
-              / [ h16               ] "::" 4( h16 ":" ) ls32
-              / [ h16 *1( ":" h16 ) ] "::" 3( h16 ":" ) ls32
-              / [ h16 *2( ":" h16 ) ] "::" 2( h16 ":" ) ls32
-              / [ h16 *3( ":" h16 ) ] "::"    h16 ":"   ls32
-              / [ h16 *4( ":" h16 ) ] "::"              ls32
-              / [ h16 *5( ":" h16 ) ] "::"              h16
-              / [ h16 *6( ":" h16 ) ] "::"
-
-h16           = 1*4HEXDIG
-ls32          = ( h16 ":" h16 ) / IPv4address
-IPv4address   = dec-octet "." dec-octet "." dec-octet "." dec-octet
-dec-octet     = "25" %x30-35         ; 250-255
-              / "2" %x30-34 DIGIT    ; 200-249
-              / "1" 2DIGIT           ; 100-199
-              / %x31-39 DIGIT        ; 10-99
-              / DIGIT                ; 0-9
-
-reg-name      = *( unreserved / pct-encoded / sub-delims )
-
-path          = path-abempty    ; begins with "/" or is empty
-                 / path-absolute   ; begins with "/" but not "//"
-                 / path-noscheme   ; begins with a non-colon segment
-                 / path-rootless   ; begins with a segment
-                 / path-empty      ; zero characters
-
-path-abempty  = *( "/" segment )
-path-absolute = "/" [ segment-nz *( "/" segment ) ]
-path-noscheme = segment-nz-nc *( "/" segment )
-path-rootless = segment-nz *( "/" segment )
-path-empty    = 0<pchar>
-
-segment       = *pchar
-segment-nz    = 1*pchar
-segment-nz-nc = 1*( unreserved / pct-encoded / sub-delims / "@" )
-                 ; non-zero-length segment without any colon ":"
-
-pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
-
-query         = *( pchar / "/" / "?" )
-
-fragment      = *( pchar / "/" / "?" )
-
-pct-encoded   = "%" HEXDIG HEXDIG
-
-unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
-reserved      = gen-delims / sub-delims
-gen-delims    = ":" / "/" / "?" / "#" / "[" / "]" / "@"
-sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
-                 / "*" / "+" / "," / ";" / "="
-~~~
-{: #abnf-grammar-cri sourcecode-name="cbor-edn-ext-cri.abnf"
-title="ABNF Definition of URI Representation of a CRI"
-}
-
 
 
 ABNF Definitions for Integrated Extension Parsers {#integrated-grammars}
@@ -2232,7 +2085,6 @@ initial entries have the Change Controller "IETF".
 | dt                               | Date/Time                       | RFC-XXXX         |
 | ip                               | IP Address/Prefix               | RFC-XXXX         |
 | hash                             | Cryptographic Hash              | RFC-XXXX         |
-| cri                              | Constrained Resource Identifier | RFC-XXXX, {{-cri}} |
 {: #tab-iana title="Initial Content of Application-extension
 Identifier Registry"}
 

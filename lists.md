@@ -21,9 +21,6 @@
 {{abnf-grammar-ip}}:
 : {{<<abnf-grammar-ip}}
 
-{{abnf-grammar-cri}}:
-: {{<<abnf-grammar-cri}}
-
 {{abnf-grammar-sq-glue}}:
 : {{<<abnf-grammar-sq-glue}}
 
