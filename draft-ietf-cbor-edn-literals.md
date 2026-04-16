@@ -4,7 +4,7 @@ v: 3
 title: >
   CBOR Extended Diagnostic Notation (EDN)
 docname: draft-ietf-cbor-edn-literals-latest
-# date: 2026-03-30
+# date: 2026-04-06
 
 keyword: Internet-Draft
 cat: std
@@ -135,11 +135,10 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    The present `-21` incorporates pull request #84, including
-    more integrated parsers for using application
-    extensions with raw strings, as well as various cleanup.
-    `-21` is intended for use at the 2026-04-01 CBOR interim, but
-    contains no known April fools pranks.
+    The present `-22` is intended to present a complete specification that
+    can be used to confirm the results of the 2026-04-01 CBOR interim.
+    This includes extending inline comments to encompass C-style
+    comments, and end-of-line comments to encompass C++-style comments.
 
 --- middle
 
@@ -490,18 +489,22 @@ syntax allows blank space (outside of constructs such as numbers,
 string literals, etc.):
 
 
-* inline comments, delimited by slashes ("`/`"):
+* inline comments, delimited by slashes ("`/`") or by C-style "`/*`"
+  and "`*/`":
 
-  In a position that allows blank space, any text within and including
-  a pair of slashes is considered blank space (and thus effectively a
-  comment).
+  In a position that allows blank space, each of the following is
+  considered blank space (and thus effectively a comment:
 
-* end-of-line comments, delimited by "`#`" and an end of line (LINE
+    * any text that starts with a slash followed by a character that is not a
+      star or a slash, up to another slash, or
+    * any text that starts with "`/*`" up to and including the next following "`*/`"
+
+* end-of-line comments, delimited by "`#`" or "`//`" and an end of line (LINE
   FEED, U+000A):
 
-  In a position that allows blank space, any text within and including
-  a pair of a "`#`" and the end of the line is considered blank space
-  (and thus effectively a comment).
+  In a position that allows blank space, any text starting with "`#`"
+  or "`//`" and ending with and including the end of the line is
+  considered blank space (and thus effectively a comment).
 
 Comments can be used to annotate a CBOR structure as in:
 
@@ -526,6 +529,34 @@ the use of inline and end-of-line comments:
 ~~~
 
 This reduces to `{1: 4, 3: 5, -1: h'6684523AB17337F173500E5728C628547CB37DFE68449C65F885D1B73B49EAE1'}`.
+
+### Discussion
+
+As a not quite backward compatible change, this specification
+restricts slash-delimited comments that were allowed in {{Section G.6 of RFC8610}} in two ways:
+
+* Inline comments now longer can be empty: The construct "`//`" that was
+  an empty comment in {{Section G.6 of RFC8610}} is now used instead to introduce an
+  end-of-line comment.
+  (Note that "`//`" still can be used in what is visually "within" a
+  slash-delimited comment; its first slash actually ends the current comment and
+  the second slash starts a new one.)
+* EDN now enables the use of C-style inline comments; e.g., "`/*foo/`"
+  was a complete comment in {{Section G.6 of RFC8610}} and now is the beginning of a
+  C-style comment that goes on up to a "`*/`".
+
+The introduction of C-style inline comments for instance enables a
+comment explaining a COSE algorithm identifier, as in
+
+~~~ cbor-diag
+4 /* HMAC 256/64 */
+~~~
+
+instead of the conventional, but often less familiar
+
+~~~ cbor-diag
+4 / HMAC 256//64 /
+~~~
 
 ## Encoding Indicators {#encoding-indicators}
 
@@ -1072,7 +1103,7 @@ EDN, while »`[[][]]`« is not.
   (and actually are terminators, which together with their optionality
   allows them to be used like separators as well, or even not at all).
   In summary, comma use is now aligned between EDN and CDDL, in a
-  fully backwards compatible way.
+  fully backward compatible way.
   (CDDL does allow the stylistically questionable »`a = [[][]]`«, though.)
 
 ### Encoding Indicators of Arrays and Maps {#ei-container}
@@ -1621,7 +1652,7 @@ The following additional items should help in the interpretation:
 
 7. {: #rawstring-grammar}
   The ABNF grammar for raw strings is lenient; a parser needs to
-  implement the comments on `matchrawdelim` and `shortrawdelim` as
+  implement the ABNF comments on `matchrawdelim` and `shortrawdelim` as
   well.
   `shortrawdelim` only matches sequences of backquotes that are
   shorter than `startrawdelim`.
@@ -1647,12 +1678,6 @@ The following additional items should help in the interpretation:
     representation of strings in this form split up into multiple
     chunks, and (2) the use of ellipses to represent elisions
     ({{elision}}).
-
-    Note that the syntax defined here for concatenation of components
-    uses an explicit `+` operator between the components to be
-    concatenated ({{Section G.4 of -cddl}} used simple juxtaposition,
-    which was not widely implemented and got in the way of making the use
-    of commas optional in other places via the rule `OC`).
 
     Text strings and byte strings do not mix within such a
     concatenation, except that byte string literal notation can be used
@@ -1707,6 +1732,18 @@ The following additional items should help in the interpretation:
       interpreted; see {{unknown}} for how this may not be immediately
       during parsing.)
 
+### Discussion
+
+Note that the syntax defined here for concatenation of components
+uses an explicit `+` operator between the components to be
+concatenated.
+
+{:aside}
+> This is not entirely backward compatible to {{Section G.4 of -cddl}},
+> which used simple juxtaposition to indicate concatenation of strings.
+> This was not widely implemented and got in the way of making the use
+> of commas optional in other places via the rule `OC`.
+
 ABNF Definitions for Application Extension Content {#app-grammars}
 ---------------------------------------
 
@@ -1752,7 +1789,7 @@ HEXDIG          = DIGIT / HEXDIGA
 HEXDIGA         = "A" / "B" / "C" / "D" / "E" / "F"
 ; Note: double-quoted strings as in "A" are case-insensitive in ABNF
 lblank          = %x0A / %x20  ; Not HT or CR (gone)
-non-lf          = %x20-7F / NONASCII
+non-lf          = %x20-7f / NONASCII
 NONASCII        = %x80-D7FF / %xE000-10FFFF
 ~~~
 {: #abnf-grammar-ext-common sourcecode-name="cbor-edn-extcommon.abnf"
@@ -1771,12 +1808,18 @@ well as blank space (including comments) around each hex digit.
 
 ~~~ abnf
 app-string-h    = S *(HEXDIG S HEXDIG S / ellipsis S)
-                  ["#" *non-lf]
+                  [eol-comment *non-lf]
 ellipsis        = 3*"."
 non-slash       = lblank / %x21-2e / %x30-7f / NONASCII
-S               = *lblank *(comment *lblank )
-comment         = "/" *non-slash "/"
-                / "#" *non-lf %x0A
+non-slash-star  = lblank / %x21-29 / %x2b-2e / %x30-7f / NONASCII
+non-star        = lblank / %x21-29 / %x2b-7f / NONASCII
+end-star        = *non-star 1*"*"
+non-lf          = %x20-7f / NONASCII
+eol-comment     = "#" / "//"
+S               = *lblank *(comment *lblank)
+comment         = "/" non-slash-star *non-slash "/"
+                / "/*" end-star *(non-slash-star end-star) "/"
+                / eol-comment *non-lf %x0A
 ~~~
 {: #abnf-grammar-h sourcecode-name="cbor-edn-ext-h.abnf"
 title="ABNF Definition of Hexadecimal Representation of a Byte String"
@@ -1800,8 +1843,8 @@ app-string-b64  = B *(4(b64dig B))
                   [b64dig B b64dig B ["=" B "=" / b64dig B ["="]] B]
                   ["#" *non-lf]
 b64dig          = ALPHA / DIGIT / "-" / "_" / "+" / "/"
-B               = *lblank *(icomment *lblank)
-icomment        = "#" *non-lf %x0A
+B               = *lblank *(comment *lblank)
+comment         = "#" *non-lf %x0A
 ~~~
 {: #abnf-grammar-b64 sourcecode-name="cbor-edn-ext-b64.abnf"
 title="ABNF definition of Base64 Representation of a Byte String"
@@ -2087,13 +2130,19 @@ for `h` prefixed single-quote strings.
 ~~~ abnf
 sq-app-string-h = %s"h'" s-app-string-h "'"
 s-app-string-h = h-S *(HEXDIG h-S HEXDIG h-S / ellipsis h-S)
-    ["#" *(i-non-lf)]
+    [eol-comment *i-non-lf]
 
 h-S = *(i-blank) *(h-comment *(i-blank))
 h-non-slash = i-blank / %x21-26 / "\'" / %x28-2e
             / %x30-5b / "\\" / %x5d-7f / i-NONASCII
-h-comment = "/" *(h-non-slash) "/"
-          / "#" *(i-non-lf) i-LF
+h-non-slash-star = i-blank / %x21-26 / "\'" / %x28-29 / %x2b-2e
+                 / %x30-5b / "\\" / %x5d-7f / i-NONASCII
+h-non-star = i-blank / %x21-26 / "\'" / %x28-29 / %x2b-5b
+           / "\\" / %x5d-7f / i-NONASCII
+h-end-star = *h-non-star 1*"*"
+h-comment = "/" h-non-slash-star *h-non-slash "/"
+          / "/*" h-end-star *(h-non-slash-star h-end-star) "/"
+          / eol-comment *i-non-lf i-LF
 ~~~
 {: #abnf-grammar-sq-h sourcecode-name="cbor-edn-int-hsq.abnf"
 title="ABNF Definition for Integrated Hex Parser"
@@ -2133,12 +2182,16 @@ be used as an integrated parser for ``` h ``` prefixed raw strings.
 ~~~ abnf
 raw-app-string-h = %s"h" startrawdelim r-app-string-h
 r-app-string-h = rh-S *(HEXDIG rh-S HEXDIG rh-S / ellipsis rh-S)
-    ("#" *(r-non-lf) matchrawdelim / fitrawdelim)
+    (eol-comment *r-non-lf matchrawdelim / fitrawdelim)
 rh-S = *(lblank) *(rh-comment *(lblank))
-rh-non-slash = lblank / %x21-2e / %x30-5f / %x61-7f
-             / NONASCII / shortrawdelim
-rh-comment = "/" *(rh-non-slash) "/"
-           / "#" *(r-non-lf) %x0A
+rh-2 = %x61-7f / NONASCII / shortrawdelim
+rh-non-slash = lblank / %x21-2e / %x30-5f / rh-2
+rh-non-slash-star = lblank / %x21-29 / %x2b-2e / %x30-5f / rh-2
+rh-non-star = lblank / %x21-29 / %x2b-5f / rh-2
+rh-end-star = *rh-non-star 1*"*"
+rh-comment = "/" rh-non-slash-star *rh-non-slash "/"
+           / "/*" rh-end-star *(rh-non-slash-star rh-end-star) "/"
+           / eol-comment *r-non-lf %x0A
 ~~~
 {: #abnf-grammar-rs-h sourcecode-name="cbor-edn-int-hraw.abnf"
 title="ABNF Definition for Integrated Raw String Hex Parser"
@@ -2472,8 +2525,9 @@ Important differences include:
   line characters, while EDN finds nothing in JSON that could be inherited here.
   Inspired by JavaScript, EDN simplifies JavaScript's copy of the
   original C comment syntax to be delimited by single slashes (where
-  line breaks are not of interest); it also adds end-of-line comments
-  starting with `#`.
+  line breaks are not of interest); it also adds traditional C-style
+  inline comments (`/*` ... `*/`) and end-of-line comments
+  that start with `#` or `//`.
 
   {:compact}
   EDN:
