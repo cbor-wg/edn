@@ -17,11 +17,10 @@ Appendix G.
 to support text representations such as of epoch-based dates/times and of IP
 addresses and prefixes. 
        (This cref will be removed by the RFC editor:) 
-The present  -21  incorporates pull request #84, including
-more integrated parsers for using application
-extensions with raw strings, as well as various cleanup.
- -21  is intended for use at the 2026-04-01 CBOR interim, but
-contains no known April fools pranks. 
+The present  -22  is intended to present a complete specification that
+can be used to confirm the results of the 2026-04-01 CBOR interim.
+This includes extending inline comments to encompass C-style
+comments, and end-of-line comments to encompass C++-style comments. 
     " name="description">
 <meta content="xml2rfc 3.32.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -1063,7 +1062,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Bormann</td>
-<td class="center">Expires 17 October 2026</td>
+<td class="center">Expires 18 October 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1079,12 +1078,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc8610" class="eref">8610</a>, <a href="https://www.rfc-editor.org/rfc/rfc8949" class="eref">8949</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-04-15" class="published">15 April 2026</time>
+<time datetime="2026-04-16" class="published">16 April 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-10-17">17 October 2026</time></dd>
+<dd class="expires"><time datetime="2026-10-18">18 October 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1107,11 +1106,10 @@ Appendix G.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 to support text representations such as of epoch-based dates/times and of IP
 addresses and prefixes.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 <p id="section-abstract-4"><span class="cref" id="status">(This cref will be removed by the RFC editor:)<br>
-The present <code>-21</code> incorporates pull request #84, including
-more integrated parsers for using application
-extensions with raw strings, as well as various cleanup.
-<code>-21</code> is intended for use at the 2026-04-01 CBOR interim, but
-contains no known April fools pranks.</span><a href="#section-abstract-4" class="pilcrow">¶</a></p>
+The present <code>-22</code> is intended to present a complete specification that
+can be used to confirm the results of the 2026-04-01 CBOR interim.
+This includes extending inline comments to encompass C-style
+comments, and end-of-line comments to encompass C++-style comments.</span><a href="#section-abstract-4" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1148,7 +1146,7 @@ contains no known April fools pranks.</span><a href="#section-abstract-4" class=
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1210,6 +1208,11 @@ contains no known April fools pranks.</span><a href="#section-abstract-4" class=
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
                 <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-comments" class="internal xref">Comments</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.1">
+                    <p id="section-toc.1-1.2.2.2.2.1.1"><a href="#section-2.2.1" class="auto internal xref">2.2.1</a>.  <a href="#name-discussion" class="internal xref">Discussion</a></p>
+</li>
+                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
                 <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-encoding-indicators" class="internal xref">Encoding Indicators</a></p>
@@ -1298,6 +1301,11 @@ contains no known April fools pranks.</span><a href="#section-abstract-4" class=
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-overall-abnf-definition-for" class="internal xref">Overall ABNF Definition for Extended Diagnostic Notation</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-discussion-2" class="internal xref">Discussion</a></p>
+</li>
+                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-abnf-definitions-for-applic" class="internal xref">ABNF Definitions for Application Extension Content</a></p>
@@ -1761,19 +1769,28 @@ syntax allows blank space (outside of constructs such as numbers,
 string literals, etc.):<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2-3.1">
-            <p id="section-2.2-3.1.1">inline comments, delimited by slashes ("<code>/</code>"):<a href="#section-2.2-3.1.1" class="pilcrow">¶</a></p>
+            <p id="section-2.2-3.1.1">inline comments, delimited by slashes ("<code>/</code>") or by C-style "<code>/*</code>"
+and "<code>*/</code>":<a href="#section-2.2-3.1.1" class="pilcrow">¶</a></p>
 <p id="section-2.2-3.1.2">
-In a position that allows blank space, any text within and including
-a pair of slashes is considered blank space (and thus effectively a
-comment).<a href="#section-2.2-3.1.2" class="pilcrow">¶</a></p>
+In a position that allows blank space, each of the following is
+considered blank space (and thus effectively a comment:<a href="#section-2.2-3.1.2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.2-3.1.3.1">
+                <p id="section-2.2-3.1.3.1.1">any text that starts with a slash followed by a character that is not a
+star or a slash, up to another slash, or<a href="#section-2.2-3.1.3.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-2.2-3.1.3.2">
+                <p id="section-2.2-3.1.3.2.1">any text that starts with "<code>/*</code>" up to and including the next following "<code>*/</code>"<a href="#section-2.2-3.1.3.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
 </li>
           <li class="normal" id="section-2.2-3.2">
-            <p id="section-2.2-3.2.1">end-of-line comments, delimited by "<code>#</code>" and an end of line (LINE
+            <p id="section-2.2-3.2.1">end-of-line comments, delimited by "<code>#</code>" or "<code>//</code>" and an end of line (LINE
 FEED, U+000A):<a href="#section-2.2-3.2.1" class="pilcrow">¶</a></p>
 <p id="section-2.2-3.2.2">
-In a position that allows blank space, any text within and including
-a pair of a "<code>#</code>" and the end of the line is considered blank space
-(and thus effectively a comment).<a href="#section-2.2-3.2.2" class="pilcrow">¶</a></p>
+In a position that allows blank space, any text starting with "<code>#</code>"
+or "<code>//</code>" and ending with and including the end of the line is
+considered blank space (and thus effectively a comment).<a href="#section-2.2-3.2.2" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-2.2-4">Comments can be used to annotate a CBOR structure as in:<a href="#section-2.2-4" class="pilcrow">¶</a></p>
@@ -1798,6 +1815,43 @@ the use of inline and end-of-line comments:<a href="#section-2.2-7" class="pilcr
 </pre><a href="#section-2.2-8" class="pilcrow">¶</a>
 </div>
 <p id="section-2.2-9">This reduces to <code>{1: 4, 3: 5, -1: h'6684523AB17337F173500E5728C628547CB37DFE68449C65F885D1B73B49EAE1'}</code>.<a href="#section-2.2-9" class="pilcrow">¶</a></p>
+<div id="discussion">
+<section id="section-2.2.1">
+          <h4 id="name-discussion">
+<a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-discussion" class="section-name selfRef">Discussion</a>
+          </h4>
+<p id="section-2.2.1-1">As a not quite backward compatible change, this specification
+restricts slash-delimited comments that were allowed in <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> in two ways:<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.2.1-2.1">
+              <p id="section-2.2.1-2.1.1">Inline comments now longer can be empty: The construct "<code>//</code>" that was
+an empty comment in <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> is now used instead to introduce an
+end-of-line comment.
+(Note that "<code>//</code>" still can be used in what is visually "within" a
+slash-delimited comment; its first slash actually ends the current comment and
+the second slash starts a new one.)<a href="#section-2.2.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.2">
+              <p id="section-2.2.1-2.2.1">EDN now enables the use of C-style inline comments; e.g., "<code>/*foo/</code>"
+was a complete comment in <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> and now is the beginning of a
+C-style comment that goes on up to a "<code>*/</code>".<a href="#section-2.2.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-2.2.1-3">The introduction of C-style inline comments for instance enables a
+comment explaining a COSE algorithm identifier, as in<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-2.2.1-4">
+<pre>
+4 /* HMAC 256/64 */
+</pre><a href="#section-2.2.1-4" class="pilcrow">¶</a>
+</div>
+<p id="section-2.2.1-5">instead of the conventional, but often less familiar<a href="#section-2.2.1-5" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-2.2.1-6">
+<pre>
+4 / HMAC 256//64 /
+</pre><a href="#section-2.2.1-6" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
 </section>
 </div>
 <div id="encoding-indicators">
@@ -2482,7 +2536,7 @@ EDN, while »<code>[[][]]</code>« is not.<a href="#section-2.6.1-8" class="pilc
   (and actually are terminators, which together with their optionality
   allows them to be used like separators as well, or even not at all).
   In summary, comma use is now aligned between EDN and CDDL, in a
-  fully backwards compatible way.
+  fully backward compatible way.
   (CDDL does allow the stylistically questionable »<code>a = [[][]]</code>«, though.)<a href="#section-2.6.1-9.1" class="pilcrow">¶</a></p>
 </aside>
 </section>
@@ -3167,12 +3221,18 @@ array           = "[" (specms S item *(MSC item) SOC / spec S) "]"
 map             = "{" (specms S keyp *(MSC keyp) SOC / spec S) "}"
 keyp            = item S ":" S item
 
-; We allow %x09 HT in prose, but not in strings
+; We allow %x09 HT in prose, but not in string literals
 blank           = %x09 / %x0A / %x0D / %x20
+lblank          = %x0A / %x20  ; Not HT or CR (gone)
 non-slash       = blank / %x21-2e / %x30-7F / NONASCII
+non-slash-star  = blank / %x21-29 / %x2b-2e / %x30-7F / NONASCII
+non-star        = blank / %x21-29 / %x2b-7F / NONASCII
+end-star        = *non-star 1*"*"
 non-lf          = %x09 / %x0D / %x20-7F / NONASCII
-comment         = "/" *non-slash "/"
-                / "#" *non-lf %x0A
+eol-comment     = "#" / "//"
+comment         = "/" non-slash-star *non-slash "/"
+                / "/*" end-star *(non-slash-star end-star) "/"
+                / eol-comment *non-lf %x0A
 ; optional space
 S               = *blank *(comment *blank)
 ; mandatory space
@@ -3369,7 +3429,7 @@ floating point literal.<a href="#section-5.1-7.5.2" class="pilcrow">¶</a></p>
 <li id="section-5.1-7.7">
 <div id="rawstring-grammar">
             <p id="section-5.1-7.7.1">The ABNF grammar for raw strings is lenient; a parser needs to
-  implement the comments on <code>matchrawdelim</code> and <code>shortrawdelim</code> as
+  implement the ABNF comments on <code>matchrawdelim</code> and <code>shortrawdelim</code> as
   well.
   <code>shortrawdelim</code> only matches sequences of backquotes that are
   shorter than <code>startrawdelim</code>.
@@ -3402,28 +3462,22 @@ representation of strings in this form split up into multiple
 chunks, and (2) the use of ellipses to represent elisions
 (<a href="#elision" class="auto internal xref">Section 4.2</a>).<a href="#section-5.1-9.1.2" class="pilcrow">¶</a></p>
 <p id="section-5.1-9.1.3">
-Note that the syntax defined here for concatenation of components
-uses an explicit <code>+</code> operator between the components to be
-concatenated (<span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.4" class="relref">Appendix G.4</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> used simple juxtaposition,
-which was not widely implemented and got in the way of making the use
-of commas optional in other places via the rule <code>OC</code>).<a href="#section-5.1-9.1.3" class="pilcrow">¶</a></p>
-<p id="section-5.1-9.1.4">
 Text strings and byte strings do not mix within such a
 concatenation, except that byte string literal notation can be used
 inside a sequence of concatenated text string notation literals, to
 encode characters that may be better represented in an encoded way.
-The following four text string values (adapted from <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.4" class="relref">Appendix G.4</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> by updating to explicit <code>+</code> operators) are equivalent:<a href="#section-5.1-9.1.4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.1-9.1.5">
+The following four text string values (adapted from <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.4" class="relref">Appendix G.4</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> by updating to explicit <code>+</code> operators) are equivalent:<a href="#section-5.1-9.1.3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1-9.1.4">
 <pre>
 "Hello world"
 "Hello " + "world"
 "Hello" + h'20' + "world"
 "" + h'48656c6c6f20776f726c64' + ""
-</pre><a href="#section-5.1-9.1.5" class="pilcrow">¶</a>
+</pre><a href="#section-5.1-9.1.4" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1-9.1.6">
-Similarly, the following byte string values are equivalent:<a href="#section-5.1-9.1.6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.1-9.1.7">
+<p id="section-5.1-9.1.5">
+Similarly, the following byte string values are equivalent:<a href="#section-5.1-9.1.5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1-9.1.6">
 <pre>
 'Hello world'
 'Hello ' + 'world'
@@ -3431,30 +3485,30 @@ Similarly, the following byte string values are equivalent:<a href="#section-5.1
 'Hello' + h'20' + 'world'
 '' + h'48656c6c6f20776f726c64' + '' + b64''
 h'4 86 56c 6c6f' + h' 20776 f726c64'
-</pre><a href="#section-5.1-9.1.7" class="pilcrow">¶</a>
+</pre><a href="#section-5.1-9.1.6" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1-9.1.8">
+<p id="section-5.1-9.1.7">
 The semantic processing of these constructs is governed by the
-following rules:<a href="#section-5.1-9.1.8" class="pilcrow">¶</a></p>
+following rules:<a href="#section-5.1-9.1.7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1-9.1.9.1">
-                <p id="section-5.1-9.1.9.1.1">A single <code>...</code> is a general ellipsis, which by itself can stand
+<li class="normal" id="section-5.1-9.1.8.1">
+                <p id="section-5.1-9.1.8.1.1">A single <code>...</code> is a general ellipsis, which by itself can stand
 for any data item.
 Multiple adjacent concatenated ellipses are equivalent to a single
-ellipsis.<a href="#section-5.1-9.1.9.1.1" class="pilcrow">¶</a></p>
+ellipsis.<a href="#section-5.1-9.1.8.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.1-9.1.9.2">
-                <p id="section-5.1-9.1.9.2.1">An ellipsis can be concatenated (on one or both sides) with string
+              <li class="normal" id="section-5.1-9.1.8.2">
+                <p id="section-5.1-9.1.8.2.1">An ellipsis can be concatenated (on one or both sides) with string
 chunks (<code>string1</code>); the result is a CBOR tag number CPA888 that contains an
 array with joined together spans of such chunks plus the ellipses
-represented by <code>888(null)</code>.<a href="#section-5.1-9.1.9.2.1" class="pilcrow">¶</a></p>
+represented by <code>888(null)</code>.<a href="#section-5.1-9.1.8.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.1-9.1.9.3">
-                <p id="section-5.1-9.1.9.3.1">If there is no ellipsis in the concatenated list, the result of
-processing the list will always be a single item.<a href="#section-5.1-9.1.9.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-5.1-9.1.8.3">
+                <p id="section-5.1-9.1.8.3.1">If there is no ellipsis in the concatenated list, the result of
+processing the list will always be a single item.<a href="#section-5.1-9.1.8.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.1-9.1.9.4">
-                <p id="section-5.1-9.1.9.4.1">The bytes in the concatenated sequence of string chunks are simply
+              <li class="normal" id="section-5.1-9.1.8.4">
+                <p id="section-5.1-9.1.8.4.1">The bytes in the concatenated sequence of string chunks are simply
 joined together, proceeding from left to right.
 If the left hand side of a concatenation is a text string, the
 joining operation results in a text string, and that
@@ -3462,10 +3516,10 @@ result needs to be valid UTF-8 except for implementations that
 support and are enabled for generation/ingestion of EDN for CBOR
 data items that are well-formed but not valid.
 If the left hand side is a byte string, the right hand side also
-needs to be a byte string.<a href="#section-5.1-9.1.9.4.1" class="pilcrow">¶</a></p>
+needs to be a byte string.<a href="#section-5.1-9.1.8.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.1-9.1.9.5">
-                <p id="section-5.1-9.1.9.5.1">Some of the strings may be app-strings.
+              <li class="normal" id="section-5.1-9.1.8.5">
+                <p id="section-5.1-9.1.8.5.1">Some of the strings may be app-strings.
 If the result type of the app-string is an actual (text or byte)
 string, joining of those string chunks occurs as with chunks
 directly notated as string literals; otherwise the occurrence of more than
@@ -3473,12 +3527,28 @@ one app-string or an app-string together with a directly notated
 string cannot be processed.
 (This determination must be made at the time the app-string is
 interpreted; see <a href="#unknown" class="auto internal xref">Section 4.1</a> for how this may not be immediately
-during parsing.)<a href="#section-5.1-9.1.9.5.1" class="pilcrow">¶</a></p>
+during parsing.)<a href="#section-5.1-9.1.8.5.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </div>
         </li>
 </ol>
+<div id="discussion-1">
+<section id="section-5.1.1">
+          <h4 id="name-discussion-2">
+<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-discussion-2" class="section-name selfRef">Discussion</a>
+          </h4>
+<p id="section-5.1.1-1">Note that the syntax defined here for concatenation of components
+uses an explicit <code>+</code> operator between the components to be
+concatenated.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+<aside id="section-5.1.1-2">
+            <p id="section-5.1.1-2.1">This is not entirely backward compatible to <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.4" class="relref">Appendix G.4</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>,
+which used simple juxtaposition to indicate concatenation of strings.
+This was not widely implemented and got in the way of making the use
+of commas optional in other places via the rule <code>OC</code>.<a href="#section-5.1.1-2.1" class="pilcrow">¶</a></p>
+</aside>
+</section>
+</div>
 </section>
 </div>
 <div id="app-grammars">
@@ -3584,7 +3654,7 @@ HEXDIG          = DIGIT / HEXDIGA
 HEXDIGA         = "A" / "B" / "C" / "D" / "E" / "F"
 ; Note: double-quoted strings as in "A" are case-insensitive in ABNF
 lblank          = %x0A / %x20  ; Not HT or CR (gone)
-non-lf          = %x20-7F / NONASCII
+non-lf          = %x20-7f / NONASCII
 NONASCII        = %x80-D7FF / %xE000-10FFFF
 </pre>
 </div>
@@ -3607,12 +3677,18 @@ well as blank space (including comments) around each hex digit.<a href="#section
             <div class="lang-abnf sourcecode" id="section-5.2.1-2.1">
 <pre>
 app-string-h    = S *(HEXDIG S HEXDIG S / ellipsis S)
-                  ["#" *non-lf]
+                  [eol-comment *non-lf]
 ellipsis        = 3*"."
 non-slash       = lblank / %x21-2e / %x30-7f / NONASCII
-S               = *lblank *(comment *lblank )
-comment         = "/" *non-slash "/"
-                / "#" *non-lf %x0A
+non-slash-star  = lblank / %x21-29 / %x2b-2e / %x30-7f / NONASCII
+non-star        = lblank / %x21-29 / %x2b-7f / NONASCII
+end-star        = *non-star 1*"*"
+non-lf          = %x20-7f / NONASCII
+eol-comment     = "#" / "//"
+S               = *lblank *(comment *lblank)
+comment         = "/" non-slash-star *non-slash "/"
+                / "/*" end-star *(non-slash-star end-star) "/"
+                / eol-comment *non-lf %x0A
 </pre>
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
@@ -3641,8 +3717,8 @@ app-string-b64  = B *(4(b64dig B))
                   [b64dig B b64dig B ["=" B "=" / b64dig B ["="]] B]
                   ["#" *non-lf]
 b64dig          = ALPHA / DIGIT / "-" / "_" / "+" / "/"
-B               = *lblank *(icomment *lblank)
-icomment        = "#" *non-lf %x0A
+B               = *lblank *(comment *lblank)
+comment         = "#" *non-lf %x0A
 </pre>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
@@ -3970,13 +4046,19 @@ for <code>h</code> prefixed single-quote strings.<a href="#section-5.3.1-1" clas
 <pre>
 sq-app-string-h = %s"h'" s-app-string-h "'"
 s-app-string-h = h-S *(HEXDIG h-S HEXDIG h-S / ellipsis h-S)
-    ["#" *(i-non-lf)]
+    [eol-comment *i-non-lf]
 
 h-S = *(i-blank) *(h-comment *(i-blank))
 h-non-slash = i-blank / %x21-26 / "\'" / %x28-2e
             / %x30-5b / "\\" / %x5d-7f / i-NONASCII
-h-comment = "/" *(h-non-slash) "/"
-          / "#" *(i-non-lf) i-LF
+h-non-slash-star = i-blank / %x21-26 / "\'" / %x28-29 / %x2b-2e
+                 / %x30-5b / "\\" / %x5d-7f / i-NONASCII
+h-non-star = i-blank / %x21-26 / "\'" / %x28-29 / %x2b-5b
+           / "\\" / %x5d-7f / i-NONASCII
+h-end-star = *h-non-star 1*"*"
+h-comment = "/" h-non-slash-star *h-non-slash "/"
+          / "/*" h-end-star *(h-non-slash-star h-end-star) "/"
+          / eol-comment *i-non-lf i-LF
 </pre>
 </div>
 <figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
@@ -4030,12 +4112,16 @@ be used as an integrated parser for <code>h</code> prefixed raw strings.<a href=
 <pre>
 raw-app-string-h = %s"h" startrawdelim r-app-string-h
 r-app-string-h = rh-S *(HEXDIG rh-S HEXDIG rh-S / ellipsis rh-S)
-    ("#" *(r-non-lf) matchrawdelim / fitrawdelim)
+    (eol-comment *r-non-lf matchrawdelim / fitrawdelim)
 rh-S = *(lblank) *(rh-comment *(lblank))
-rh-non-slash = lblank / %x21-2e / %x30-5f / %x61-7f
-             / NONASCII / shortrawdelim
-rh-comment = "/" *(rh-non-slash) "/"
-           / "#" *(r-non-lf) %x0A
+rh-2 = %x61-7f / NONASCII / shortrawdelim
+rh-non-slash = lblank / %x21-2e / %x30-5f / rh-2
+rh-non-slash-star = lblank / %x21-29 / %x2b-2e / %x30-5f / rh-2
+rh-non-star = lblank / %x21-29 / %x2b-5f / rh-2
+rh-end-star = *rh-non-star 1*"*"
+rh-comment = "/" rh-non-slash-star *rh-non-slash "/"
+           / "/*" rh-end-star *(rh-non-slash-star rh-end-star) "/"
+           / eol-comment *r-non-lf %x0A
 </pre>
 </div>
 <figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
@@ -4834,8 +4920,9 @@ language instances with tools.)<a href="#appendix-A-5" class="pilcrow">¶</a></p
 line characters, while EDN finds nothing in JSON that could be inherited here.
 Inspired by JavaScript, EDN simplifies JavaScript's copy of the
 original C comment syntax to be delimited by single slashes (where
-line breaks are not of interest); it also adds end-of-line comments
-starting with <code>#</code>.<a href="#appendix-A-7.1.1" class="pilcrow">¶</a></p>
+line breaks are not of interest); it also adds traditional C-style
+inline comments (<code>/*</code> ... <code>*/</code>) and end-of-line comments
+that start with <code>#</code> or <code>//</code>.<a href="#appendix-A-7.1.1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlCompact dlParallel" id="appendix-A-7.1.2">
             <dt id="appendix-A-7.1.2.1">EDN:</dt>
             <dd style="margin-left: 1.5em" id="appendix-A-7.1.2.2">
