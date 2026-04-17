@@ -479,6 +479,12 @@ application-oriented extensions ({{app-ext}}), both to motivate
 making these extensions generally available, and to illustrate the
 concept.
 
+Of these, the application-oriented extensions `h`, `b64`, `dt` and `ip` are
+intended to be mandatory to implement.
+(As mentioned, for simplicity we use the term "application-oriented
+extensions" for that specific mechanism even if it is used to describe
+a part of base EDN.)
+
 ## Comments {#comments}
 
 For presentation to humans, EDN text may benefit from comments.
@@ -545,9 +551,15 @@ level.
 For some diagnostic purposes, it is useful to represent the choice of
 a serialization variation by including encoding indicators.
 Implementations of EDN generally do not need to provide this
-functionality, but may want to be able to process EDN that contains
-encoding indicators, ignoring them just as a generic CBOR decoder
-ignores the presence of the serialization variants it encounters.
+functionality in full; if they do, they can be called "diagnostic
+implementations".
+To be able to process EDN that contains encoding indicators,
+EDN-consuming implementation MUST accept them (i.e., process or
+ignore the presence of each encoding indicator).
+(Ignoring them could be compared to a generic CBOR decoder ignoring
+the presence of the serialization variants it encounters.)
+It is RECOMMENDED to by default provide a warning for each encoding
+indicator value that is encountered but not further processed.
 
 Encoding indicators are placed immediately to the right of the data
 item or of a syntactic feature that can stand for the data item the
