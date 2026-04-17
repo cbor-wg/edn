@@ -239,10 +239,6 @@ diagnostic notation that was originally defined in {{Section 6 of -old-cbor}}.
 {{Section 8 of RFC8949@-cbor}} and {{Section G of RFC8610}} have
 collectively been called "Extended Diagnostic Notation" (EDN), giving
 the present document its name.
-<!--
-Similarly, this notation could be extended in a separate document to
-provide documentation for NaN payloads, which are not covered in this document.
--->
 
 After introductory material, {{app-ext}}
 illustrates the concept of application-oriented extension literals by
@@ -670,12 +666,41 @@ different row.
 The non-finite floating-point values `Infinity`, `-Infinity`, and `NaN` are
 written exactly as in this sentence (this is also a way they can be
 written in JavaScript, although JSON does not allow them).
-`NaN` in EDN is represented as 0xF97E00 in CBOR preferred serialization.
+`NaN` in EDN stands for the NaN value with a zero sign bit and an all-zero
+significand except for a set quiet bit; this is represented as
+0xF97E00 in CBOR preferred serialization.
+{{tab-non-finite-encoding}} shows how the floating point numbers 1.1, 1.5 and
+these three values are encoded in preferred serialization and when
+encoding indicators are given.
+
+<!-- $ edn-abnf -e '1.5, 1.5_1, 1.5_2, 1.5_3' -tcbor | cborseq2pretty.rb
+ -->
+
+| EDN                        | CBOR hex              |
+|----------------------------|-----------------------|
+| `1.1`                      | `fb 3ff199999999999a` |
+| `1.1_1`, `1.1_2`           | (error)               |
+| `1.1_3`                    | `fb 3ff199999999999a` |
+| `1.5`, `1.5_1`             | `f9 3e00`             |
+| `1.5_2`                    | `fa 3fc00000`         |
+| `1.5_3`                    | `fb 3ff8000000000000` |
+| `Infinity`, `Infinity_1`   | `f9 7c00`             |
+| `Infinity_2`               | `fa 7f800000`         |
+| `Infinity_3`               | `fb 7ff0000000000000` |
+| `-Infinity`, `-Infinity_1` | `f9 fc00`             |
+| `-Infinity_2`              | `fa ff800000`         |
+| `-Infinity_3`              | `fb fff0000000000000` |
+| `NaN`, `NaN_1`             | `f9 7e00`             |
+| `NaN_2`                    | `fa 7fc00000`         |
+| `NaN_3`                    | `fb 7ff8000000000000` |
+{: #tab-non-finite-encoding title="Encoding indicators on floating
+point values" }
+
 
 See {{decnumber}} for additional details of the EDN number syntax.
 
 (Note that literals for further number formats, e.g., for representing
-rational numbers as fractions, or for NaNs with non-zero payloads, can
+rational numbers as fractions, or for other NaN values than the one called `NaN`, can
 be added as application-oriented literals.
 Background information beyond that in {{-cbor}} about the representation
 of numbers in CBOR can be found in the informational document
