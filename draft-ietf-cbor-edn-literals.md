@@ -116,6 +116,9 @@ informative:
   ABNFROB:
     target: https://github.com/cabo/abnftt
     title: PEG-parsing using ABNF grammars (via treetop)
+  EDN-WIKI:
+    target: https://github.com/cbor-wg/edn/wiki
+    title: EDN Wiki
 
 --- abstract
 
@@ -428,6 +431,9 @@ types.
 Any additional detailed syntax discussion needed has been deferred to
 {{grammar}}.
 
+Additional information about implementation and use of EDN is
+continuously being collected by the community in {{EDN-WIKI}}.
+
 ## Application-Oriented Extension Literals {#app-lit}
 
 EDN provides _literals_ that represent CBOR data items textually.
@@ -488,12 +494,11 @@ EDN now provides two comment syntaxes, which can be used where the
 syntax allows blank space (outside of constructs such as numbers,
 string literals, etc.):
 
-
 * inline comments, delimited by slashes ("`/`") or by C-style "`/*`"
   and "`*/`":
 
   In a position that allows blank space, each of the following is
-  considered blank space (and thus effectively a comment:
+  considered blank space (and thus effectively a comment):
 
     * any text that starts with a slash followed by a character that is not a
       star or a slash, up to another slash, or
@@ -528,7 +533,22 @@ the use of inline and end-of-line comments:
 }
 ~~~
 
-This reduces to `{1: 4, 3: 5, -1: h'6684523AB17337F173500E5728C628547CB37DFE68449C65F885D1B73B49EAE1'}`.
+This reduces to `{1: 4, 3: 5, -1:
+h'6684523AB17337F173500E5728C628547CB37DFE68449C65F885D1B73B49EAE1'}`.
+
+{:aside}
+>
+Note that application-oriented extensions can define their own
+internal comment syntaxes for text inside strings, which may or may
+not mimic the overall comment syntax of EDN.
+The h'' syntax ({{h-grammar}}), which the framework for application-oriented
+extensions was designed to include as an instance, provides an
+equivalent to the overall comment syntax inside its text strings.
+Similarly, b64'' ({{b64-grammar}}) provides a subset of that limited to
+"`#`" end-of-line comments (the slash character "`/`" is used in the
+alphabet in classic base64 encoding).
+None of the other application-oriented extensions supplied in this
+specification provides for such a kind of internal comment syntax.
 
 ### Discussion
 
@@ -541,11 +561,11 @@ restricts slash-delimited comments that were allowed in {{Section G.6 of RFC8610
   (Note that "`//`" still can be used in what is visually "within" a
   slash-delimited comment; its first slash actually ends the current comment and
   the second slash starts a new one.)
-* EDN now enables the use of C-style inline comments; e.g., "`/*foo/`"
+* EDN now enables the use of C-style inline comments: for instance, "`/*foo/`"
   was a complete comment in {{Section G.6 of RFC8610}} and now is the beginning of a
   C-style comment that goes on up to a "`*/`".
 
-The introduction of C-style inline comments for instance enables a
+As an example, the introduction of C-style inline comments enables a
 comment explaining a COSE algorithm identifier, as in
 
 ~~~ cbor-diag
@@ -1825,6 +1845,23 @@ comment         = "/" non-slash-star *non-slash "/"
 title="ABNF Definition of Hexadecimal Representation of a Byte String"
 }
 
+{:aside}
+>
+> The comment syntax provided inside the hex string is intended to
+> mimic the overall syntax for comments in EDN ({{comments}}).\\
+> Implementation note: Comments and blank space are also described by
+> the following search regexp, which can be used to remove them.
+> For display, the regexp is split along the outer
+> alternative into four lines, which need to be combined before use;
+> `\z` stands for the end of the string and is notated `$` in some
+> regexp dialects.
+>
+> ~~~
+  \s|
+  /\*(?:[^*]*\*+)(?:[^/*][^*]*\*+)*/|
+  /[^/*][^/]*/|
+  (?:#|//)[^\n]*(?:\n|\z)
+> ~~~
 
 ### b64: ABNF Definition of Base64 representation of a byte string {#b64-grammar}
 
@@ -1836,7 +1873,7 @@ This syntax allows both the classic ({{Section 4 of RFC4648}}) and the
 URL-safe ({{Section 5 of RFC4648}}) alphabet to be used.
 It accommodates, but does not require base64 padding.
 Note that inclusion of classic base64 makes it impossible to have
-in-line comments in b64, as "/" is valid base64-classic.
+comments based on slash characters in b64, as "`/`" is valid base64-classic.
 
 ~~~ abnf
 app-string-b64  = B *(4(b64dig B))
