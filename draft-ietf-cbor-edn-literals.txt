@@ -103,7 +103,7 @@ Table of Contents
      2.2.  Comments  . . . . . . . . . . . . . . . . . . . . . . . .  11
        2.2.1.  Discussion  . . . . . . . . . . . . . . . . . . . . .  12
      2.3.  Encoding Indicators . . . . . . . . . . . . . . . . . . .  12
-     2.4.  Numbers . . . . . . . . . . . . . . . . . . . . . . . . .  14
+     2.4.  Numbers . . . . . . . . . . . . . . . . . . . . . . . . .  15
      2.5.  Strings . . . . . . . . . . . . . . . . . . . . . . . . .  17
        2.5.1.  Double-Quoted String Literals . . . . . . . . . . . .  17
 
@@ -562,6 +562,11 @@ Bormann                  Expires 27 October 2026               [Page 10]
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
+   Of these, the application-oriented extensions h, b64, dt and ip are
+   intended to be mandatory to implement.  (As mentioned, for simplicity
+   we use the term "application-oriented extensions" for that specific
+   mechanism even if it is used to describe a part of base EDN.)
+
 2.2.  Comments
 
    For presentation to humans, EDN text may benefit from comments.  JSON
@@ -602,12 +607,7 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    Another example, combining the use of inline and end-of-line
    comments:
 
-   {
-    /kty/ 1 : 4, # Symmetric
-    /alg/ 3 : 5, # HMAC 256-256
-     /k/ -1 : h'6684523ab17337f173500e5728c628547cb37df
-                e68449c65f885d1b73b49eae1'
-   }
+
 
 
 
@@ -617,6 +617,13 @@ Bormann                  Expires 27 October 2026               [Page 11]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
+
+   {
+    /kty/ 1 : 4, # Symmetric
+    /alg/ 3 : 5, # HMAC 256-256
+     /k/ -1 : h'6684523ab17337f173500e5728c628547cb37df
+                e68449c65f885d1b73b49eae1'
+   }
 
    This reduces to {1: 4, 3: 5, -1:
    h'6684523AB17337F173500E5728C628547CB37DFE68449C65F885D1B73B49EAE1'}.
@@ -662,13 +669,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
 
 
-
-
-
-
-
-
-
 Bormann                  Expires 27 October 2026               [Page 12]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
@@ -679,9 +679,14 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    diagnostic purposes, it is useful to represent the choice of a
    serialization variation by including encoding indicators.
    Implementations of EDN generally do not need to provide this
-   functionality, but may want to be able to process EDN that contains
-   encoding indicators, ignoring them just as a generic CBOR decoder
-   ignores the presence of the serialization variants it encounters.
+   functionality in full; if they do, they can be called "diagnostic
+   implementations".  To be able to process EDN that contains encoding
+   indicators, EDN-consuming implementation MUST accept them (i.e.,
+   process or ignore the presence of each encoding indicator).
+   (Ignoring them could be compared to a generic CBOR decoder ignoring
+   the presence of the serialization variants it encounters.)  It is
+   RECOMMENDED to by default provide a warning for each encoding
+   indicator value that is encountered but not further processed.
 
    Encoding indicators are placed immediately to the right of the data
    item or of a syntactic feature that can stand for the data item the
@@ -717,11 +722,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    (In the following, an abbreviation of the form ai=nn gives nn as the
    numeric value of the field _additional information_, the low-order 5
    bits of the initial byte: see Section 3 of RFC 8949 [STD94].  This
-   field is used in encoding the "argument", i.e., the value, tag, or
-   length; ai=0 to ai=23 mean that the value of the ai field immediately
-   _is_ the argument, ai=24 to ai=27 mean that the argument is carried
-   in 2^(ai-24) (1, 2, 4, or 8) additional bytes, and ai=31 means that
-   indefinite length encoding is used.)
 
 
 
@@ -729,6 +729,12 @@ Bormann                  Expires 27 October 2026               [Page 13]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
+
+   field is used in encoding the "argument", i.e., the value, tag, or
+   length; ai=0 to ai=23 mean that the value of the ai field immediately
+   _is_ the argument, ai=24 to ai=27 mean that the argument is carried
+   in 2^(ai-24) (1, 2, 4, or 8) additional bytes, and ai=31 means that
+   indefinite length encoding is used.)
 
    An underscore followed by a decimal digit n indicates that the
    preceding item (or, for arrays and maps, the item starting with the
@@ -773,18 +779,18 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
    for indefinite length strings and in Section 2.6.2 for arrays and
    maps.
 
-2.4.  Numbers
-
-   In addition to JSON's decimal number literals, EDN provides
-   hexadecimal, octal, and binary number literals in the usual
-   C-language notation (octal with 0o prefix present only).
-
 
 
 Bormann                  Expires 27 October 2026               [Page 14]
 
 Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
 
+
+2.4.  Numbers
+
+   In addition to JSON's decimal number literals, EDN provides
+   hexadecimal, octal, and binary number literals in the usual
+   C-language notation (octal with 0o prefix present only).
 
    Numbers composed only of digits (of the respective base) are
    interpreted as CBOR integers (major type 0/1, or where the number
@@ -826,12 +832,6 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)      April 2026
       +----------------------------------------+-------------------+
 
       Table 2: Example Sets of Equivalent Notations for Some Numbers
-
-
-
-
-
-
 
 
 
