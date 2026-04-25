@@ -2093,14 +2093,153 @@ different row.<a href="#section-2.4-4" class="pilcrow">¶</a></p>
 <p id="section-2.4-6">The non-finite floating-point values <code>Infinity</code>, <code>-Infinity</code>, and <code>NaN</code> are
 written exactly as in this sentence (this is also a way they can be
 written in JavaScript, although JSON does not allow them).
-<code>NaN</code> in EDN is represented as 0xF97E00 in CBOR preferred serialization.<a href="#section-2.4-6" class="pilcrow">¶</a></p>
-<p id="section-2.4-7">See <a href="#decnumber" class="auto internal xref">Section 5.1, Paragraph 7, Item 3</a> for additional details of the EDN number syntax.<a href="#section-2.4-7" class="pilcrow">¶</a></p>
-<p id="section-2.4-8">(Note that literals for further number formats, e.g., for representing
-rational numbers as fractions, or for NaNs with non-zero payloads, can
+<code>NaN</code> in EDN stands for the NaN value with a zero sign bit and an all-zero
+significand except for a set quiet bit; this is represented as
+0xF97E00 in CBOR preferred serialization.
+<a href="#tab-non-finite-encoding" class="auto internal xref">Table 3</a> shows how the floating point numbers 1.1, 1.5 and
+these three values are encoded in preferred serialization and when
+encoding indicators are given.<a href="#section-2.4-6" class="pilcrow">¶</a></p>
+<span id="name-encoding-indicators-on-floa"></span><div id="tab-non-finite-encoding">
+<table class="center" id="table-3">
+          <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-encoding-indicators-on-floa" class="selfRef">Encoding indicators on floating point values</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">EDN</th>
+              <th class="text-left" rowspan="1" colspan="1">CBOR hex</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>1.1</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>fb 3ff199999999999a</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>1.1_1</code>, <code>1.1_2</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">(error)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>1.1_3</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>fb 3ff199999999999a</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>1.5</code>, <code>1.5_1</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>f9 3e00</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>1.5_2</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>fa 3fc00000</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>1.5_3</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>fb 3ff8000000000000</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>Infinity</code>, <code>Infinity_1</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>f9 7c00</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>Infinity_2</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>fa 7f800000</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>Infinity_3</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>fb 7ff0000000000000</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>-Infinity</code>, <code>-Infinity_1</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>f9 fc00</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>-Infinity_2</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>fa ff800000</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>-Infinity_3</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>fb fff0000000000000</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>NaN</code>, <code>NaN_1</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>f9 7e00</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>NaN_2</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>fa 7fc00000</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>NaN_3</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>fb 7ff8000000000000</code>
+</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="section-2.4-8">See <a href="#decnumber" class="auto internal xref">Section 5.1, Paragraph 7, Item 3</a> for additional details of the EDN number syntax.<a href="#section-2.4-8" class="pilcrow">¶</a></p>
+<p id="section-2.4-9">(Note that literals for further number formats, e.g., for representing
+rational numbers as fractions, or for other NaN values than the one called <code>NaN</code>, can
 be added as application-oriented literals.
 Background information beyond that in <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> about the representation
 of numbers in CBOR can be found in the informational document
-<span>[<a href="#I-D.bormann-cbor-numbers" class="cite xref">I-D.bormann-cbor-numbers</a>]</span>.)<a href="#section-2.4-8" class="pilcrow">¶</a></p>
+<span>[<a href="#I-D.bormann-cbor-numbers" class="cite xref">I-D.bormann-cbor-numbers</a>]</span>.)<a href="#section-2.4-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="strings">
@@ -2642,12 +2781,12 @@ If fractional seconds are given in the text (production
 floating-point number; the value is an integer number otherwise.
 In the all-upper-case variant of the app-prefix, the value is enclosed
 in a tag number 1.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">Each row of <a href="#tab-equiv-dt" class="auto internal xref">Table 3</a> shows an example of "dt" notation and
+<p id="section-3.1-4">Each row of <a href="#tab-equiv-dt" class="auto internal xref">Table 4</a> shows an example of "dt" notation and
 equivalent notation not using an application-extension identifier.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
 <span id="name-dt-and-dt-literals-vs-plain"></span><div id="tab-equiv-dt">
-<table class="center" id="table-3">
+<table class="center" id="table-4">
           <caption>
-<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#table-4" class="selfRef">Table 4</a>:
 <a href="#name-dt-and-dt-literals-vs-plain" class="selfRef">dt and DT literals vs. plain EDN</a>
           </caption>
 <thead>
@@ -2743,12 +2882,12 @@ structures explicitly, e.g., an interface format without a zone
 identifier can be represented as in <code>52([ip'192.0.2.42',24])</code>, or an
 interface format with zone identifier 42 as in
 <code>54([ip'fe80::0202:02ff:ffff:fe03:0303',64,42])</code>.)<a href="#section-3.2-5" class="pilcrow">¶</a></p>
-<p id="section-3.2-6">Each row of <a href="#tab-equiv-ip" class="auto internal xref">Table 4</a> shows an example of "ip" notation and
+<p id="section-3.2-6">Each row of <a href="#tab-equiv-ip" class="auto internal xref">Table 5</a> shows an example of "ip" notation and
 equivalent notation not using an application-extension identifier.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
 <span id="name-ip-and-ip-literals-vs-plain"></span><div id="tab-equiv-ip">
-<table class="center" id="table-4">
+<table class="center" id="table-5">
           <caption>
-<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#table-5" class="selfRef">Table 5</a>:
 <a href="#name-ip-and-ip-literals-vs-plain" class="selfRef">ip and IP literals vs. plain EDN</a>
           </caption>
 <thead>
@@ -2840,9 +2979,9 @@ If the second item is not given, the default algorithm used is -16
 <p id="section-3.3-3">No uppercase variant prefix is defined for the application-extension
 identifier "hash".<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <span id="name-hash-literals-vs-plain-edn"></span><div id="tab-equiv-hash">
-<table class="center" id="table-5">
+<table class="center" id="table-6">
           <caption>
-<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#table-6" class="selfRef">Table 6</a>:
 <a href="#name-hash-literals-vs-plain-edn" class="selfRef">hash literals vs. plain EDN</a>
           </caption>
 <thead>
@@ -3574,11 +3713,11 @@ combine with the application-extension identifiers used as prefixes to form
 application-oriented extension literals.
 Each of these may integrate ABNF rules defined in <a href="#abnf-grammar" class="auto internal xref">Figure 1</a>,
 which are not always repeated here.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2"><a href="#tab-prefixes" class="auto internal xref">Table 6</a> summarizes the app-prefix values defined in this document.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-2"><a href="#tab-prefixes" class="auto internal xref">Table 7</a> summarizes the app-prefix values defined in this document.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <span id="name-app-prefix-values-defined-i"></span><div id="tab-prefixes">
-<table class="center" id="table-6">
+<table class="center" id="table-7">
           <caption>
-<a href="#table-6" class="selfRef">Table 6</a>:
+<a href="#table-7" class="selfRef">Table 7</a>:
 <a href="#name-app-prefix-values-defined-i" class="selfRef">App-prefix Values Defined in this Document</a>
           </caption>
 <thead>
@@ -4234,12 +4373,12 @@ application-extension identifier<a href="#section-6.1-4.8.1" class="pilcrow">¶<
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-6.1-5">The initial content of the registry is shown in <a href="#tab-iana" class="auto internal xref">Table 7</a>; all
+<p id="section-6.1-5">The initial content of the registry is shown in <a href="#tab-iana" class="auto internal xref">Table 8</a>; all
 initial entries have the Change Controller "IETF".<a href="#section-6.1-5" class="pilcrow">¶</a></p>
 <span id="name-initial-content-of-applicat"></span><div id="tab-iana">
-<table class="center" id="table-7">
+<table class="center" id="table-8">
           <caption>
-<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#table-8" class="selfRef">Table 8</a>:
 <a href="#name-initial-content-of-applicat" class="selfRef">Initial Content of Application-extension Identifier Registry</a>
           </caption>
 <thead>
@@ -4364,12 +4503,12 @@ application-extension identifier<a href="#section-6.2-4.8.1" class="pilcrow">¶<
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-6.2-5">The initial content of the registry is shown in <a href="#tab-iana-ei" class="auto internal xref">Table 8</a>; all
+<p id="section-6.2-5">The initial content of the registry is shown in <a href="#tab-iana-ei" class="auto internal xref">Table 9</a>; all
 initial entries have the Change Controller "IETF".<a href="#section-6.2-5" class="pilcrow">¶</a></p>
 <span id="name-initial-content-of-encoding"></span><div id="tab-iana-ei">
-<table class="center" id="table-8">
+<table class="center" id="table-9">
           <caption>
-<a href="#table-8" class="selfRef">Table 8</a>:
+<a href="#table-9" class="selfRef">Table 9</a>:
 <a href="#name-initial-content-of-encoding" class="selfRef">Initial Content of Encoding Indicator Registry</a>
           </caption>
 <thead>
@@ -4449,9 +4588,9 @@ present document.<a href="#section-6.2-7.1" class="pilcrow">¶</a></p>
 <p id="section-6.3-1">IANA is requested to add the following Media-Type to the "Media Types"
 registry <span>[<a href="#IANA.media-types" class="cite xref">IANA.media-types</a>]</span>.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <span id="name-new-media-type-application-"></span><div id="new-media-type">
-<table class="center" id="table-9">
+<table class="center" id="table-10">
           <caption>
-<a href="#table-9" class="selfRef">Table 9</a>:
+<a href="#table-10" class="selfRef">Table 10</a>:
 <a href="#name-new-media-type-application-" class="selfRef">New Media Type application/cbor-diagnostic</a>
           </caption>
 <thead>
@@ -4596,9 +4735,9 @@ data edited by humans, often under source-code control.<a href="#section-6.3-3.2
 sub-registry, within the "Constrained RESTful Environments (CoRE)
 Parameters" Registry <span>[<a href="#IANA.core-parameters" class="cite xref">IANA.core-parameters</a>]</span>, as follows:<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <span id="name-new-content-format-for-appl"></span><div id="tab-content-format">
-<table class="center" id="table-10">
+<table class="center" id="table-11">
           <caption>
-<a href="#table-10" class="selfRef">Table 10</a>:
+<a href="#table-11" class="selfRef">Table 11</a>:
 <a href="#name-new-content-format-for-appl" class="selfRef">New Content-Format for application/cbor-diagnostic</a>
           </caption>
 <thead>
@@ -4637,13 +4776,13 @@ than 1000.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
   occurrences of the prefix "CPA" in the document.  Finally,
   please remove this note.</span><a href="#section-6.5-1" class="pilcrow">¶</a></p>
 <p id="section-6.5-2">In the "CBOR Tags" registry <span>[<a href="#IANA.cbor-tags" class="cite xref">IANA.cbor-tags</a>]</span>, IANA is requested to assign the
-tags in <a href="#tab-tag-values" class="auto internal xref">Table 11</a> from the "specification required" space
+tags in <a href="#tab-tag-values" class="auto internal xref">Table 12</a> from the "specification required" space
 (suggested assignments: 888 and 999), with the present document as the
 specification reference.<a href="#section-6.5-2" class="pilcrow">¶</a></p>
 <span id="name-values-for-tags"></span><div id="tab-tag-values">
-<table class="center" id="table-11">
+<table class="center" id="table-12">
           <caption>
-<a href="#table-11" class="selfRef">Table 11</a>:
+<a href="#table-12" class="selfRef">Table 12</a>:
 <a href="#name-values-for-tags" class="selfRef">Values for Tags</a>
           </caption>
 <thead>
@@ -5121,55 +5260,55 @@ these with a control operator, which looks very different.<a href="#appendix-A-7
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.5">
-<a href="#tab-equiv-dt" class="auto internal xref">Table 3</a>:</dt>
+<a href="#tab-equiv-dt" class="auto internal xref">Table 4</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.6">
           <p id="appendix-C-1.6.1"><a href="#tab-equiv-dt" class="internal xref">dt and DT literals vs. plain EDN</a><a href="#appendix-C-1.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.7">
-<a href="#tab-equiv-ip" class="auto internal xref">Table 4</a>:</dt>
+<a href="#tab-equiv-ip" class="auto internal xref">Table 5</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.8">
           <p id="appendix-C-1.8.1"><a href="#tab-equiv-ip" class="internal xref">ip and IP literals vs. plain EDN</a><a href="#appendix-C-1.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.9">
-<a href="#tab-equiv-hash" class="auto internal xref">Table 5</a>:</dt>
+<a href="#tab-equiv-hash" class="auto internal xref">Table 6</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.10">
           <p id="appendix-C-1.10.1"><a href="#tab-equiv-hash" class="internal xref">hash literals vs. plain EDN</a><a href="#appendix-C-1.10.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.11">
-<a href="#tab-prefixes" class="auto internal xref">Table 6</a>:</dt>
+<a href="#tab-prefixes" class="auto internal xref">Table 7</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.12">
           <p id="appendix-C-1.12.1"><a href="#tab-prefixes" class="internal xref">App-prefix Values Defined in this Document</a><a href="#appendix-C-1.12.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.13">
-<a href="#tab-iana" class="auto internal xref">Table 7</a>:</dt>
+<a href="#tab-iana" class="auto internal xref">Table 8</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.14">
           <p id="appendix-C-1.14.1"><a href="#tab-iana" class="internal xref">Initial Content of Application-extension Identifier Registry</a><a href="#appendix-C-1.14.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.15">
-<a href="#tab-iana-ei" class="auto internal xref">Table 8</a>:</dt>
+<a href="#tab-iana-ei" class="auto internal xref">Table 9</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.16">
           <p id="appendix-C-1.16.1"><a href="#tab-iana-ei" class="internal xref">Initial Content of Encoding Indicator Registry</a><a href="#appendix-C-1.16.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.17">
-<a href="#new-media-type" class="auto internal xref">Table 9</a>:</dt>
+<a href="#new-media-type" class="auto internal xref">Table 10</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.18">
           <p id="appendix-C-1.18.1"><a href="#new-media-type" class="internal xref">New Media Type application/cbor-diagnostic</a><a href="#appendix-C-1.18.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.19">
-<a href="#tab-content-format" class="auto internal xref">Table 10</a>:</dt>
+<a href="#tab-content-format" class="auto internal xref">Table 11</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.20">
           <p id="appendix-C-1.20.1"><a href="#tab-content-format" class="internal xref">New Content-Format for application/cbor-diagnostic</a><a href="#appendix-C-1.20.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.21">
-<a href="#tab-tag-values" class="auto internal xref">Table 11</a>:</dt>
+<a href="#tab-tag-values" class="auto internal xref">Table 12</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.22">
           <p id="appendix-C-1.22.1"><a href="#tab-tag-values" class="internal xref">Values for Tags</a><a href="#appendix-C-1.22.1" class="pilcrow">¶</a></p>
 </dd>
