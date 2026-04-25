@@ -345,14 +345,14 @@ to convert EDN to binary CBOR and back to EDN while achieving exactly
 the same result as the original input EDN — the original EDN possibly
 was created by humans or by a different EDN generator.
 
-### Basic Output Format
+### Basic Output Format {#basic}
 
 However, there is a certain expectation that EDN generators can be
 configured to some basic output format, which:
 
 * looks like JSON where that is possible;
 * inserts encoding indicators only where the binary form differs from
-  preferred serialization;
+  Preferred Serialization ({{Section 4.1 of RFC8949@-cbor}});
 * uses hexadecimal representation (`h''`) for byte strings, not
   `b64''` or embedded CBOR (`<<>>`);
 * does not generate elaborate blank space (newlines, indentation) for
@@ -585,11 +585,6 @@ several alternative representations were actually used; for example, a
 data item written »1.5« by a diagnostic decoder might have been
 encoded as a half-, single-, or double-precision float.
 
-The convention for encoding indicators is that anything starting with
-an underscore and all immediately following characters that are alphanumeric or
-underscore is an encoding indicator, and can be ignored by anyone not
-interested in this information.  For example, `_` or `_3`.
-
 Encoding indicators are always optional:
 EDN is usually used to describe CBOR data items at the data model
 level.
@@ -597,13 +592,38 @@ For some diagnostic purposes, it is useful to represent the choice of
 a serialization variation by including encoding indicators.
 Implementations of EDN generally do not need to provide this
 functionality, but may want to be able to process EDN that contains
-encoding indicators, ignoring them just as a generic CBOR decoder
+encoding indicators, ignoring their presence or absence just as a
+generic CBOR decoder
 ignores the presence of the serialization variants it encounters.
+
+When creating EDN as input for a diagnostic CBOR encoder in order to
+obtain specific encoding choices, encoding indicators may be placed
+manually or by the software generating the EDN.
+Where no encoding indicator is placed, a diagnostic CBOR encoder is expected to
+generate Preferred Serialization ({{Section 4.1 of RFC8949@-cbor}}) with
+definite length encoding only.
+Similarly, when using EDN as output for a diagnostic CBOR decoder, a
+basic diagnostic configuration of the tool is expected to provide
+encoding indicators only in places where the CBOR input did not use
+Preferred Serialization with definite length encoding (see also
+{{basic}}).
+Diagnostic implementations of EDN that process encoding indicators as
+discussed here are expected to document their diagnostic behavior and
+the processing options that can be selected.
+
+### Syntax, Semantics, Examples
+
+Encoding indicators start with
+an underscore and comprise all immediately following characters that are alphanumeric or
+underscore.
+For example, `_` or `_3`.
+Encoding indicators can be ignored by anyone not
+interested in this information.
 
 Encoding indicators are placed immediately to the right of the data
 item or of a syntactic feature that can stand for the data item the
 encoding of which the encoding indicator is controlling.
-{{tab-ei}} provides examples for encoding indicators used with various
+{{tab-ei}} provides examples for data items with encoding indicators used with various
 kinds of data items.
 
 | mt | examples                |
@@ -630,14 +650,20 @@ encoding is used.)
 
 An underscore followed by a decimal digit `n` indicates that the
 preceding item (or, for arrays and maps, the item starting with the
-preceding bracket or brace) was encoded with an additional information
+preceding bracket or brace) was or is to be encoded with an additional information
 value of `ai=`24+`n`.  For example, `1.5_1` is a half-precision floating-point
 number (2<sup>1</sup> = 2 additional bytes or 16 bits), while `1.5_3` is encoded as
 double precision (2<sup>3</sup> = 8 additional bytes or 64 bits).
-<!--
-This encoding
-indicator is not shown in {{examples}}.
- -->
+For a tool consuming EDN in a diagnostic mode, encountering an
+encoding indicator that does not provide enough space to correctly
+encode the unchanged data item given is an error; there is no
+truncation or rounding that would change the data item encoded.
+
+{:aside}
+>
+Truncation or rounding semantics imply performing changes at the data
+model level, which is outside the scope of encoding indicators.
+Such operations can be provided by application extensions.
 
 The encoding indicator `_` is an abbreviation of what would in full
 form be `_7`, which is not used.
@@ -657,10 +683,10 @@ head of the data item.
 and when CBOR is extended to make use of `ai=28` to `ai=30`.)
 
 Surprisingly, {{Section 8.1 of RFC8949@-cbor}} does not address `ai=0` to
-`ai=23` — the assumption seems to have been that preferred serialization
+`ai=23` — the assumption seems to have been that Preferred Serialization
 ({{Section 4.1 of RFC8949@-cbor}}) will be used when converting CBOR
 diagnostic notation to an encoded CBOR data item, so leaving out the
-encoding indicator for a data item with a preferred serialization
+encoding indicator for a data item with a Preferred Serialization
 will implicitly use `ai=0` to `ai=23` if that is possible.
 The present specification allows making this explicit:
 
@@ -668,12 +694,12 @@ The present specification allows making this explicit:
 it indicates that the argument is encoded directly in the initial byte
 of the CBOR item.
 
-While no pressing use for further values for encoding indicators
-comes to mind, this is an extension point for EDN; {{reg-ei}} defines
+Encoding indicators are an extension point for EDN; {{reg-ei}} defines
 a registry for additional values.
 
-Encoding Indicators are discussed in further detail in {{ei-string}} for
-indefinite length strings and in {{ei-container}} for arrays and maps.
+Specific forms of encoding indicators are discussed in further detail
+in {{ei-string}} for indefinite length strings and in {{ei-container}} for
+arrays and maps.
 
 ## Numbers
 
@@ -721,7 +747,7 @@ different row.
 The non-finite floating-point values `Infinity`, `-Infinity`, and `NaN` are
 written exactly as in this sentence (this is also a way they can be
 written in JavaScript, although JSON does not allow them).
-`NaN` in EDN is represented as 0xF97E00 in CBOR preferred serialization.
+`NaN` in EDN is represented as 0xF97E00 in CBOR Preferred Serialization.
 
 See {{decnumber}} for additional details of the EDN number syntax.
 
@@ -1173,7 +1199,7 @@ encoding of the tag head.  For example:
 {: indent='5'}
 1_1(1363896240)
 
-(assuming preferred serialization for the tag content) is encoded as
+(assuming Preferred Serialization for the tag content) is encoded as
 
 ~~~ cbor-pretty
 d9 0001        # tag(1)
@@ -1648,7 +1674,7 @@ The following additional items should help in the interpretation:
   If fine control over encoding is desired, this can be expressed by
   being explicit about the representation as a tag:
   E.g., `987654321098765432310`, which is equivalent to `2(h'35 8a 75
-  04 38 f3 80 f5 f6')` in its preferred serialization, might be
+  04 38 f3 80 f5 f6')` in its Preferred Serialization, might be
   written as `2_3(h'00 00 00 35 8a 75 04 38 f3 80 f5 f6'_1)` if
   leading zeros need to be added during serialization to obtain
   specific sizes for tag head, byte string head, and the overall byte
@@ -1656,11 +1682,11 @@ The following additional items should help in the interpretation:
 
    When `decnumber` stands for a floating point value, and for
    `hexfloat` and `nonfin`, a floating point data item with major
-   type 7 is used in preferred serialization (unless modified by an
+   type 7 is used in Preferred Serialization (unless modified by an
    encoding indicator, which then needs to be `_1`, `_2`, or `_3`).
    For this, the number range needs to fit into an {{IEEE754}} binary64 (or the size
    corresponding to the encoding indicator), and the precision will be
-   adjusted to binary64 before further applying preferred serialization
+   adjusted to binary64 before further applying Preferred Serialization
    (or to the size corresponding to the encoding indicator).
    Tag 4/5 representations are not generated in these cases.
    Future app-prefixes could be defined to allow more control for
