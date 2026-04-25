@@ -138,10 +138,12 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    The present `-22` is intended to present a complete specification that
-    can be used to confirm the results of the 2026-04-01 CBOR interim.
-    This includes extending inline comments to encompass C-style
-    comments, and end-of-line comments to encompass C++-style comments.
+    The present text is intended to become input to the planned `-23`,
+    a complete specification that reacts to discussion on previous
+    draft revisions and that can be used to confirm the results in a WGLC.
+    Among other concerns, the discussion revealed that some additional
+    editorial content was required; the attempt was to address this need
+    without making technical changes.
 
 --- middle
 
