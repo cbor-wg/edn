@@ -26,7 +26,16 @@ simple          = %s"false"
                 / %s"true"
                 / %s"null"
                 / %s"undefined"
-                / %s"simple(" S item S ")"
+                / %s"simple(" S simple-number S ")"
+simple-number   = "25" %x30-35         ; 250-255
+                / "2" %x30-34 DIGIT    ; 200-249
+                / "1" 2DIGIT           ; 100-199
+                / %x34-39 DIGIT        ; 40-99
+                / "3" %x32-39          ; 32-39
+                ;; there are no simple values between 24-31
+                / "2" %x30-33          ; 20-23
+                / "1" DIGIT            ; 10-19
+                / DIGIT                ; 0-9
 uint            = "0" / DIGIT1 *DIGIT
 tagged          = uint spec "(" S item S ")"
 
@@ -65,11 +74,12 @@ lblank          = %x0A / %x20  ; Not HT or CR (gone)
 non-slash       = blank / %x21-2e / %x30-7F / NONASCII
 non-slash-star  = blank / %x21-29 / %x2b-2e / %x30-7F / NONASCII
 non-star        = blank / %x21-29 / %x2b-7F / NONASCII
-end-star        = *non-star 1*"*"
+ends-in-star    = *non-star 1*"*"
 non-lf          = %x09 / %x0D / %x20-7F / NONASCII
 eol-comment     = "#" / "//"
 comment         = "/" non-slash-star *non-slash "/"
-                / "/*" end-star *(non-slash-star end-star) "/"
+                / "/*" ends-in-star
+                       *(non-slash-star ends-in-star) "/"
                 / eol-comment *non-lf %x0A
 ; optional space
 S               = *blank *(comment *blank)

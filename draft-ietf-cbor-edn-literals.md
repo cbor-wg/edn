@@ -241,10 +241,6 @@ diagnostic notation that was originally defined in {{Section 6 of -old-cbor}}.
 {{Section 8 of RFC8949@-cbor}} and {{Section G of RFC8610}} have
 collectively been called "Extended Diagnostic Notation" (EDN), giving
 the present document its name.
-<!--
-Similarly, this notation could be extended in a separate document to
-provide documentation for NaN payloads, which are not covered in this document.
--->
 
 After introductory material, {{app-ext}}
 illustrates the concept of application-oriented extension literals by
@@ -484,6 +480,12 @@ application-oriented extensions ({{app-ext}}), both to motivate
 making these extensions generally available, and to illustrate the
 concept.
 
+Of these, the application-oriented extensions `h`, `b64`, `dt` and `ip` are
+intended to be mandatory to implement.
+(As mentioned, for simplicity we use the term "application-oriented
+extensions" for that specific mechanism even if it is used to describe
+a part of base EDN.)
+
 ## Comments {#comments}
 
 For presentation to humans, EDN text may benefit from comments.
@@ -591,10 +593,15 @@ level.
 For some diagnostic purposes, it is useful to represent the choice of
 a serialization variation by including encoding indicators.
 Implementations of EDN generally do not need to provide this
-functionality, but may want to be able to process EDN that contains
-encoding indicators, ignoring their presence or absence just as a
-generic CBOR decoder
-ignores the presence of the serialization variants it encounters.
+functionality in full; if they do, they can be called "diagnostic
+implementations".
+To be able to process EDN that contains encoding indicators,
+EDN-consuming implementation MUST accept them (i.e., process or
+ignore the presence or absence of each encoding indicator).
+(Ignoring them could be compared to a generic CBOR decoder ignoring
+the presence of the serialization variants it encounters.)
+It is RECOMMENDED to by default provide a warning for each encoding
+indicator value that is encountered but not further processed.
 
 When creating EDN as input for a diagnostic CBOR encoder in order to
 obtain specific encoding choices, encoding indicators may be placed
@@ -747,12 +754,40 @@ different row.
 The non-finite floating-point values `Infinity`, `-Infinity`, and `NaN` are
 written exactly as in this sentence (this is also a way they can be
 written in JavaScript, although JSON does not allow them).
-`NaN` in EDN is represented as 0xF97E00 in CBOR Preferred Serialization.
+`NaN` in EDN stands for the NaN value with a zero sign bit and an all-zero
+significand except for a set quiet bit; this is represented as
+0xF97E00 in CBOR Preferred Serialization.
+{{tab-non-finite-encoding}} shows how the floating point numbers 1.1, 1.5 and
+these three values are encoded in preferred serialization and when
+encoding indicators are given.
+
+<!-- $ edn-abnf -e '1.5, 1.5_1, 1.5_2, 1.5_3' -tcbor | cborseq2pretty.rb
+ -->
+
+| EDN                        | CBOR hex              |
+|----------------------------|-----------------------|
+| `1.1`                      | `fb 3ff199999999999a` |
+| `1.1_1`, `1.1_2`           | (error)               |
+| `1.1_3`                    | `fb 3ff199999999999a` |
+| `1.5`, `1.5_1`             | `f9 3e00`             |
+| `1.5_2`                    | `fa 3fc00000`         |
+| `1.5_3`                    | `fb 3ff8000000000000` |
+| `Infinity`, `Infinity_1`   | `f9 7c00`             |
+| `Infinity_2`               | `fa 7f800000`         |
+| `Infinity_3`               | `fb 7ff0000000000000` |
+| `-Infinity`, `-Infinity_1` | `f9 fc00`             |
+| `-Infinity_2`              | `fa ff800000`         |
+| `-Infinity_3`              | `fb fff0000000000000` |
+| `NaN`, `NaN_1`             | `f9 7e00`             |
+| `NaN_2`                    | `fa 7fc00000`         |
+| `NaN_3`                    | `fb 7ff8000000000000` |
+{: #tab-non-finite-encoding title="Encoding indicators on floating
+point values" }
 
 See {{decnumber}} for additional details of the EDN number syntax.
 
 (Note that literals for further number formats, e.g., for representing
-rational numbers as fractions, or for NaNs with non-zero payloads, can
+rational numbers as fractions, or for other NaN values than the one called `NaN`, can
 be added as application-oriented literals.
 Background information beyond that in {{-cbor}} about the representation
 of numbers in CBOR can be found in the informational document
@@ -1859,12 +1894,13 @@ ellipsis        = 3*"."
 non-slash       = lblank / %x21-2e / %x30-7f / NONASCII
 non-slash-star  = lblank / %x21-29 / %x2b-2e / %x30-7f / NONASCII
 non-star        = lblank / %x21-29 / %x2b-7f / NONASCII
-end-star        = *non-star 1*"*"
+ends-in-star    = *non-star 1*"*"
 non-lf          = %x20-7f / NONASCII
 eol-comment     = "#" / "//"
 S               = *lblank *(comment *lblank)
 comment         = "/" non-slash-star *non-slash "/"
-                / "/*" end-star *(non-slash-star end-star) "/"
+                / "/*" ends-in-star
+                       *(non-slash-star ends-in-star) "/"
                 / eol-comment *non-lf %x0A
 ~~~
 {: #abnf-grammar-h sourcecode-name="cbor-edn-ext-h.abnf"
@@ -2202,9 +2238,10 @@ h-non-slash-star = i-blank / %x21-26 / "\'" / %x28-29 / %x2b-2e
                  / %x30-5b / "\\" / %x5d-7f / i-NONASCII
 h-non-star = i-blank / %x21-26 / "\'" / %x28-29 / %x2b-5b
            / "\\" / %x5d-7f / i-NONASCII
-h-end-star = *h-non-star 1*"*"
+h-ends-in-star = *h-non-star 1*"*"
 h-comment = "/" h-non-slash-star *h-non-slash "/"
-          / "/*" h-end-star *(h-non-slash-star h-end-star) "/"
+          / "/*" h-ends-in-star
+                 *(h-non-slash-star h-ends-in-star) "/"
           / eol-comment *i-non-lf i-LF
 ~~~
 {: #abnf-grammar-sq-h sourcecode-name="cbor-edn-int-hsq.abnf"
@@ -2251,9 +2288,10 @@ rh-2 = %x61-7f / NONASCII / shortrawdelim
 rh-non-slash = lblank / %x21-2e / %x30-5f / rh-2
 rh-non-slash-star = lblank / %x21-29 / %x2b-2e / %x30-5f / rh-2
 rh-non-star = lblank / %x21-29 / %x2b-5f / rh-2
-rh-end-star = *rh-non-star 1*"*"
+rh-ends-in-star = *rh-non-star 1*"*"
 rh-comment = "/" rh-non-slash-star *rh-non-slash "/"
-           / "/*" rh-end-star *(rh-non-slash-star rh-end-star) "/"
+           / "/*" rh-ends-in-star
+                  *(rh-non-slash-star rh-ends-in-star) "/"
            / eol-comment *r-non-lf %x0A
 ~~~
 {: #abnf-grammar-rs-h sourcecode-name="cbor-edn-int-hraw.abnf"
