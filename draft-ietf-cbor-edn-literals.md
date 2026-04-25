@@ -598,7 +598,7 @@ Implementations of EDN generally do not need to provide this
 functionality in full; if they do, they can be called "diagnostic
 implementations".
 To be able to process EDN that contains encoding indicators,
-EDN-consuming implementation MUST accept them (i.e., process or
+an EDN-consuming implementation MUST accept them (i.e., process or
 ignore the presence or absence of each encoding indicator).
 (Ignoring them could be compared to a generic CBOR decoder ignoring
 the presence of the serialization variants it encounters.)
