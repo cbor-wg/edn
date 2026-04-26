@@ -444,7 +444,7 @@ application-oriented extension, immediately followed by a sequence
 literal ({{embedded}}) or a single-quoted or raw string literal ({{strings}}).
 The latter form uses its string literal as a shorthand
 form for a sequence literal representing a sequence with exactly that
-one string data item.
+one text string data item.
 
 {:aside}
 > This notation is generalized from
@@ -459,23 +459,43 @@ base64url).
 The present specification allows registering additional names for this namespace,
 which it calls *application-extension identifiers*.
 
-More precisely, an *application-extension identifier* is a name consisting of a
+More precisely, an *application-extension identifier* is a registered name consisting of a
 lower-case ASCII letter (`[a-z]`) and zero or more additional ASCII
 characters that are either lower-case letters, digits, or hyphens (`[a-z0-9-]`).
 »false«, »true«, »null«, and »undefined« cannot be used as such
 identifiers and are reserved.
 
-Application-extension identifiers are registered in a registry
+Application-extension identifiers are registered in the "Application-Extension Identifiers" registry
 ({{appext-iana}}).
 
 An application-extension (such as `dt`) MAY also define the meaning of
-a variant prefix derived from its application-extension identifier by
+one additional prefix derived from its application-extension identifier by
 replacing each lower-case character by its upper-case counterpart (such
 as `DT`).
-As a convention for such definitions, using the all-uppercase variant
-implies making use of a tag appropriate for this application-oriented
-extension (such as tag number 1 for `DT`, where `dt` stands for the
-unwrapped number).
+As a convention, using the all-uppercase variant implies making use of
+a CBOR tag appropriate for this application-oriented extension (such
+as tag number 1 for `DT`, where in contrast the prefix `dt` stands for
+the unwrapped tag content).
+
+In summary, an application-extension identifier gives rise to one or two
+application-extension prefixes, one that is lexically identical to the
+identifier (i.e., all lowercase), and potentially another one that is an
+all-uppercase variation of it.
+In addition to specifying which of these two variations exhibits which
+specific semantics, the application extension specifies what input the
+extension takes.
+
+When the prefix is used immediately in front of a single-quoted or a raw
+string, the input takes the form of a single text string CBOR data
+item.
+When used immediately in front of a sequence literal, the input is a
+CBOR sequence of elements of the sequence literal as input.
+The application extension can provide behavior that depends on the
+number of items supplied as input to it and their data types; it
+cannot distinguish between its prefix being used with a single-quoted
+string, a raw string, or a CBOR sequence composed of a single text
+string data item (as illustrated for instance in Tables {{<tab-equiv-dt}},
+{{<tab-equiv-ip}}, and {{<tab-equiv-hash}}).
 
 This specification defines a number of generally applicable
 application-oriented extensions ({{app-ext}}), both to motivate
@@ -485,8 +505,8 @@ concept.
 Of these, the application-oriented extensions `h`, `b64`, `dt` and `ip` are
 intended to be mandatory to implement.
 (As mentioned, for simplicity we use the term "application-oriented
-extensions" for that specific mechanism even if it is used to describe
-a part of base EDN.)
+extensions" for the mechanism discussed in this section even if it is
+used to describe a part of base EDN.)
 
 ## Comments {#comments}
 
@@ -681,7 +701,7 @@ indicated by `_7`, which is therefore not used and marked as reserved
 (as are `_4`, `_5`, and `_6`, which would stand for `ai=28` to
 `ai=30`, values currently not in use in CBOR; these encoding
 indicators will be available if and when CBOR is extended to make use
-of them.)
+of them).
 
 Note that the encoding indicator `_` is only available behind the opening
 brace/bracket for `map` and `array` ({{ei-container}}): strings have a special syntax
@@ -804,7 +824,7 @@ the string constitute UTF-8 {{-utf8}} text, major type 3), and byte strings
 (CBOR does not further characterize the bytes that constitute the
 string, major type 2).
 
-EDN has three direct notations for strings: double-quoted and raw
+EDN has three direct (unprefixed) notations for strings: double-quoted and raw
 strings for (UTF-8) text strings, and single-quoted strings for byte strings.
 The latter are useful for byte strings carrying bytes that can be meaningfully
 notated as UTF-8 text ({{sq-lit}}).
@@ -812,8 +832,8 @@ notated as UTF-8 text ({{sq-lit}}).
 Many strings are best notated as extension literals, which may
 provide detailed access to the bits within those bytes (see
 {{encoded-byte-strings}}).
-Extension literals can be constructed out of single-quoted strings,
-raw strings, and sequence literals.
+Extension literals can be constructed out of single-quoted strings and
+raw strings, as well as sequence literals.
 
 ### Double-Quoted String Literals {#dq-lit}
 
@@ -1294,12 +1314,14 @@ equivalent notation not using an application-extension identifier.
 | `dt'1969-07-21T02:56:16Z'`   | `-14159024`    |
 | `dt'1969-07-21T02:56:16.0Z'` | `-14159024.0`  |
 | `dt'1969-07-21T02:56:16.5Z'` | `-14159023.5`  |
+| ``dt`1969-07-21T02:56:16.5Z` `` | `-14159023.5`  |
 | `dt<<'1969-07-21T02:56:16.5Z'>>` | `-14159023.5`  |
 | `dt<<"1969-07-21T02:56:16.5Z">>` | `-14159023.5`  |
+| ``dt<<`1969-07-21T02:56:16.5Z`>>`` | `-14159023.5`  |
 | `DT'1969-07-21T02:56:16Z'`   | `1(-14159024)` |
 {: #tab-equiv-dt title="dt and DT literals vs. plain EDN"}
 
-See {{dt-grammar}} for an ABNF definition for the content of `dt` literals.
+See {{dt-grammar}} for an ABNF definition for the text string input of `dt` literals.
 
 
 The "ip" Extension {#ip}
@@ -1309,8 +1331,8 @@ The application-extension identifier "ip" is used to notate an IP
 address literal that can be used as an IP address as per {{Section 3 of
 -iptag}}.
 
-The content of the literal is a single IPv4address or IPv6address as per
-{{Section 3.2.2 of -uri}}, as a text or byte string.
+The input of the literal is a single text string representing an IPv4address or IPv6address as per
+{{Section 3.2.2 of -uri}}.
 
 With the lower-case app-string prefix `ip`, the value of the literal is a
 byte string representing the binary IP address.
@@ -1363,7 +1385,7 @@ input to a cryptographic hash function as well as identify such a hash
 function to obtain a byte string that represents the output of that
 hash function.
 
-The content of the literal is a string, optionally followed by either
+The input of the literal is a (text or byte) string, optionally followed by either
 an integer or a text string that identifies the hash function in the
 COSE Algorithms registry of the CBOR Object Signing and Encryption
 (COSE) registry group {{IANA.cose}}, either by the identifier (value:
@@ -1393,7 +1415,7 @@ The
 application-extension identifier "`cri`" is used to notate
 an EDN literal for a CRI reference as defined in {{-cri}}.
 
-The text of the literal is a URI Reference as per {{-uri}} or an IRI
+The input of the literal is a URI Reference as per {{-uri}} or an IRI
 Reference as per {{-iri}}.
 
 The value of the literal is a CRI reference that can be converted to
