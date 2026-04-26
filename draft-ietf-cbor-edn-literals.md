@@ -674,22 +674,24 @@ Truncation or rounding semantics imply performing changes at the data
 model level, which is outside the scope of encoding indicators.
 Such operations can be provided by application extensions.
 
-The encoding indicator `_` is an abbreviation of what would in full
-form be `_7`, which is not used.
-Therefore, an underscore `_` on its own stands for indefinite length
-encoding (`ai=31`).
-(Note that this encoding indicator is only available behind the opening
+The encoding indicator `_` (an underscore on its own) is used to
+indicate indefinite length encoding.
+Indefinite length encoding uses `ai=31`, which could have been
+indicated by `_7`, which is therefore not used and marked as reserved
+(as are `_4`, `_5`, and `_6`, which would stand for `ai=28` to
+`ai=30`, values currently not in use in CBOR; these encoding
+indicators will be available if and when CBOR is extended to make use
+of them.)
+
+Note that the encoding indicator `_` is only available behind the opening
 brace/bracket for `map` and `array` ({{ei-container}}): strings have a special syntax
 `streamstring` for indefinite length encoding except for the special
-cases `''_` and `""_` ({{ei-string}}).)
+cases `''_` and `""_` ({{ei-string}}).
 
 The encoding indicators `_0` to `_3` can be used to indicate `ai=24`
 to `ai=27`, respectively; they therefore stand for 1, 2, 4, and 8
 bytes of additional information (ai) following the initial byte in the
 head of the data item.
-(The abbreviation of `_7` into `_` was discussed above.
-`_4` to `_6` are not currently used in CBOR, but will be available if
-and when CBOR is extended to make use of `ai=28` to `ai=30`.)
 
 Surprisingly, {{Section 8.1 of RFC8949@-cbor}} does not address `ai=0` to
 `ai=23` — the assumption seems to have been that Preferred Serialization
