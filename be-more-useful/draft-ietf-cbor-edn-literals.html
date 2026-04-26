@@ -1733,7 +1733,7 @@ application-oriented extension, immediately followed by a sequence
 literal (<a href="#embedded" class="auto internal xref">Section 2.5.6</a>) or a single-quoted or raw string literal (<a href="#strings" class="auto internal xref">Section 2.5</a>).
 The latter form uses its string literal as a shorthand
 form for a sequence literal representing a sequence with exactly that
-one string data item.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+one text string data item.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <aside id="section-2.1-3">
           <p id="section-2.1-3.1">This notation is generalized from
 Section <a href="https://rfc-editor.org/rfc/rfc8949#section-8" class="relref">8</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>, which provides for notating byte
@@ -1746,30 +1746,48 @@ base64url).<a href="#section-2.1-3.1" class="pilcrow">¶</a></p>
 The present specification allows registering additional names for this namespace,
 which it calls <em>application-extension identifiers</em>.<a href="#section-2.1-3.2" class="pilcrow">¶</a></p>
 </aside>
-<p id="section-2.1-4">More precisely, an <em>application-extension identifier</em> is a name consisting of a
+<p id="section-2.1-4">More precisely, an <em>application-extension identifier</em> is a registered name consisting of a
 lower-case ASCII letter (<code>[a-z]</code>) and zero or more additional ASCII
 characters that are either lower-case letters, digits, or hyphens (<code>[a-z0-9-]</code>).
 »false«, »true«, »null«, and »undefined« cannot be used as such
 identifiers and are reserved.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
-<p id="section-2.1-5">Application-extension identifiers are registered in a registry
+<p id="section-2.1-5">Application-extension identifiers are registered in the "Application-Extension Identifiers" registry
 (<a href="#appext-iana" class="auto internal xref">Section 6.1</a>).<a href="#section-2.1-5" class="pilcrow">¶</a></p>
 <p id="section-2.1-6">An application-extension (such as <code>dt</code>) <span class="bcp14">MAY</span> also define the meaning of
-a variant prefix derived from its application-extension identifier by
+one additional prefix derived from its application-extension identifier by
 replacing each lower-case character by its upper-case counterpart (such
 as <code>DT</code>).
-As a convention for such definitions, using the all-uppercase variant
-implies making use of a tag appropriate for this application-oriented
-extension (such as tag number 1 for <code>DT</code>, where <code>dt</code> stands for the
-unwrapped number).<a href="#section-2.1-6" class="pilcrow">¶</a></p>
-<p id="section-2.1-7">This specification defines a number of generally applicable
+As a convention, using the all-uppercase variant implies making use of
+a CBOR tag appropriate for this application-oriented extension (such
+as tag number 1 for <code>DT</code>, where in contrast the prefix <code>dt</code> stands for
+the unwrapped tag content).<a href="#section-2.1-6" class="pilcrow">¶</a></p>
+<p id="section-2.1-7">In summary, an application-extension identifier gives rise to one or two
+application-extension prefixes, one that is lexically identical to the
+identifier (i.e., all lowercase), and potentially another one that is an
+all-uppercase variation of it.
+In addition to specifying which of these two variations exhibits which
+specific semantics, the application extension specifies what input the
+extension takes.<a href="#section-2.1-7" class="pilcrow">¶</a></p>
+<p id="section-2.1-8">When the prefix is used immediately in front of a single-quoted or a raw
+string, the input takes the form of a single text string CBOR data
+item.
+When used immediately in front of a sequence literal, the input is a
+CBOR sequence of elements of the sequence literal as input.
+The application extension can provide behavior that depends on the
+number of items supplied as input to it and their data types; it
+cannot distinguish between its prefix being used with a single-quoted
+string, a raw string, or a CBOR sequence composed of a single text
+string data item (as illustrated for instance in Tables <a href="#tab-equiv-dt" class="auto internal xref">4</a>,
+<a href="#tab-equiv-ip" class="auto internal xref">5</a>, and <a href="#tab-equiv-hash" class="auto internal xref">6</a>).<a href="#section-2.1-8" class="pilcrow">¶</a></p>
+<p id="section-2.1-9">This specification defines a number of generally applicable
 application-oriented extensions (<a href="#app-ext" class="auto internal xref">Section 3</a>), both to motivate
 making these extensions generally available, and to illustrate the
-concept.<a href="#section-2.1-7" class="pilcrow">¶</a></p>
-<p id="section-2.1-8">Of these, the application-oriented extensions <code>h</code>, <code>b64</code>, <code>dt</code> and <code>ip</code> are
+concept.<a href="#section-2.1-9" class="pilcrow">¶</a></p>
+<p id="section-2.1-10">Of these, the application-oriented extensions <code>h</code>, <code>b64</code>, <code>dt</code> and <code>ip</code> are
 intended to be mandatory to implement.
 (As mentioned, for simplicity we use the term "application-oriented
-extensions" for that specific mechanism even if it is used to describe
-a part of base EDN.)<a href="#section-2.1-8" class="pilcrow">¶</a></p>
+extensions" for the mechanism discussed in this section even if it is
+used to describe a part of base EDN.)<a href="#section-2.1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="comments">
@@ -2033,7 +2051,7 @@ indicated by <code>_7</code>, which is therefore not used and marked as reserved
 (as are <code>_4</code>, <code>_5</code>, and <code>_6</code>, which would stand for <code>ai=28</code> to
 <code>ai=30</code>, values currently not in use in CBOR; these encoding
 indicators will be available if and when CBOR is extended to make use
-of them.)<a href="#section-2.3.1-7" class="pilcrow">¶</a></p>
+of them).<a href="#section-2.3.1-7" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-8">Note that the encoding indicator <code>_</code> is only available behind the opening
 brace/bracket for <code>map</code> and <code>array</code> (<a href="#ei-container" class="auto internal xref">Section 2.6.2</a>): strings have a special syntax
 <code>streamstring</code> for indefinite length encoding except for the special
@@ -2320,15 +2338,15 @@ of numbers in CBOR can be found in the informational document
 the string constitute UTF-8 <span>[<a href="#STD63" class="cite xref">STD63</a>]</span> text, major type 3), and byte strings
 (CBOR does not further characterize the bytes that constitute the
 string, major type 2).<a href="#section-2.5-1" class="pilcrow">¶</a></p>
-<p id="section-2.5-2">EDN has three direct notations for strings: double-quoted and raw
+<p id="section-2.5-2">EDN has three direct (unprefixed) notations for strings: double-quoted and raw
 strings for (UTF-8) text strings, and single-quoted strings for byte strings.
 The latter are useful for byte strings carrying bytes that can be meaningfully
 notated as UTF-8 text (<a href="#sq-lit" class="auto internal xref">Section 2.5.2</a>).<a href="#section-2.5-2" class="pilcrow">¶</a></p>
 <p id="section-2.5-3">Many strings are best notated as extension literals, which may
 provide detailed access to the bits within those bytes (see
 <a href="#encoded-byte-strings" class="auto internal xref">Section 2.5.5</a>).
-Extension literals can be constructed out of single-quoted strings,
-raw strings, and sequence literals.<a href="#section-2.5-3" class="pilcrow">¶</a></p>
+Extension literals can be constructed out of single-quoted strings and
+raw strings, as well as sequence literals.<a href="#section-2.5-3" class="pilcrow">¶</a></p>
 <div id="dq-lit">
 <section id="section-2.5.1">
           <h4 id="name-double-quoted-string-litera">
@@ -2891,6 +2909,14 @@ equivalent notation not using an application-extension identifier.<a href="#sect
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">
+                <code>dt`1969-07-21T02:56:16.5Z`</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>-14159023.5</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
                 <code>dt&lt;&lt;'1969-07-21T02:56:16.5Z'&gt;&gt;</code>
 </td>
               <td class="text-left" rowspan="1" colspan="1">
@@ -2907,6 +2933,14 @@ equivalent notation not using an application-extension identifier.<a href="#sect
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">
+                <code>dt&lt;&lt;`1969-07-21T02:56:16.5Z`&gt;&gt;</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>-14159023.5</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
                 <code>DT'1969-07-21T02:56:16Z'</code>
 </td>
               <td class="text-left" rowspan="1" colspan="1">
@@ -2916,7 +2950,7 @@ equivalent notation not using an application-extension identifier.<a href="#sect
           </tbody>
         </table>
 </div>
-<p id="section-3.1-6">See <a href="#dt-grammar" class="auto internal xref">Section 5.2.3</a> for an ABNF definition for the content of <code>dt</code> literals.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+<p id="section-3.1-6">See <a href="#dt-grammar" class="auto internal xref">Section 5.2.3</a> for an ABNF definition for the text string input of <code>dt</code> literals.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ip">
@@ -2926,8 +2960,8 @@ equivalent notation not using an application-extension identifier.<a href="#sect
         </h3>
 <p id="section-3.2-1">The application-extension identifier "ip" is used to notate an IP
 address literal that can be used as an IP address as per <span><a href="https://rfc-editor.org/rfc/rfc9164#section-3" class="relref">Section 3</a> of [<a href="#RFC9164" class="cite xref">RFC9164</a>]</span>.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">The content of the literal is a single IPv4address or IPv6address as per
-<span><a href="https://rfc-editor.org/rfc/rfc3986#section-3.2.2" class="relref">Section 3.2.2</a> of [<a href="#RFC3986" class="cite xref">RFC3986</a>]</span>, as a text or byte string.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">The input of the literal is a single text string representing an IPv4address or IPv6address as per
+<span><a href="https://rfc-editor.org/rfc/rfc3986#section-3.2.2" class="relref">Section 3.2.2</a> of [<a href="#RFC3986" class="cite xref">RFC3986</a>]</span>.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">With the lower-case app-string prefix <code>ip</code>, the value of the literal is a
 byte string representing the binary IP address.
 With the upper-case app-string prefix <code>IP</code>, the literal is such a byte string
@@ -3037,7 +3071,7 @@ equivalent notation not using an application-extension identifier.<a href="#sect
 input to a cryptographic hash function as well as identify such a hash
 function to obtain a byte string that represents the output of that
 hash function.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.3-2">The content of the literal is a string, optionally followed by either
+<p id="section-3.3-2">The input of the literal is a (text or byte) string, optionally followed by either
 an integer or a text string that identifies the hash function in the
 COSE Algorithms registry of the CBOR Object Signing and Encryption
 (COSE) registry group <span>[<a href="#IANA.cose" class="cite xref">IANA.cose</a>]</span>, either by the identifier (value:
@@ -3109,7 +3143,7 @@ identifier "hash".<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <p id="section-3.4-1">The
 application-extension identifier "<code>cri</code>" is used to notate
 an EDN literal for a CRI reference as defined in <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.4-2">The text of the literal is a URI Reference as per <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> or an IRI
+<p id="section-3.4-2">The input of the literal is a URI Reference as per <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> or an IRI
 Reference as per <span>[<a href="#RFC3987" class="cite xref">RFC3987</a>]</span>.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
 <p id="section-3.4-3">The value of the literal is a CRI reference that can be converted to
 the text of the literal using the procedure of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-30#section-6.1" class="relref">Section 6.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>.  
