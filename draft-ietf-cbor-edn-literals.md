@@ -138,7 +138,8 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    The present text is intended to become input to the planned `-23`,
+    The present `-23` is intended as reference material during the
+    2026-04-29 CBOR interim,
     a complete specification that reacts to discussion on previous
     draft revisions and that can be used to confirm the results in a WGLC.
     Among other concerns, the discussion revealed that some additional
