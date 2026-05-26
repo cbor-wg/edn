@@ -600,7 +600,7 @@ specification provides for such a kind of internal comment syntax.
 As a not quite backward compatible change, this specification
 restricts slash-delimited comments that were allowed in {{Section G.6 of RFC8610}} in two ways:
 
-* Inline comments now longer can be empty: The construct "`//`" that was
+* Inline comments no longer can be empty: The construct "`//`" that was
   an empty comment in {{Section G.6 of RFC8610}} is now used instead to introduce an
   end-of-line comment.
   (Note that "`//`" still can be used in what is visually "within" a
