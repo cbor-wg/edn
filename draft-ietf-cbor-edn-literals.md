@@ -770,8 +770,8 @@ A leading "`+`" sign is a no-op, and a leading "`-`" sign inverts the
 sign of the number.
 So `0`, `000`, `+0` all represent the same integer zero, as does `-0`.
 Similarly,
-`1`, `001`, `+1` and `+0001` all stand for the same integer one, and
-`-1` and `-0001` both designate the same integer minus one.
+`1`, `001`, `+1` and `+0001` all stand for the same positive integer one, and
+`-1` and `-0001` both designate the same negative integer minus one.
 
 Using a decimal point (`.`) and/or an exponent (`e` for decimal, `p`
 for hexadecimal) turns the number into a floating point number (major
