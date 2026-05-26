@@ -358,11 +358,13 @@ that control what presentation variant is most desirable for the
 application that it is being used for.
 
 Because of this, a deterministic representation is not defined for
-CDN, and there is no expectation for "roundtripping" from CDN to
-CBOR and back, i.e., for an ability
-to convert CDN to binary CBOR and back to CDN while achieving exactly
-the same result as the original input CDN — the original CDN possibly
-was created by humans or by a different CDN generator.
+CDN.
+More generally speaking, there is no expectation for "roundtripping":
+Converting CDN to binary CBOR and back to CDN will generally not achieve exactly
+the same result as the original input CDN.
+This possibly
+was created by humans or by a different CDN generator and may contain
+presentation information that is not represented in the binary CBOR.
 
 ### Basic Output Format {#basic}
 
