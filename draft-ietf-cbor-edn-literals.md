@@ -400,7 +400,7 @@ Information obtained from a CDDL model can help in choosing
 application-oriented literals or specific string representations such
 as embedded CBOR or `b64''` in the appropriate places.
 
-Overview over Concise Diagnostic Notation (CDN) {#diagnostic-notation}
+Concise Diagnostic Notation (CDN) {#diagnostic-notation}
 =====================================================
 
 CBOR is a binary interchange format.  To facilitate documentation and
