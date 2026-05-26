@@ -2048,9 +2048,13 @@ argument is carried in 2<sup>ai-24</sup> (1, 2, 4, or 8)
 additional bytes, and <code>ai=31</code> means that indefinite length
 encoding is used.)<a href="#section-2.3.1-4" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-5">An underscore followed by a decimal digit <code>n</code> indicates that the
-preceding item (or, for arrays and maps, the item starting with the
-preceding bracket or brace) was or is to be encoded with an additional information
-value of <code>ai=</code>24+<code>n</code>.  For example, <code>1.5_1</code> is a half-precision floating-point
+item was or is to be encoded with an additional information
+value of <code>ai=</code>24+<code>n</code>.
+(The item associated to the encoding indicator may be the preceding
+item, or, for arrays and maps, the item starting with the
+preceding bracket or brace.)
+For an example involving floating point values (Section <a href="https://rfc-editor.org/rfc/rfc8949#section-3.3" class="relref">3.3</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>),
+<code>1.5_1</code> is a half-precision floating-point
 number (2<sup>1</sup> = 2 additional bytes or 16 bits), while <code>1.5_3</code> is encoded as
 double precision (2<sup>3</sup> = 8 additional bytes or 64 bits).
 For a tool consuming CDN in a diagnostic mode, encountering an
