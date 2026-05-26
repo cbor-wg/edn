@@ -701,9 +701,13 @@ additional bytes, and `ai=31` means that indefinite length
 encoding is used.)
 
 An underscore followed by a decimal digit `n` indicates that the
-preceding item (or, for arrays and maps, the item starting with the
-preceding bracket or brace) was or is to be encoded with an additional information
-value of `ai=`24+`n`.  For example, `1.5_1` is a half-precision floating-point
+item was or is to be encoded with an additional information
+value of `ai=`24+`n`.
+(The item associated to the encoding indicator may be the preceding
+item, or, for arrays and maps, the item starting with the
+preceding bracket or brace.)
+For an example involving floating point values ({{Section 3.3 of RFC8949@-cbor}}),
+`1.5_1` is a half-precision floating-point
 number (2<sup>1</sup> = 2 additional bytes or 16 bits), while `1.5_3` is encoded as
 double precision (2<sup>3</sup> = 8 additional bytes or 64 bits).
 For a tool consuming CDN in a diagnostic mode, encountering an
