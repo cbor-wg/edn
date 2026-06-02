@@ -521,7 +521,7 @@ making these extensions generally available, and to illustrate the
 concept.
 
 Of these, the application-oriented extensions `h`, `b64`, `dt` and `ip` are
-intended to be mandatory to implement.
+mandatory to implement.
 (As mentioned, for simplicity we use the term "application-oriented
 extensions" for the mechanism discussed in this section even if it is
 used to describe a part of base EDN.)
@@ -532,7 +532,7 @@ For presentation to humans, EDN text may benefit from comments.
 JSON famously does not provide for comments, and the original
 diagnostic notation in {{Section 6 of -old-cbor}} inherited this property.
 
-EDN now provides two comment syntaxes, which can be used where the
+EDN provides two comment syntaxes, which can be used where the
 syntax allows blank space (outside of constructs such as numbers,
 string literals, etc.):
 
@@ -594,7 +594,7 @@ specification provides for such a kind of internal comment syntax.
 
 ### Discussion
 
-As a not quite backward compatible change, this specification
+As a backwards-incompatible change, this specification
 restricts slash-delimited comments that were allowed in {{Section G.6 of RFC8610}} in two ways:
 
 * Inline comments now longer can be empty: The construct "`//`" that was
@@ -623,9 +623,9 @@ instead of the conventional, but often less familiar
 ## Encoding Indicators {#encoding-indicators}
 
 Sometimes it is useful to indicate in the diagnostic notation which of
-several alternative representations were actually used; for example, a
+several alternative CBOR representations are actually used; for example, a
 data item written »1.5« by a diagnostic decoder might have been
-encoded as a half-, single-, or double-precision float.
+encoded in CBOR as a half-, single-, or double-precision float.
 
 Encoding indicators are always optional:
 EDN is usually used to describe CBOR data items at the data model
@@ -638,9 +638,7 @@ implementations".
 To be able to process EDN that contains encoding indicators,
 an EDN-consuming implementation MUST accept them (i.e., process or
 ignore the presence or absence of each encoding indicator).
-(Ignoring them could be compared to a generic CBOR decoder ignoring
-the presence of the serialization variants it encounters.)
-It is RECOMMENDED to by default provide a warning for each encoding
+It is RECOMMENDED to provide a warning for each encoding
 indicator value that is encountered but not further processed.
 
 When creating EDN as input for a diagnostic CBOR encoder in order to
@@ -648,11 +646,11 @@ obtain specific encoding choices, encoding indicators may be placed
 manually or by the software generating the EDN.
 Where no encoding indicator is placed, a diagnostic CBOR encoder is expected to
 generate Preferred Serialization ({{Section 4.1 of RFC8949@-cbor}}) with
-definite length encoding only.
-Similarly, when using EDN as output for a diagnostic CBOR decoder, a
-basic diagnostic configuration of the tool is expected to provide
+definite-length encoding only.
+Similarly, when using EDN as output for a diagnostic CBOR decoder,
+the default configuration of the tool is expected to provide
 encoding indicators only in places where the CBOR input did not use
-Preferred Serialization with definite length encoding (see also
+Preferred Serialization with definite-length encoding (see also
 {{basic}}).
 Diagnostic implementations of EDN that process encoding indicators as
 discussed here are expected to document their diagnostic behavior and
@@ -664,8 +662,6 @@ Encoding indicators start with
 an underscore and comprise all immediately following characters that are alphanumeric or
 underscore.
 For example, `_` or `_3`.
-Encoding indicators can be ignored by anyone not
-interested in this information.
 
 Encoding indicators are placed immediately to the right of the data
 item or of a syntactic feature that can stand for the data item the
@@ -692,7 +688,7 @@ This field is used in encoding the "argument", i.e., the value, tag, or
 length; `ai=0` to `ai=23` mean that the value of the `ai` field
 immediately *is* the argument, `ai=24` to `ai=27` mean that the
 argument is carried in 2<sup>ai-24</sup> (1, 2, 4, or 8)
-additional bytes, and `ai=31` means that indefinite length
+additional bytes, and `ai=31` means that indefinite-length
 encoding is used.)
 
 An underscore followed by a decimal digit `n` indicates that the
@@ -713,8 +709,8 @@ model level, which is outside the scope of encoding indicators.
 Such operations can be provided by application extensions.
 
 The encoding indicator `_` (an underscore on its own) is used to
-indicate indefinite length encoding.
-Indefinite length encoding uses `ai=31`, which could have been
+indicate indefinite-length encoding.
+Indefinite-length encoding uses `ai=31`, which could have been
 indicated by `_7`, which is therefore not used and marked as reserved
 (as are `_4`, `_5`, and `_6`, which would stand for `ai=28` to
 `ai=30`, values currently not in use in CBOR; these encoding
@@ -723,10 +719,10 @@ of them).
 
 Note that the encoding indicator `_` is only available behind the opening
 brace/bracket for `map` and `array` ({{ei-container}}): strings have a special syntax
-`streamstring` for indefinite length encoding except for the special
+`streamstring` for indefinite-length encoding except for the special
 cases `''_` and `""_` ({{ei-string}}).
 
-The encoding indicators `_0` to `_3` can be used to indicate `ai=24`
+The encoding indicators `_0` to `_3` indicate `ai=24`
 to `ai=27`, respectively; they therefore stand for 1, 2, 4, and 8
 bytes of additional information (ai) following the initial byte in the
 head of the data item.
@@ -747,7 +743,7 @@ Encoding indicators are an extension point for EDN; {{reg-ei}} defines
 a registry for additional values.
 
 Specific forms of encoding indicators are discussed in further detail
-in {{ei-string}} for indefinite length strings and in {{ei-container}} for
+in {{ei-string}} for indefinite-length strings and in {{ei-container}} for
 arrays and maps.
 
 ## Numbers
@@ -757,8 +753,8 @@ arrays and maps.
  -->
 
 In addition to JSON's decimal number literals, EDN provides hexadecimal, octal,
-and binary number literals in the usual C-language notation (octal with `0o`
-prefix present only).
+and binary number literals in the usual C-language notation (`0x`, `0o`, and `0b`,
+respectively).
 
 Numbers composed only of digits (of the respective base) are
 interpreted as CBOR integers (major type 0/1, or where the number
@@ -842,33 +838,32 @@ the string constitute UTF-8 {{-utf8}} text, major type 3), and byte strings
 (CBOR does not further characterize the bytes that constitute the
 string, major type 2).
 
-EDN has three direct (unprefixed) notations for strings: double-quoted and raw
-strings for (UTF-8) text strings, and single-quoted strings for byte strings.
-The latter are useful for byte strings carrying bytes that can be meaningfully
-notated as UTF-8 text ({{sq-lit}}).
+(UTF-8) text strings can be represented in EDN either as double-quoted {{dq-lit}}
+or as raw strings {{raw-lit}}, while byte strings can be represented as
+single-quoted strings {{sq-lit}}. This is only useful for byte strings carrying
+bytes that can be meaningfully notated as UTF-8 text.
 
 Many strings are best notated as extension literals, which may
 provide detailed access to the bits within those bytes (see
 {{encoded-byte-strings}}).
 Extension literals can be constructed out of single-quoted strings and
-raw strings, as well as sequence literals.
+raw strings, as well as sequence literals (cf. {{app-lit}}).
 
 ### Double-Quoted String Literals {#dq-lit}
 
 EDN enables notating text strings in a form compatible to that of notating text
 strings in JSON (i.e., as a double-quoted string literal), with a
-number of usability extensions.
-In JSON, no control characters are allowed to occur
-directly in text string literals; if needed, they can be specified using
-escapes such as `\t` or `\r`.
+number of usability enhancements.
+JSON allows no control characters in text-string literals;
+if needed, they can be specified using escapes such as `\t` or `\r`.
+This also applies to EDN, and all escaping rules apply as in JSON,
+with a single exception:
 In EDN, string literals additionally can contain newlines (LINEFEED
 U+000A), which are copied into the resulting string like other
 characters in the string literal.
 To deal with variability in platform presentation of newlines, any
 carriage return characters (U+000D) that may be present in the EDN
 string literal are not copied into the resulting string (see {{cr}}).
-No other control characters can occur directly in a string literal,
-and the handling of escaped characters (`\r` etc.) is as in JSON.
 
 JSON's escape scheme for characters that are not on Unicode's basic
 multilingual plane (BMP) is cumbersome (see {{Section 7 of RFC8259@-json}}).
@@ -885,8 +880,8 @@ This means the following are equivalent (the first `o` is escaped as
 
 ### Single-Quoted String Literals {#sq-lit}
 
-Analogously to text string literals delimited by double quotes, EDN
-allows the use of single quotes (without a prefix) to express byte
+Analogously to text-string literals delimited by double quotes, EDN
+allows the use of single quotes (without a prefix) to express byte-
 string literals with UTF-8 text; for instance, the following are
 equivalent:
 
@@ -896,7 +891,7 @@ h'68656c6c6f20776f726c64'
 ~~~~
 
 The escaping rules of JSON strings are applied equivalently for
-text-based byte string literals, e.g., `\\` stands for a single
+text-based byte-string literals, e.g., `\\` stands for a single
 backslash and `\'` stands for a single quote.
 However, to facilitate parsing, in single-quoted strings EDN excludes
 certain escaping mechanisms available for double-quoted strings:
@@ -1014,11 +1009,10 @@ See {{grammar}} for a more formal approach to defining these rules.
 
 ### Encoding Indicators of Strings {#ei-string}
 
-For indefinite length encoding, strings (byte and text strings) have a
-special syntax `streamstring`.
-This is used (except for the special cases `''_` and `""_` below) to
-notate their detailed composition into individual "chunks" ({{Section
-3.2.3 of RFC8949@-cbor}}), by representing the individual chunks in
+Indefinite-length (byte or text) strings are composed of
+different "chunks" ({{Section 3.2.3 of RFC8949@-cbor}}).
+EDN provides a special syntax `streamstring` for them.
+This syntax represents the individual chunks in
 sequence within parentheses, each optionally followed by a comma, with
 an encoding indicator `_` immediately after the opening parenthesis:
 e.g., `(_ h'0123', h'4567')` or `(_ "foo", "bar")`.
@@ -1075,7 +1069,7 @@ instance, the following are equivalent:
 ~~~~
 
 The internal syntax of prefixed single-quote literals such
-as `h''` and `b64''` can also allow comments as blank space (see {{comments}}).
+as `h''` and `b64''` also allows comments as blank space (see {{comments}}).
 
 ~~~~ cbor-diag
    h'68656c6c6f20776f726c64'
@@ -1087,8 +1081,8 @@ as `h''` and `b64''` can also allow comments as blank space (see {{comments}}).
 Slash characters are part of the base64 classic alphabet (see
 Table 1 in {{Section 4 of RFC4648}}), and they therefore need to be in the
 `b64''` set of characters that contribute to the byte string.
-Therefore, only end-of-line comments are available inside b64 byte string
-literals.
+Therefore, only end-of-line comments starting with `#` are available inside
+b64 byte string literals.
 
 ~~~~ cbor-diag
    b64'/base64 not a comment/ but one follows # comment'
@@ -1104,7 +1098,7 @@ which is the same as `h'968C2C'`.
 ### CBOR Sequence Literals {#embedded}
 
 In diagnostic notation, a sequence of zero or more CBOR data item literals can
-be enclosed in `<<` and `>>`, optionally prefixed by an
+be comma-separated and enclosed in `<<` and `>>`, optionally prefixed by an
 application-extension prefix; this specification speaks of *sequence literals*.
 EDN mainly deals with individual data items, not with CBOR sequences
 {{-seq}}, so the CBOR sequence represented by the sequence literal needs
@@ -1113,7 +1107,7 @@ to be further processed to obtain the value of the literal.
 Prefixed sequence literals refer to the application extension (see
 {{app-lit}}) identified by the prefix and apply the extension to its
 sequence content, resulting in a single data item.
-This data item may be a string or may not (always) be, depending on
+This data item may be a string or not (always), depending on
 the definition of the application extension.
 
 An unprefixed sequence literal applies CBOR encoding to the
@@ -1156,8 +1150,8 @@ for CBOR data items that are well-formed but not valid; when this is
 enabled, such implementations MAY relax the requirement on text
 strings to be valid UTF-8.
 
-Note that neither CBOR about its text strings nor EDN about its source
-language make any requirements except for conformance to {{-utf8}}.
+CBOR has no requirements for its text strings except for conformance to
+{{-utf8}}. The same applies to EDN and its source language.
 No additional Unicode processing or validation such as normalization
 or checking whether a scalar value is actually assigned is foreseen by
 EDN, particularly not any processing that is dependent on a specific
@@ -1251,7 +1245,7 @@ well-formed but not valid ({{Section 5.3 of RFC8949@-cbor}}).
 For maps, this is relevant for map keys that occur more than once, as in:
 
 ~~~ cbor-diag
-{1: "to", 1: "fro"}
+{1: "to", 1: "from"}
 ~~~
 
 ## Tags
@@ -1290,7 +1284,7 @@ EDN uses JSON syntax for the simple values True (»`true`«), False
 (»`false`«), and Null (»`null`«).
 Undefined is written »`undefined`« as in JavaScript.
 
-These and all other simple values can be given as "simple()" with the
+These and all other simple values can also be given as "simple()" with the
 appropriate unsigned integer in the parentheses.  For example, »`simple(42)`«
 indicates major type 7, value 42, and »`simple(20)`« indicates
 »`false`«.
@@ -1301,7 +1295,7 @@ Application-Oriented Extension Literals {#app-ext}
 =======================================
 
 This document extends the syntax used in diagnostic notation to also
-enable application-oriented extensions.
+enable application-oriented extensions ({{app-lit}}).
 This section defines a number of application-oriented extensions.
 
 
@@ -1399,8 +1393,8 @@ The "hash" Extension {#hash}
 --------------------
 
 The application-extension identifier "hash" is used to notate the
-input to a cryptographic hash function as well as identify such a hash
-function to obtain a byte string that represents the output of that
+input to a cryptographic hash function as well as to identify such a hash
+function. Its value is a byte string that represents the output of that
 hash function.
 
 The input of the literal is a (text or byte) string, optionally followed by either
@@ -1493,7 +1487,7 @@ chain.
 Handling unknown application-extension identifiers {#unknown}
 --------------------------------------------------
 
-When ingesting CBOR diagnostic notation, any
+When ingesting CBOR diagnostic notation,
 application-oriented extension literals are usually decoded and
 transformed into the corresponding data item during ingestion.
 If an application-extension is not known or not implemented by the
@@ -1519,7 +1513,7 @@ which represent each item in the sequence contained in the
 app-sequence.
 
 For example, `cri'https://example.com'` can be represented as
-`/CPA/ 999(["cri", ["https://example.com"]])`, or
+`/CPA/ 999(["cri", ["https://example.com"]])`, and
 `hash<<"data", -44>>` as `/CPA/ 999(["hash", ["data", -44]])`.
 
 <!-- edn-abnf -fe "cri'https://example.com'" -->
@@ -1564,7 +1558,7 @@ The Diagnostic Notation Ellipsis Tag, tag number CPA888 ({{iana-standin}}).
 The content of this tag either is
 
 1. null (indicating a data item entirely replaced by an ellipsis), or it is
-2. an array, the elements of which are alternating between fragments
+2. an array, the elements of which are alternating between chunks
    of a string and the actual elisions, represented as ellipses
    carrying a null as content.
 
@@ -1614,7 +1608,7 @@ The example
 between the bytes notated _inside_ `h''` literals.
 
 String elisions can be represented in a CBOR data item by a stand-in
-that wraps an array of string fragments alternating with ellipsis
+that wraps an array of string chunks alternating with ellipsis
 indicators:
 
 ~~~ cbor-diag
@@ -2484,7 +2478,7 @@ initial entries have the Change Controller "IETF".
 
 | Encoding Indicator | Description                        | Reference         |
 |--------------------|------------------------------------|-------------------|
-| _                  | Indefinite Length Encoding (ai=31) | RFC8949, RFC-XXXX |
+| _                  | Indefinite-Length Encoding (ai=31) | RFC8949, RFC-XXXX |
 | _i                 | ai=0 to ai=23                      | RFC-XXXX          |
 | _0                 | ai=24                              | RFC8949, RFC-XXXX |
 | _1                 | ai=25                              | RFC8949, RFC-XXXX |
