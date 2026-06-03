@@ -1573,7 +1573,7 @@ Elisions can stand in for entire subtrees, e.g. in:
 ~~~
 
 A single ellipsis (or key/value pair of ellipses) can imply eliding
-multiple elements in an array (members in a map); if more detailed
+multiple elements in an array (members in a map). If more detailed
 control is required, a data definition language such as CDDL can be
 employed.
 (Note that the stand-in form defined here does not allow multiple
