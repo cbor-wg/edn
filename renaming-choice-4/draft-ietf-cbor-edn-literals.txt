@@ -4,9 +4,9 @@
 
 Network Working Group                                         C. Bormann
 Internet-Draft                                    Universität Bremen TZI
-Updates: 8610, 8949 (if approved)                            18 May 2026
+Updates: 8610, 8949 (if approved)                            6 June 2026
 Intended status: Standards Track                                        
-Expires: 19 November 2026
+Expires: 8 December 2026
 
 
                    Concise Diagnostic Notation (CDN)
@@ -53,9 +53,9 @@ About This Document
 
 
 
-Bormann                 Expires 19 November 2026                [Page 1]
+Bormann                  Expires 8 December 2026                [Page 1]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 Status of This Memo
@@ -73,7 +73,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 November 2026.
+   This Internet-Draft will expire on 8 December 2026.
 
 Copyright Notice
 
@@ -98,7 +98,7 @@ Table of Contents
        1.3.1.  For Humans  . . . . . . . . . . . . . . . . . . . . .   8
        1.3.2.  Determinism?  . . . . . . . . . . . . . . . . . . . .   8
        1.3.3.  Basic Output Format . . . . . . . . . . . . . . . . .   8
-   2.  Overview over Concise Diagnostic Notation (CDN) . . . . . . .   9
+   2.  Concise Diagnostic Notation (CDN) . . . . . . . . . . . . . .   9
      2.1.  Application-Oriented Extension Literals . . . . . . . . .  10
      2.2.  Comments  . . . . . . . . . . . . . . . . . . . . . . . .  12
        2.2.1.  Discussion  . . . . . . . . . . . . . . . . . . . . .  13
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bormann                 Expires 19 November 2026                [Page 2]
+Bormann                  Expires 8 December 2026                [Page 2]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
        2.5.1.  Double-Quoted String Literals . . . . . . . . . . . .  20
@@ -165,9 +165,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026                [Page 3]
+Bormann                  Expires 8 December 2026                [Page 3]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
      6.5.  Stand-in Tags . . . . . . . . . . . . . . . . . . . . . .  61
@@ -221,9 +221,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026                [Page 4]
+Bormann                  Expires 8 December 2026                [Page 4]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    This document consolidates and formalizes the definition of CDN,
@@ -277,9 +277,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026                [Page 5]
+Bormann                  Expires 8 December 2026                [Page 5]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    Note that CDN is not meant to be the only text-based representation
@@ -333,9 +333,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026                [Page 6]
+Bormann                  Expires 8 December 2026                [Page 6]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    hinting at knowledge of this updated specification.
@@ -389,9 +389,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026                [Page 7]
+Bormann                  Expires 8 December 2026                [Page 7]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 1.3.1.  For Humans
@@ -445,9 +445,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026                [Page 8]
+Bormann                  Expires 8 December 2026                [Page 8]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    *  does not generate elaborate blank space (newlines, indentation)
@@ -475,7 +475,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
    representations such as embedded CBOR or b64'' in the appropriate
    places.
 
-2.  Overview over Concise Diagnostic Notation (CDN)
+2.  Concise Diagnostic Notation (CDN)
 
    CBOR is a binary interchange format.  To facilitate documentation and
    debugging, and in particular to facilitate communication between
@@ -501,9 +501,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026                [Page 9]
+Bormann                  Expires 8 December 2026                [Page 9]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    CDN borrows the JSON syntax for numbers (integer and floating-point,
@@ -557,9 +557,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 10]
+Bormann                  Expires 8 December 2026               [Page 10]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
       |  This notation is generalized from Section 8 of RFC 8949
@@ -613,9 +613,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 11]
+Bormann                  Expires 8 December 2026               [Page 11]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    This specification defines a number of generally applicable
@@ -669,9 +669,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 12]
+Bormann                  Expires 8 December 2026               [Page 12]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    Another example, combining the use of inline and end-of-line
@@ -725,9 +725,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 13]
+Bormann                  Expires 8 December 2026               [Page 13]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    instead of the conventional, but often less familiar
@@ -781,9 +781,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 14]
+Bormann                  Expires 8 December 2026               [Page 14]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    Encoding indicators are placed immediately to the right of the data
@@ -837,9 +837,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 15]
+Bormann                  Expires 8 December 2026               [Page 15]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    An underscore followed by a decimal digit n indicates that the
@@ -893,9 +893,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 16]
+Bormann                  Expires 8 December 2026               [Page 16]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    Specific forms of encoding indicators are discussed in further detail
@@ -949,9 +949,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 17]
+Bormann                  Expires 8 December 2026               [Page 17]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
       +========================================+===================+
@@ -1005,9 +1005,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 18]
+Bormann                  Expires 8 December 2026               [Page 18]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
              +========================+=====================+
@@ -1061,9 +1061,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 19]
+Bormann                  Expires 8 December 2026               [Page 19]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 2.5.  Strings
@@ -1117,9 +1117,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 20]
+Bormann                  Expires 8 December 2026               [Page 20]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 2.5.2.  Single-Quoted String Literals
@@ -1173,9 +1173,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 21]
+Bormann                  Expires 8 December 2026               [Page 21]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 2.5.3.  Raw String Literals
@@ -1229,9 +1229,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 22]
+Bormann                  Expires 8 December 2026               [Page 22]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    *  After processing the backquotes used as delimiters, any single
@@ -1285,9 +1285,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 23]
+Bormann                  Expires 8 December 2026               [Page 23]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    forms ''_ and ""_ can be used instead and are reserved for the case
@@ -1341,9 +1341,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 24]
+Bormann                  Expires 8 December 2026               [Page 24]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    Slash characters are part of the base64 classic alphabet (see Table 1
@@ -1397,9 +1397,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 25]
+Bormann                  Expires 8 December 2026               [Page 25]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 2.5.7.  Validity of Text Strings
@@ -1453,9 +1453,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 26]
+Bormann                  Expires 8 December 2026               [Page 26]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 2.6.1.  Mandatory Separators, Optional Terminators
@@ -1509,9 +1509,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 27]
+Bormann                  Expires 8 December 2026               [Page 27]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 2.6.2.  Encoding Indicators of Arrays and Maps
@@ -1565,9 +1565,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 28]
+Bormann                  Expires 8 December 2026               [Page 28]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    d9 0001        # tag(1)
@@ -1621,9 +1621,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 29]
+Bormann                  Expires 8 December 2026               [Page 29]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
              +================================+==============+
@@ -1677,9 +1677,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 30]
+Bormann                  Expires 8 December 2026               [Page 30]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    As an additional case, the uppercase app-string prefix IP can be used
@@ -1733,9 +1733,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 31]
+Bormann                  Expires 8 December 2026               [Page 31]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 3.3.  The "hash" Extension
@@ -1789,9 +1789,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 32]
+Bormann                  Expires 8 December 2026               [Page 32]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 3.4.  The "cri" Extension
@@ -1845,9 +1845,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 33]
+Bormann                  Expires 8 December 2026               [Page 33]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
       |  Implementation note: Typically, the ultimate applications will
@@ -1901,9 +1901,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 34]
+Bormann                  Expires 8 December 2026               [Page 34]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    // the indicated value and replace the residue with the value
@@ -1957,9 +1957,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 35]
+Bormann                  Expires 8 December 2026               [Page 35]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    Subtree elisions can be represented in a CBOR data item by using
@@ -2013,9 +2013,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 36]
+Bormann                  Expires 8 December 2026               [Page 36]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 5.  ABNF Definitions
@@ -2069,9 +2069,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 37]
+Bormann                  Expires 8 December 2026               [Page 37]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
                       / decnumber / nonfin) spec
@@ -2125,9 +2125,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 38]
+Bormann                  Expires 8 December 2026               [Page 38]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    bstr            = app-string / sqstr / app-rstring / rawstring
@@ -2181,9 +2181,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 39]
+Bormann                  Expires 8 December 2026               [Page 39]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
                    / %s"n" ; LF line feed U+000A
@@ -2237,9 +2237,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 40]
+Bormann                  Expires 8 December 2026               [Page 40]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
                    / %x28-5B
@@ -2293,9 +2293,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 41]
+Bormann                  Expires 8 December 2026               [Page 41]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
        processed on either of these kinds of platforms will generate the
@@ -2349,9 +2349,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 42]
+Bormann                  Expires 8 December 2026               [Page 42]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
        indicator).  Tag 4/5 representations are not generated in these
@@ -2405,9 +2405,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 43]
+Bormann                  Expires 8 December 2026               [Page 43]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
       'Hello world'
@@ -2461,9 +2461,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 44]
+Bormann                  Expires 8 December 2026               [Page 44]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
       |  This is not entirely backward compatible to Appendix G.4 of
@@ -2517,9 +2517,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 45]
+Bormann                  Expires 8 December 2026               [Page 45]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
        +============+===========================+=================+
@@ -2573,9 +2573,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 46]
+Bormann                  Expires 8 December 2026               [Page 46]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    For convenience, the common definitions in Figure 2 are not repeated
@@ -2629,9 +2629,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 47]
+Bormann                  Expires 8 December 2026               [Page 47]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
       |  The comment syntax provided inside the hex string is intended
@@ -2685,9 +2685,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 48]
+Bormann                  Expires 8 December 2026               [Page 48]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    app-string-dt   = date-time
@@ -2741,9 +2741,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 49]
+Bormann                  Expires 8 December 2026               [Page 49]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    app-string-ip = IPaddress ["/" uint]
@@ -2797,9 +2797,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 50]
+Bormann                  Expires 8 December 2026               [Page 50]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    app-string-cri = URI-reference
@@ -2853,9 +2853,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 51]
+Bormann                  Expires 8 December 2026               [Page 51]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    dec-octet     = "25" %x30-35         ; 250-255
@@ -2909,9 +2909,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 52]
+Bormann                  Expires 8 December 2026               [Page 52]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    For application-extensions that only use printable ASCII characters
@@ -2965,9 +2965,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 53]
+Bormann                  Expires 8 December 2026               [Page 53]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    fitrawdelim  = rawdelim ; width == previous startrawdelim
@@ -3021,9 +3021,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 54]
+Bormann                  Expires 8 December 2026               [Page 54]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 5.3.2.  b64'': ABNF Definition of Integrated Parser
@@ -3077,9 +3077,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 55]
+Bormann                  Expires 8 December 2026               [Page 55]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    raw-app-string-b64 = %s"b64" startrawdelim r-app-string-b64
@@ -3133,9 +3133,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 56]
+Bormann                  Expires 8 December 2026               [Page 56]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    Change Controller:
@@ -3189,9 +3189,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 57]
+Bormann                  Expires 8 December 2026               [Page 57]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 6.2.  Encoding Indicators
@@ -3245,9 +3245,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 58]
+Bormann                  Expires 8 December 2026               [Page 58]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
           +====================+===================+===========+
@@ -3301,9 +3301,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 59]
+Bormann                  Expires 8 December 2026               [Page 59]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
             +======+=================+=======================+
@@ -3357,9 +3357,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 60]
+Bormann                  Expires 8 December 2026               [Page 60]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 6.4.  Content-Format
@@ -3413,9 +3413,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 61]
+Bormann                  Expires 8 December 2026               [Page 61]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 7.  Security considerations
@@ -3469,9 +3469,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 62]
+Bormann                  Expires 8 December 2026               [Page 62]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    [C]        International Organization for Standardization,
@@ -3525,9 +3525,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 63]
+Bormann                  Expires 8 December 2026               [Page 63]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
@@ -3581,9 +3581,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 64]
+Bormann                  Expires 8 December 2026               [Page 64]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    [STD80]    Internet Standard 80,
@@ -3637,9 +3637,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 65]
+Bormann                  Expires 8 December 2026               [Page 65]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    [RFC7049]  Bormann, C. and P. Hoffman, "Concise Binary Object
@@ -3693,9 +3693,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
 
 
 
-Bormann                 Expires 19 November 2026               [Page 66]
+Bormann                  Expires 8 December 2026               [Page 66]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    [YAML]     Ben-Kiki, O., Evans, C., and I. döt Net, "YAML Ain't
@@ -3749,9 +3749,9 @@ Appendix A.  CDN and CDDL
 
 
 
-Bormann                 Expires 19 November 2026               [Page 67]
+Bormann                  Expires 8 December 2026               [Page 67]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    *  Syntax for tags.  CDDL's tag syntax is part of the system for
@@ -3805,9 +3805,9 @@ List of Tables
 
 
 
-Bormann                 Expires 19 November 2026               [Page 68]
+Bormann                  Expires 8 December 2026               [Page 68]
 
-Internet-Draft      Concise Diagnostic Notation (CDN)           May 2026
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
    Table 2:   Example Sets of Equivalent Notations for Some Numbers
@@ -3861,4 +3861,4 @@ Author's Address
 
 
 
-Bormann                 Expires 19 November 2026               [Page 69]
+Bormann                  Expires 8 December 2026               [Page 69]
