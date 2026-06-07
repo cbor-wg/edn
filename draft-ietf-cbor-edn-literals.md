@@ -670,20 +670,24 @@ interested in this information.
 Encoding indicators are placed immediately to the right of the data
 item or of a syntactic feature that can stand for the data item the
 encoding of which the encoding indicator is controlling.
-{{tab-ei}} provides examples for data items with encoding indicators used with various
-kinds of data items.
+{{tab-ei}} provides examples for data items with definite length
+encoding indicators used with various kinds of data items ("mt" = major
+type, "ignoring e.i." = encoding when ignoring the encoding indicators).
+Examples for encoding indicators controlling indefinite length
+encoding can be found in the context of explanations in {{ei-string}}
+and {{ei-container}}.
 
-| mt | examples                |
-|  0 | `1_1`, `0x4711_3`       |
-|  1 | `-1_1`                  |
-|  2 | `'A'_1`                 |
-|  3 | `"A"_1`                 |
-|  4 | `[_1 "bar"]`            |
-|  5 | `{_1 "bar": 1}`         |
-|  6 | `1_1(4711)`             |
-|  7 | `1.5_2`, `0x4711p+03_3` |
-{: #tab-ei title="Examples of Encoding Indicators for Different Data
-Items (mt = major type)"}
+| mt | examples               | encoding (in hex)             | ignoring e.i.     |
+|  0 | `1_1`<br>`0x4711_3`       | 190001<br>1b0000000000004711     | 01<br>194711         |
+|  1 | `-1_1`                 | 390000                        | 20                |
+|  2 | `'A'_1`                | 59000141                      | 4141              |
+|  3 | `"A"_1`                | 79000161                      | 6161              |
+|  4 | `[_1 "bar"]`           | 99000163626172                | 8163626172        |
+|  5 | `{_1 "bar": 1}`        | b900016362617201              | a16362617201      |
+|  6 | `1_1(4711)`            | d90001191267                  | c1191267          |
+|  7 | `1.5_2`<br>`0x4711p+03_3` | fa3fc00000<br>fb4101c44000000000 | f93e00<br>fa480e2200 |
+{: #tab-ei title="Examples of Definite Length Encoding Indicators for
+Different Data Items"}
 
 (In the following, an abbreviation of the form `ai=`nn gives nn as
 the numeric value of the field _additional information_, the low-order 5
