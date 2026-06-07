@@ -139,13 +139,8 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    The present `-25` is intended for the May 2026 Working Group Last Call.
-    It corrects a clerical error in `-24`, which completes the work
-    started in PR #102 and adds a couple of paragraphs on editorial
-    conventions.
-    It also makes a leap ahead beyond `-24` by adopting and making a
-    detailed proposal (PR #105) for a renaming choice that was
-    discussed at the 2026-05-13 CBOR interim WG meeting.
+    This is a working copy, addressing some of the May/June 2026 Working
+    Group Last Call comments on `-25`.
 
 --- middle
 
