@@ -788,10 +788,10 @@ Internet-Draft   CBOR Extended Diagnostic Notation (EDN)       June 2026
 
    provides examples for data items with definite length encoding
    indicators used with various kinds of data items ("mt" = major type,
-   "ignoring e.i." = encoding when ignoring the encoding indicators).
-   Examples for encoding indicators controlling indefinite length
-   encoding can be found in the context of explanations in Section 2.5.4
-   and Section 2.6.2.
+   "ignoring e.i." = example encoding when ignoring the encoding
+   indicators).  Examples for encoding indicators controlling indefinite
+   length encoding can be found in the context of explanations in
+   Section 2.5.4 and Section 2.6.2.
 
         +====+==============+====================+===============+
         | mt | examples     | encoding (in hex)  | ignoring e.i. |
