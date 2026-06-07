@@ -949,12 +949,14 @@ lead to an exponential duplication of backslashes that has informally
 been described as "quoting hell".
 
 CDN therefore also allows text strings to be notated as raw string
-literals, which do not perform backslash processing.
-Instead, data transparency is provided by enclosing them in starting
+literals, which do not perform any special processing on backslashes,
+i.e., treat
+them as raw string content like any other characters.
+Instead, data transparency is provided by enclosing the entire string content in starting
 and ending delimiters built as a sequence of one or more backquote
 (»`` ` ``«, U+0060 GRAVE ACCENT) characters.
 
-For example, the I-Regexp »``[^ \t\n\r"'`]``«, a character class
+For example, the string content »``[^ \t\n\r"'`]``«, an I-Regexp character class
 that excludes blank space and quoting characters, can be notated as:
 
      ``[^ \t\n\r"'`]``
@@ -963,7 +965,7 @@ instead of
 
      "[^ \\t\\n\\r\"'`]"
 
-By using more backquotes for the outer delimiters than the longest
+By using more backquotes for each of the outer delimiters than the longest
 sequence of backquotes that can be found in the string, internal
 backquotes do not prematurely end the string literal.
 An example for a raw string that contains a double backquote and
