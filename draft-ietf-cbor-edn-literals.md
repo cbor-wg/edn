@@ -672,7 +672,7 @@ item or of a syntactic feature that can stand for the data item the
 encoding of which the encoding indicator is controlling.
 {{tab-ei}} provides examples for data items with definite length
 encoding indicators used with various kinds of data items ("mt" = major
-type, "ignoring e.i." = encoding when ignoring the encoding indicators).
+type, "ignoring e.i." = example encoding when ignoring the encoding indicators).
 Examples for encoding indicators controlling indefinite length
 encoding can be found in the context of explanations in {{ei-string}}
 and {{ei-container}}.
