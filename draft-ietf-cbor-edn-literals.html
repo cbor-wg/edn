@@ -17,13 +17,8 @@ Appendix G.
 to support text representations such as of epoch-based dates/times and of IP
 addresses and prefixes. 
        (This cref will be removed by the RFC editor:) 
-The present  -25  is intended for the May 2026 Working Group Last Call.
-It corrects a clerical error in  -24 , which completes the work
-started in PR #102 and adds a couple of paragraphs on editorial
-conventions.
-It also makes a leap ahead beyond  -24  by adopting and making a
-detailed proposal (PR #105) for a renaming choice that was
-discussed at the 2026-05-13 CBOR interim WG meeting. 
+This is a working copy, addressing some of the May/June 2026 Working
+Group Last Call comments on  -25 . 
     " name="description">
 <meta content="xml2rfc 3.33.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -1063,7 +1058,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Bormann</td>
-<td class="center">Expires 8 December 2026</td>
+<td class="center">Expires 10 December 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1079,12 +1074,12 @@ svg {
 <a href="https://www.rfc-editor.org/rfc/rfc8610" class="eref">8610</a>, <a href="https://www.rfc-editor.org/rfc/rfc8949" class="eref">8949</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-06-06" class="published">6 June 2026</time>
+<time datetime="2026-06-08" class="published">8 June 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-12-08">8 December 2026</time></dd>
+<dd class="expires"><time datetime="2026-12-10">10 December 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1107,13 +1102,8 @@ Appendix G.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 to support text representations such as of epoch-based dates/times and of IP
 addresses and prefixes.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 <p id="section-abstract-4"><span class="cref" id="status">(This cref will be removed by the RFC editor:)<br>
-The present <code>-25</code> is intended for the May 2026 Working Group Last Call.
-It corrects a clerical error in <code>-24</code>, which completes the work
-started in PR #102 and adds a couple of paragraphs on editorial
-conventions.
-It also makes a leap ahead beyond <code>-24</code> by adopting and making a
-detailed proposal (PR #105) for a renaming choice that was
-discussed at the 2026-05-13 CBOR interim WG meeting.</span><a href="#section-abstract-4" class="pilcrow">¶</a></p>
+This is a working copy, addressing some of the May/June 2026 Working
+Group Last Call comments on <code>-25</code>.</span><a href="#section-abstract-4" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1150,7 +1140,7 @@ discussed at the 2026-05-13 CBOR interim WG meeting.</span><a href="#section-abs
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 10 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1629,11 +1619,13 @@ opposed to <code>h''</code>; a CDN generator may have quite a few options
 that control what presentation variant is most desirable for the
 application that it is being used for.<a href="#section-1.3.2-1" class="pilcrow">¶</a></p>
 <p id="section-1.3.2-2">Because of this, a deterministic representation is not defined for
-CDN, and there is no expectation for "roundtripping" from CDN to
-CBOR and back, i.e., for an ability
-to convert CDN to binary CBOR and back to CDN while achieving exactly
-the same result as the original input CDN — the original CDN possibly
-was created by humans or by a different CDN generator.<a href="#section-1.3.2-2" class="pilcrow">¶</a></p>
+CDN.
+More generally speaking, there is no expectation for "roundtripping":
+Converting CDN to binary CBOR and back to CDN will generally not achieve exactly
+the same result as the original input CDN.
+This possibly
+was created by humans or by a different CDN generator and may contain
+presentation information that is not represented in the binary CBOR.<a href="#section-1.3.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="basic">
@@ -1888,7 +1880,7 @@ specification provides for such a kind of internal comment syntax.<a href="#sect
 restricts slash-delimited comments that were allowed in <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> in two ways:<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1-2.1">
-              <p id="section-2.2.1-2.1.1">Inline comments now longer can be empty: The construct "<code>//</code>" that was
+              <p id="section-2.2.1-2.1.1">Inline comments no longer can be empty: The construct "<code>//</code>" that was
 an empty comment in <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> is now used instead to introduce an
 end-of-line comment.
 (Note that "<code>//</code>" still can be used in what is visually "within" a
@@ -2046,9 +2038,13 @@ argument is carried in 2<sup>ai-24</sup> (1, 2, 4, or 8)
 additional bytes, and <code>ai=31</code> means that indefinite length
 encoding is used.)<a href="#section-2.3.1-4" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-5">An underscore followed by a decimal digit <code>n</code> indicates that the
-preceding item (or, for arrays and maps, the item starting with the
-preceding bracket or brace) was or is to be encoded with an additional information
-value of <code>ai=</code>24+<code>n</code>.  For example, <code>1.5_1</code> is a half-precision floating-point
+item was or is to be encoded with an additional information
+value of <code>ai=</code>24+<code>n</code>.
+(The item associated to the encoding indicator may be the preceding
+item, or, for arrays and maps, the item starting with the
+preceding bracket or brace.)
+For an example involving floating point values (Section <a href="https://rfc-editor.org/rfc/rfc8949#section-3.3" class="relref">3.3</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>),
+<code>1.5_1</code> is a half-precision floating-point
 number (2<sup>1</sup> = 2 additional bytes or 16 bits), while <code>1.5_3</code> is encoded as
 double precision (2<sup>3</sup> = 8 additional bytes or 64 bits).
 For a tool consuming CDN in a diagnostic mode, encountering an
@@ -2110,8 +2106,8 @@ A leading "<code>+</code>" sign is a no-op, and a leading "<code>-</code>" sign 
 sign of the number.
 So <code>0</code>, <code>000</code>, <code>+0</code> all represent the same integer zero, as does <code>-0</code>.
 Similarly,
-<code>1</code>, <code>001</code>, <code>+1</code> and <code>+0001</code> all stand for the same integer one, and
-<code>-1</code> and <code>-0001</code> both designate the same integer minus one.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
+<code>1</code>, <code>001</code>, <code>+1</code> and <code>+0001</code> all stand for the same positive integer one, and
+<code>-1</code> and <code>-0001</code> both designate the same negative integer minus one.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
 <p id="section-2.4-3">Using a decimal point (<code>.</code>) and/or an exponent (<code>e</code> for decimal, <code>p</code>
 for hexadecimal) turns the number into a floating point number (major
 type 7) instead, irrespective of whether it is an integral number
@@ -2462,11 +2458,13 @@ of processing giving this "escaping" mechanism specific application semantics, t
 lead to an exponential duplication of backslashes that has informally
 been described as "quoting hell".<a href="#section-2.5.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.5.3-2">CDN therefore also allows text strings to be notated as raw string
-literals, which do not perform backslash processing.
-Instead, data transparency is provided by enclosing them in starting
+literals, which do not perform any special processing on backslashes,
+i.e., treat
+them as raw string content like any other characters.
+Instead, data transparency is provided by enclosing the entire string content in starting
 and ending delimiters built as a sequence of one or more backquote
 (»<code>`</code>«, U+0060 GRAVE ACCENT) characters.<a href="#section-2.5.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.5.3-3">For example, the I-Regexp »<code>[^ \t\n\r"'`]</code>«, a character class
+<p id="section-2.5.3-3">For example, the string content »<code>[^ \t\n\r"'`]</code>«, an I-Regexp character class
 that excludes blank space and quoting characters, can be notated as:<a href="#section-2.5.3-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.3-4">
 <pre>
@@ -2479,7 +2477,7 @@ that excludes blank space and quoting characters, can be notated as:<a href="#se
  "[^ \\t\\n\\r\"'`]"
 </pre><a href="#section-2.5.3-6" class="pilcrow">¶</a>
 </div>
-<p id="section-2.5.3-7">By using more backquotes for the outer delimiters than the longest
+<p id="section-2.5.3-7">By using more backquotes for each of the outer delimiters than the longest
 sequence of backquotes that can be found in the string, internal
 backquotes do not prematurely end the string literal.
 An example for a raw string that contains a double backquote and
