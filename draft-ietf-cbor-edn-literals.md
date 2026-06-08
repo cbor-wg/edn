@@ -139,13 +139,8 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    The present `-25` is intended for the May 2026 Working Group Last Call.
-    It corrects a clerical error in `-24`, which completes the work
-    started in PR #102 and adds a couple of paragraphs on editorial
-    conventions.
-    It also makes a leap ahead beyond `-24` by adopting and making a
-    detailed proposal (PR #105) for a renaming choice that was
-    discussed at the 2026-05-13 CBOR interim WG meeting.
+    This is a working copy, addressing some of the May/June 2026 Working
+    Group Last Call comments on `-25`.
 
 --- middle
 
@@ -358,11 +353,13 @@ that control what presentation variant is most desirable for the
 application that it is being used for.
 
 Because of this, a deterministic representation is not defined for
-CDN, and there is no expectation for "roundtripping" from CDN to
-CBOR and back, i.e., for an ability
-to convert CDN to binary CBOR and back to CDN while achieving exactly
-the same result as the original input CDN — the original CDN possibly
-was created by humans or by a different CDN generator.
+CDN.
+More generally speaking, there is no expectation for "roundtripping":
+Converting CDN to binary CBOR and back to CDN will generally not achieve exactly
+the same result as the original input CDN.
+This possibly
+was created by humans or by a different CDN generator and may contain
+presentation information that is not represented in the binary CBOR.
 
 ### Basic Output Format {#basic}
 
@@ -600,7 +597,7 @@ specification provides for such a kind of internal comment syntax.
 As a not quite backward compatible change, this specification
 restricts slash-delimited comments that were allowed in {{Section G.6 of RFC8610}} in two ways:
 
-* Inline comments now longer can be empty: The construct "`//`" that was
+* Inline comments no longer can be empty: The construct "`//`" that was
   an empty comment in {{Section G.6 of RFC8610}} is now used instead to introduce an
   end-of-line comment.
   (Note that "`//`" still can be used in what is visually "within" a
@@ -699,9 +696,13 @@ additional bytes, and `ai=31` means that indefinite length
 encoding is used.)
 
 An underscore followed by a decimal digit `n` indicates that the
-preceding item (or, for arrays and maps, the item starting with the
-preceding bracket or brace) was or is to be encoded with an additional information
-value of `ai=`24+`n`.  For example, `1.5_1` is a half-precision floating-point
+item was or is to be encoded with an additional information
+value of `ai=`24+`n`.
+(The item associated to the encoding indicator may be the preceding
+item, or, for arrays and maps, the item starting with the
+preceding bracket or brace.)
+For an example involving floating point values ({{Section 3.3 of RFC8949@-cbor}}),
+`1.5_1` is a half-precision floating-point
 number (2<sup>1</sup> = 2 additional bytes or 16 bits), while `1.5_3` is encoded as
 double precision (2<sup>3</sup> = 8 additional bytes or 64 bits).
 For a tool consuming CDN in a diagnostic mode, encountering an
@@ -770,8 +771,8 @@ A leading "`+`" sign is a no-op, and a leading "`-`" sign inverts the
 sign of the number.
 So `0`, `000`, `+0` all represent the same integer zero, as does `-0`.
 Similarly,
-`1`, `001`, `+1` and `+0001` all stand for the same integer one, and
-`-1` and `-0001` both designate the same integer minus one.
+`1`, `001`, `+1` and `+0001` all stand for the same positive integer one, and
+`-1` and `-0001` both designate the same negative integer minus one.
 
 Using a decimal point (`.`) and/or an exponent (`e` for decimal, `p`
 for hexadecimal) turns the number into a floating point number (major
@@ -943,12 +944,14 @@ lead to an exponential duplication of backslashes that has informally
 been described as "quoting hell".
 
 CDN therefore also allows text strings to be notated as raw string
-literals, which do not perform backslash processing.
-Instead, data transparency is provided by enclosing them in starting
+literals, which do not perform any special processing on backslashes,
+i.e., treat
+them as raw string content like any other characters.
+Instead, data transparency is provided by enclosing the entire string content in starting
 and ending delimiters built as a sequence of one or more backquote
 (»`` ` ``«, U+0060 GRAVE ACCENT) characters.
 
-For example, the I-Regexp »``[^ \t\n\r"'`]``«, a character class
+For example, the string content »``[^ \t\n\r"'`]``«, an I-Regexp character class
 that excludes blank space and quoting characters, can be notated as:
 
      ``[^ \t\n\r"'`]``
@@ -957,7 +960,7 @@ instead of
 
      "[^ \\t\\n\\r\"'`]"
 
-By using more backquotes for the outer delimiters than the longest
+By using more backquotes for each of the outer delimiters than the longest
 sequence of backquotes that can be found in the string, internal
 backquotes do not prematurely end the string literal.
 An example for a raw string that contains a double backquote and
