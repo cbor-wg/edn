@@ -510,6 +510,8 @@ string, the input takes the form of a single text string CBOR data
 item.
 When used immediately in front of a sequence literal, the input is a
 CBOR sequence of elements of the sequence literal as input.
+(For a single parameter, this is equivalent to receiving a single CBOR
+data item as the argument.)
 The application extension can provide behavior that depends on the
 number of items supplied as input to it and their data types; it
 cannot distinguish between its prefix being used with a single-quoted
