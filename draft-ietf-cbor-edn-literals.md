@@ -936,6 +936,9 @@ certain escaping mechanisms available for double-quoted strings:
 * `\u`-based escapes are not available for characters in the range
   from U+0020 through U+007E (essentially, printable ASCII).
 
+All other escaping mechanisms that are available in double-quoted
+string literals are available in single-quoted string literals.
+
 Single-quoted string literals can occur unprefixed and stand for the
 byte string that encodes its text string value (the "content"), or be
 prefixed by what looks like an application-extension prefix (see
