@@ -2291,14 +2291,14 @@ title="ABNF Definitions Useful for Raw String Integrated Extension Parsers"}
 
 Four subsections with ABNF for integrated parsers follow, a pair for
 `h''` and `b64''`, and a pair for ``` h`` ``` and ``` b64`` ```.
-There is no requirement for a new application-extension to supply ABNF
+There is no expectation for a new application-extension to supply ABNF
 for an integrated parser (or any ABNF at all!), in particular if the
 parsing function is likely to be fulfilled by a platform library.
 If ABNF for the content of a single-quoted string is available in an
 application-extension specification, ABNF for an integrated parser can
-be written as a separate activity or also automatically derived.
-At the time of writing, one example for a tool performing such a
-derivation is available as open-source software {{ABNFROB}}.
+be written as a separate activity or also automatically derived (see
+also {{CDN-WIKI}} for more information about implementing integrated
+parsers).
 
 ### h'': ABNF Definition of Integrated Parser {#sq-h-grammar}
 
