@@ -349,7 +349,8 @@ However, there are even more representation variants in CDN than in
 binary CBOR, and there is little point in specifically endorsing a
 single variant as "deterministic" when other variants may be more
 useful for human understanding, e.g., the `<< >>` notation as
-opposed to `h''`; a CDN generator may have quite a few options
+opposed to, say, hexadecimal `h''` notation;
+a CDN generator may have quite a few options
 that control what presentation variant is most desirable for the
 application that it is being used for.
 
