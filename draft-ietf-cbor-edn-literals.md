@@ -1598,9 +1598,9 @@ ellipses in the automation scripts for the documents using them.
 This specification defines a CBOR Tag that can be used in the ingestion
 for this purpose:
 The Diagnostic Notation Ellipsis Tag, tag number CPA888 ({{iana-standin}}).
-The content of this tag either is
+The content of this tag is one of:
 
-1. null (indicating a data item entirely replaced by an ellipsis), or it is
+1. null (indicating a data item entirely replaced by an ellipsis);
 2. an array, the elements of which are alternating between fragments
    of a string and the actual elisions, represented as ellipses
    carrying a null as content.
