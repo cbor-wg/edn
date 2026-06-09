@@ -2426,11 +2426,11 @@ The experts are instructed to be frugal in the allocation of
 application-extension identifiers that are suggestive of generally applicable semantics,
 keeping them in reserve for application-extensions that are likely to enjoy wide
 use and can make good use of their conciseness.
-The expert is also instructed to direct the registrant to provide a
+The experts are also instructed to direct the registrant to provide a
 specification ({{Section 4.6 of RFC8126@-ianacons}}), but can make exceptions,
 for instance when a specification is not available at the time of
 registration but is likely forthcoming.
-If the expert becomes aware of application-extension identifiers that are deployed and
+If the experts become aware of application-extension identifiers that are deployed and
 in use, they may also initiate a registration on their own if
 they deem such a registration can avert potential future collisions.
 {: #de-instructions}
@@ -2488,7 +2488,7 @@ The experts are instructed to be frugal in the allocation of
 encoding indicators that are suggestive of generally applicable semantics,
 keeping them in reserve for encoding indicator registrations that are likely to enjoy wide
 use and can make good use of their conciseness.
-If the expert becomes aware of encoding indicators that are deployed and
+If the experts become aware of encoding indicators that are deployed and
 in use, they may also solicit a specification and initiate a registration on their own if
 they deem such a registration can avert potential future collisions.
 {: #de-instructions-ei}
