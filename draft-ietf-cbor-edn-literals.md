@@ -906,7 +906,7 @@ This means the following are equivalent (the first `o` is escaped as
 
 ~~~ cbor-diag
 "D\u{6f}mino's \u{1F073} + \u{2318}"   # \u{}-escape 3 chars
-"Domino's \uD83C\uDC73 + \u2318"       # escape JSON-like
+"D\u006Fmino's \uD83C\uDC73 + \u2318"  # escape JSON-like
 "Domino's 🁳 + ⌘"                       # unescaped
 ~~~
 
