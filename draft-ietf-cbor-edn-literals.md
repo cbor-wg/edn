@@ -582,6 +582,21 @@ the use of inline and end-of-line comments:
 This reduces to `{1: 4, 3: 5, -1:
 h'6684523AB17337F173500E5728C628547CB37DFE68449C65F885D1B73B49EAE1'}`.
 
+A CDN file used for configuration might look like this (employing
+'//' end of line comments throughout and an ornamental C-Style comment at the start):
+
+~~~ cbor-diag
+/* ### MyApp Configuration
+ * John Example, 2026-06-09
+ */
+{
+  // Top-level config for the app
+  "appName": "MyApp", // short name shown in UI
+  "version": "1.2.0",
+  ...: ...
+}
+~~~
+
 {:aside}
 >
 Note that application-oriented extensions can define their own
