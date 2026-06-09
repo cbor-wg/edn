@@ -461,9 +461,10 @@ _application-oriented extension literals_, or _extension literals_ for short.
 Extension literals start with a _prefix_ that identifies the
 application-oriented extension, immediately followed by a sequence
 literal ({{embedded}}) or a single-quoted or raw string literal ({{strings}}).
-The latter form uses its string literal as a shorthand
+The string-based forms use their string literal as a shorthand
 form for a sequence literal representing a sequence with exactly that
-one text string data item.
+one text string data item, e.g., ``b64`Zm9v` `` is a shorthand for
+`b64<<"Zm9v">>` or ``b64<<`Zm9v`>>``.
 
 {:aside}
 > This notation is generalized from
