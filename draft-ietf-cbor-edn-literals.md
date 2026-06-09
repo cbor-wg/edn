@@ -1870,7 +1870,7 @@ The following additional items should help in the interpretation:
     * An ellipsis can be concatenated (on one or both sides) with string
       chunks (`string1`); the result is a CBOR tag number CPA888 that contains an
       array with joined together spans of such chunks plus the ellipses
-      represented by `888(null)`.
+      represented by `/CPA/888(null)`.
     * If there is no ellipsis in the concatenated list, the result of
       processing the list will always be a single item.
     * The bytes in the concatenated sequence of string chunks are simply
