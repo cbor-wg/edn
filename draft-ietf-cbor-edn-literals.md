@@ -165,9 +165,10 @@ previous descriptions, and is known as Concise Diagnostic Notation (CDN).
 Diagnostic notation syntax is based on JSON, with extensions
 for representing CBOR constructs such as binary data and tags.
 
-Standardizing CDN in addition to the actual binary interchange format CBOR does
-not serve to create a competing interchange format, but enables the use of
-a shared diagnostic notation in tools for and in documents about CBOR.
+The interchange format created by standardizing CDN is not intended to
+compete with the actual binary interchange format CBOR, but enables
+the use of a shared diagnostic notation in tools for and in documents
+about CBOR.
 Still, between tools for CBOR development and diagnosis, document
 generation systems, continuous integration (CI)
 environments, configuration files, and user interfaces for viewing and
@@ -214,7 +215,7 @@ interaction between tools is often smoother if media types can be used.
 >
 > * `cbor` (which is actually not useful, as CBOR is a binary format
 >   and cannot be used in textual examples in an RFC),
-> * `cbor-diag` (which is another name for CDN, as defined in the
+> * `cbor-diag` (which is another name for CDN, as is now defined in the
 >   present document),
 > * `cbor-pretty` (which is a possibly annotated and pretty-printed
 >   hexdump of an encoded CBOR data item, along the lines of the
