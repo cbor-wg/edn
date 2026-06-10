@@ -1613,8 +1613,6 @@ Elisions also can be used as part of a (text or byte) string:
 }
 ~~~
 
-The example "contract" combines string concatenation via the `+`
-operator ({{grammar}}) with an
 The examples "contract" and "bytes_in_IRI" combine (text and byte)
 string concatenation via the `+` operator ({{grammar}}) with an
 ellipsis.
