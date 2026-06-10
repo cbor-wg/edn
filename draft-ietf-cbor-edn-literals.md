@@ -1476,6 +1476,49 @@ is equivalent to
 See {{cri-grammar}} for an ABNF definition for the content of `cri` literals.
 
 
+## The "float" Extension
+
+<!-- IEEE754-oriented literals for more floating point values -->
+
+The "`float`" application extension enables the notation of 2-byte,
+4-byte, and 8-byte byte strings to express floating point values
+(mt=7, ai=25/26/27 respectively) by giving their IEEE 754
+representation.
+A text string used as an argument is interpreted exactly as a hex
+literal (like the `h` application prefix); the result is used as the
+byte string.
+
+The application-oriented literal is interpreted as an encoded data
+item would be that prefixes the byte string by a single byte 0xF9
+(2 bytes, i.e., binary16), 0xFA (4 bytes, i.e., binary32), and 0xFB (8
+bytes, i.e., binary64), respectively.
+Byte strings of a different length than 2, 4, or 8 raise an error.
+Note that the interpretation as an encoded data item does not create
+or imply an encoding indicator; that can be added separately.
+
+Example (tool used: `edn-abnf -afloat -e`):
+
+~~~
+🔧 "[float'fe00', float'fe00'_2, float'47110815']" -tpretty ➔
+83             # array(3)
+   F9 FE00     # primitive(65024)
+   FA FFC00000 # primitive(4290772992)
+   FA 47110815 # primitive(1192298517)
+
+🔧 "[float'fe00', float'fe00'_2, float'47110815', 0x1.22102ap+15]" ➔
+[float'fe00', float'fe00'_2, 37128.08203125, 37128.08203125]
+~~~
+{: post="fold"}
+
+The purpose of this application extension is to close a gap in CDN's
+{{IEEE754}} binary64 support:
+Without this (or a similar) extension there is no way to represent NaN
+values different from the one called out at the end of {{Section 4.1 of
+RFC8949@-cbor}}: "(for many applications, the single NaN encoding
+0xf97e00 will suffice)".
+For finite floating point numbers, the decimal or hex floating point
+representations are preferred.
+
 Stand-in Representations in Binary CBOR {#stand-in}
 =======================================
 
@@ -1910,6 +1953,8 @@ which are not always repeated here.
 | HASH       | (not used)                                         |                                                   |
 | cri        | RFC 3986 URI or URI reference                      | CBOR structure representing equivalent CRI        |
 | CRI        | "                                                  | Tag 99 on the above                               |
+| float      | floating point value from input bytes              | floating point value (mt=7)                       |
+| FLOAT      | (not used)                                         |                                                   |
 {: #tab-prefixes title="App-prefix Values Defined in this Document"}
 
 Note that implementation platforms may already provide implementations
@@ -2449,10 +2494,9 @@ initial entries have the Change Controller "IETF".
 | ip                               | IP Address/Prefix               | RFC-XXXX         |
 | hash                             | Cryptographic Hash              | RFC-XXXX         |
 | cri                              | Constrained Resource Identifier | RFC-XXXX, {{-cri}} |
+| float                            | Floating-Point Value            | RFC-XXXX         |
 {: #tab-iana title="Initial Content of Application-extension
 Identifier Registry"}
-
-
 
 ## Encoding Indicators {#reg-ei}
 
