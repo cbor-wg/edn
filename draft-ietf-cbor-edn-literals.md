@@ -1016,8 +1016,8 @@ See {{grammar}} for a more formal approach to defining these rules.
 ### Encoding Indicators of Strings {#ei-string}
 
 Indefinite-length (byte or text) strings are composed of
-different "chunks" ({{Section 3.2.3 of RFC8949@-cbor}}).
-EDN provides a special syntax `streamstring` for them.
+"chunks" ({{Section 3.2.3 of RFC8949@-cbor}}).
+CDN provides a special syntax `streamstring` for them.
 This syntax represents the individual chunks in
 sequence within parentheses, each optionally followed by a comma, with
 an encoding indicator `_` immediately after the opening parenthesis:
