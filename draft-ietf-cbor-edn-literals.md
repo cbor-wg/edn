@@ -665,6 +665,8 @@ Encoding indicators start with
 an underscore and comprise all immediately following characters that are alphanumeric or
 underscore.
 For example, `_` or `_3`.
+Encoding indicators can be ignored by anyone not
+interested in this information.
 
 Encoding indicators are placed immediately to the right of the data
 item or of a syntactic feature that can stand for the data item the
