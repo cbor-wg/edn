@@ -114,9 +114,6 @@ informative:
     date: 2021-10-01
     refcontent:
     - Revision 1.2.2
-  ABNFROB:
-    target: https://github.com/cabo/abnftt
-    title: PEG-parsing using ABNF grammars (via treetop)
   CDN-WIKI:
     target: https://github.com/cbor-wg/edn/wiki
     title: CDN Wiki
@@ -2298,8 +2295,8 @@ parsing function is likely to be fulfilled by a platform library.
 If ABNF for the content of a single-quoted string is available in an
 application-extension specification, ABNF for an integrated parser can
 be written as a separate activity or also automatically derived (see
-also {{CDN-WIKI}} for more information about implementing integrated
-parsers).
+also {{CDN-WIKI}}, where more information about implementing integrated
+parsers is being collected).
 
 ### h'': ABNF Definition of Integrated Parser {#sq-h-grammar}
 
