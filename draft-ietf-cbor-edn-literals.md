@@ -1075,7 +1075,7 @@ instance, the following are equivalent:
 ~~~~
 
 The internal syntax of prefixed single-quote literals such
-as `h''` and `b64''` also allows comments as blank space (see {{comments}}).
+as `h''` and `b64''` might also allow comments as blank space (see {{comments}}).
 
 ~~~~ cbor-diag
    h'68656c6c6f20776f726c64'
@@ -1104,7 +1104,7 @@ which is the same as `h'968C2C'`.
 ### CBOR Sequence Literals {#embedded}
 
 In diagnostic notation, a sequence of zero or more CBOR data item literals can
-be comma-separated and enclosed in `<<` and `>>`, optionally prefixed by an
+be enclosed in `<<` and `>>` and separated by comma or blank space, optionally prefixed by an
 application-extension prefix; this specification speaks of *sequence literals*.
 CDN mainly deals with individual data items, not with CBOR sequences
 {{-seq}}, so the CBOR sequence represented by the sequence literal needs
@@ -1569,7 +1569,7 @@ The Diagnostic Notation Ellipsis Tag, tag number CPA888 ({{iana-standin}}).
 The content of this tag either is
 
 1. null (indicating a data item entirely replaced by an ellipsis), or it is
-2. an array, the elements of which are alternating between chunks
+2. an array, the elements of which are alternating between parts
    of a string and the actual elisions, represented as ellipses
    carrying a null as content.
 
@@ -1613,13 +1613,15 @@ Elisions also can be used as part of a (text or byte) string:
 
 The example "contract" combines string concatenation via the `+`
 operator ({{grammar}}) with an
+The examples "contract" and "bytes_in_IRI" combine (text and byte)
+string concatenation via the `+` operator ({{grammar}}) with an
 ellipsis.
 The example
 "signature" uses special syntax that allows the use of ellipses
 between the bytes notated _inside_ `h''` literals.
 
 String elisions can be represented in a CBOR data item by a stand-in
-that wraps an array of string chunks alternating with ellipsis
+that wraps an array of string parts alternating with ellipsis
 indicators:
 
 ~~~ cbor-diag
