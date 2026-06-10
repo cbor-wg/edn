@@ -114,9 +114,6 @@ informative:
     date: 2021-10-01
     refcontent:
     - Revision 1.2.2
-  ABNFROB:
-    target: https://github.com/cabo/abnftt
-    title: PEG-parsing using ABNF grammars (via treetop)
   CDN-WIKI:
     target: https://github.com/cbor-wg/edn/wiki
     title: CDN Wiki
@@ -165,9 +162,10 @@ previous descriptions, and is known as Concise Diagnostic Notation (CDN).
 Diagnostic notation syntax is based on JSON, with extensions
 for representing CBOR constructs such as binary data and tags.
 
-Standardizing CDN in addition to the actual binary interchange format CBOR does
-not serve to create a competing interchange format, but enables the use of
-a shared diagnostic notation in tools for and in documents about CBOR.
+The interchange format created by standardizing CDN is not intended to
+compete with the actual binary interchange format CBOR, but enables
+the use of a shared diagnostic notation in tools for and in documents
+about CBOR.
 Still, between tools for CBOR development and diagnosis, document
 generation systems, continuous integration (CI)
 environments, configuration files, and user interfaces for viewing and
@@ -214,7 +212,7 @@ interaction between tools is often smoother if media types can be used.
 >
 > * `cbor` (which is actually not useful, as CBOR is a binary format
 >   and cannot be used in textual examples in an RFC),
-> * `cbor-diag` (which is another name for CDN, as defined in the
+> * `cbor-diag` (which is another name for CDN, as is now defined in the
 >   present document),
 > * `cbor-pretty` (which is a possibly annotated and pretty-printed
 >   hexdump of an encoded CBOR data item, along the lines of the
@@ -348,7 +346,8 @@ However, there are even more representation variants in CDN than in
 binary CBOR, and there is little point in specifically endorsing a
 single variant as "deterministic" when other variants may be more
 useful for human understanding, e.g., the `<< >>` notation as
-opposed to `h''`; a CDN generator may have quite a few options
+opposed to, say, hexadecimal `h''` notation;
+a CDN generator may have quite a few options
 that control what presentation variant is most desirable for the
 application that it is being used for.
 
@@ -460,9 +459,10 @@ _application-oriented extension literals_, or _extension literals_ for short.
 Extension literals start with a _prefix_ that identifies the
 application-oriented extension, immediately followed by a sequence
 literal ({{embedded}}) or a single-quoted or raw string literal ({{strings}}).
-The latter form uses its string literal as a shorthand
+The string-based forms use their string literal as a shorthand
 form for a sequence literal representing a sequence with exactly that
-one text string data item.
+one text string data item, e.g., ``b64`Zm9v` `` is a shorthand for
+`b64<<"Zm9v">>` or ``b64<<`Zm9v`>>``.
 
 {:aside}
 > This notation is generalized from
@@ -508,6 +508,8 @@ string, the input takes the form of a single text string CBOR data
 item.
 When used immediately in front of a sequence literal, the input is a
 CBOR sequence of elements of the sequence literal as input.
+(For a single parameter, this is equivalent to receiving a single CBOR
+data item as the argument.)
 The application extension can provide behavior that depends on the
 number of items supplied as input to it and their data types; it
 cannot distinguish between its prefix being used with a single-quoted
@@ -577,6 +579,21 @@ the use of inline and end-of-line comments:
 
 This reduces to `{1: 4, 3: 5, -1:
 h'6684523AB17337F173500E5728C628547CB37DFE68449C65F885D1B73B49EAE1'}`.
+
+A CDN file used for configuration might look like this (employing
+'//' end of line comments throughout and an ornamental C-Style comment at the start):
+
+~~~ cbor-diag
+/* ### MyApp Configuration
+ * John Example, 2026-06-09
+ */
+{
+  // Top-level config for the app
+  "appName": "MyApp", // short name shown in UI
+  "version": "1.2.0",
+  ...: ...
+}
+~~~
 
 {:aside}
 >
@@ -886,7 +903,7 @@ This means the following are equivalent (the first `o` is escaped as
 
 ~~~ cbor-diag
 "D\u{6f}mino's \u{1F073} + \u{2318}"   # \u{}-escape 3 chars
-"Domino's \uD83C\uDC73 + \u2318"       # escape JSON-like
+"D\u006Fmino's \uD83C\uDC73 + \u2318"  # escape JSON-like
 "Domino's 🁳 + ⌘"                       # unescaped
 ~~~
 
@@ -915,6 +932,9 @@ certain escaping mechanisms available for double-quoted strings:
   compatibility feature is not available for them.
 * `\u`-based escapes are not available for characters in the range
   from U+0020 through U+007E (essentially, printable ASCII).
+
+All other escaping mechanisms that are available in double-quoted
+string literals are available in single-quoted string literals.
 
 Single-quoted string literals can occur unprefixed and stand for the
 byte string that encodes its text string value (the "content"), or be
@@ -1575,9 +1595,9 @@ ellipses in the automation scripts for the documents using them.
 This specification defines a CBOR Tag that can be used in the ingestion
 for this purpose:
 The Diagnostic Notation Ellipsis Tag, tag number CPA888 ({{iana-standin}}).
-The content of this tag either is
+The content of this tag is one of:
 
-1. null (indicating a data item entirely replaced by an ellipsis), or it is
+1. null (indicating a data item entirely replaced by an ellipsis);
 2. an array, the elements of which are alternating between parts
    of a string and the actual elisions, represented as ellipses
    carrying a null as content.
@@ -1847,7 +1867,7 @@ The following additional items should help in the interpretation:
     * An ellipsis can be concatenated (on one or both sides) with string
       chunks (`string1`); the result is a CBOR tag number CPA888 that contains an
       array with joined together spans of such chunks plus the ellipses
-      represented by `888(null)`.
+      represented by `/CPA/888(null)`.
     * If there is no ellipsis in the concatenated list, the result of
       processing the list will always be a single item.
     * The bytes in the concatenated sequence of string chunks are simply
@@ -2268,14 +2288,14 @@ title="ABNF Definitions Useful for Raw String Integrated Extension Parsers"}
 
 Four subsections with ABNF for integrated parsers follow, a pair for
 `h''` and `b64''`, and a pair for ``` h`` ``` and ``` b64`` ```.
-There is no requirement for a new application-extension to supply ABNF
+There is no expectation for a new application-extension to supply ABNF
 for an integrated parser (or any ABNF at all!), in particular if the
 parsing function is likely to be fulfilled by a platform library.
 If ABNF for the content of a single-quoted string is available in an
 application-extension specification, ABNF for an integrated parser can
-be written as a separate activity or also automatically derived.
-At the time of writing, one example for a tool performing such a
-derivation is available as open-source software {{ABNFROB}}.
+be written as a separate activity or also automatically derived (see
+also {{CDN-WIKI}}, where more information about implementing integrated
+parsers is being collected).
 
 ### h'': ABNF Definition of Integrated Parser {#sq-h-grammar}
 
@@ -2403,11 +2423,11 @@ The experts are instructed to be frugal in the allocation of
 application-extension identifiers that are suggestive of generally applicable semantics,
 keeping them in reserve for application-extensions that are likely to enjoy wide
 use and can make good use of their conciseness.
-The expert is also instructed to direct the registrant to provide a
+The experts are also instructed to direct the registrant to provide a
 specification ({{Section 4.6 of RFC8126@-ianacons}}), but can make exceptions,
 for instance when a specification is not available at the time of
 registration but is likely forthcoming.
-If the expert becomes aware of application-extension identifiers that are deployed and
+If the experts become aware of application-extension identifiers that are deployed and
 in use, they may also initiate a registration on their own if
 they deem such a registration can avert potential future collisions.
 {: #de-instructions}
@@ -2465,7 +2485,7 @@ The experts are instructed to be frugal in the allocation of
 encoding indicators that are suggestive of generally applicable semantics,
 keeping them in reserve for encoding indicator registrations that are likely to enjoy wide
 use and can make good use of their conciseness.
-If the expert becomes aware of encoding indicators that are deployed and
+If the experts become aware of encoding indicators that are deployed and
 in use, they may also solicit a specification and initiate a registration on their own if
 they deem such a registration can avert potential future collisions.
 {: #de-instructions-ei}
