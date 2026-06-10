@@ -1797,7 +1797,7 @@ application-oriented extensions (<a href="#app-ext" class="auto internal xref">S
 making these extensions generally available, and to illustrate the
 concept.<a href="#section-2.1-9" class="pilcrow">¶</a></p>
 <p id="section-2.1-10">Of these, the application-oriented extensions <code>h</code>, <code>b64</code>, <code>dt</code> and <code>ip</code> are
-intended to be mandatory to implement.
+mandatory to implement.
 (As mentioned, for simplicity we use the term "application-oriented
 extensions" for the mechanism discussed in this section even if it is
 used to describe a part of base CDN.)<a href="#section-2.1-10" class="pilcrow">¶</a></p>
@@ -1811,7 +1811,7 @@ used to describe a part of base CDN.)<a href="#section-2.1-10" class="pilcrow">�
 <p id="section-2.2-1">For presentation to humans, CDN text may benefit from comments.
 JSON famously does not provide for comments, and the original
 diagnostic notation in <span><a href="https://rfc-editor.org/rfc/rfc7049#section-6" class="relref">Section 6</a> of [<a href="#RFC7049" class="cite xref">RFC7049</a>]</span> inherited this property.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2-2">CDN now provides two comment syntaxes, which can be used where the
+<p id="section-2.2-2">CDN provides two comment syntaxes, which can be used where the
 syntax allows blank space (outside of constructs such as numbers,
 string literals, etc.):<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1896,7 +1896,7 @@ specification provides for such a kind of internal comment syntax.<a href="#sect
           <h4 id="name-discussion">
 <a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-discussion" class="section-name selfRef">Discussion</a>
           </h4>
-<p id="section-2.2.1-1">As a not quite backward compatible change, this specification
+<p id="section-2.2.1-1">As a backwards-incompatible change, this specification
 restricts slash-delimited comments that were allowed in <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> in two ways:<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1-2.1">
@@ -1936,9 +1936,9 @@ comment explaining a COSE algorithm identifier, as in<a href="#section-2.2.1-3" 
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-encoding-indicators" class="section-name selfRef">Encoding Indicators</a>
         </h3>
 <p id="section-2.3-1">Sometimes it is useful to indicate in the diagnostic notation which of
-several alternative representations were actually used; for example, a
+several alternative CBOR representations are actually used; for example, a
 data item written »1.5« by a diagnostic decoder might have been
-encoded as a half-, single-, or double-precision float.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+encoded in CBOR as a half-, single-, or double-precision float.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.3-2">Encoding indicators are always optional:
 CDN is usually used to describe CBOR data items at the data model
 level.
@@ -1950,20 +1950,18 @@ implementations".
 To be able to process CDN that contains encoding indicators,
 a CDN-consuming implementation <span class="bcp14">MUST</span> accept them (i.e., process or
 ignore the presence or absence of each encoding indicator).
-(Ignoring them could be compared to a generic CBOR decoder ignoring
-the presence of the serialization variants it encounters.)
-It is <span class="bcp14">RECOMMENDED</span> to by default provide a warning for each encoding
+It is <span class="bcp14">RECOMMENDED</span> to provide a warning for each encoding
 indicator value that is encountered but not further processed.<a href="#section-2.3-2" class="pilcrow">¶</a></p>
 <p id="section-2.3-3">When creating CDN as input for a diagnostic CBOR encoder in order to
 obtain specific encoding choices, encoding indicators may be placed
 manually or by the software generating the CDN.
 Where no encoding indicator is placed, a diagnostic CBOR encoder is expected to
 generate Preferred Serialization (Section <a href="https://rfc-editor.org/rfc/rfc8949#section-4.1" class="relref">4.1</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>) with
-definite length encoding only.
+definite-length encoding only.
 Similarly, when using CDN as output for a diagnostic CBOR decoder, a
 basic diagnostic configuration of the tool is expected to provide
 encoding indicators only in places where the CBOR input did not use
-Preferred Serialization with definite length encoding (see also
+Preferred Serialization with definite-length encoding (see also
 <a href="#basic" class="auto internal xref">Section 1.3.3</a>).
 Diagnostic implementations of CDN that process encoding indicators as
 discussed here are expected to document their diagnostic behavior and
@@ -2077,7 +2075,7 @@ This field is used in encoding the "argument", i.e., the value, tag, or
 length; <code>ai=0</code> to <code>ai=23</code> mean that the value of the <code>ai</code> field
 immediately <em>is</em> the argument, <code>ai=24</code> to <code>ai=27</code> mean that the
 argument is carried in 2<sup>ai-24</sup> (1, 2, 4, or 8)
-additional bytes, and <code>ai=31</code> means that indefinite length
+additional bytes, and <code>ai=31</code> means that indefinite-length
 encoding is used.)<a href="#section-2.3.1-4" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-5">An underscore followed by a decimal digit <code>n</code> indicates that the
 item was or is to be encoded with an additional information
@@ -2099,8 +2097,8 @@ model level, which is outside the scope of encoding indicators.
 Such operations can be provided by application extensions.<a href="#section-2.3.1-6.1" class="pilcrow">¶</a></p>
 </aside>
 <p id="section-2.3.1-7">The encoding indicator <code>_</code> (an underscore on its own) is used to
-indicate indefinite length encoding.
-Indefinite length encoding uses <code>ai=31</code>, which could have been
+indicate indefinite-length encoding.
+Indefinite-length encoding uses <code>ai=31</code>, which could have been
 indicated by <code>_7</code>, which is therefore not used and marked as reserved
 (as are <code>_4</code>, <code>_5</code>, and <code>_6</code>, which would stand for <code>ai=28</code> to
 <code>ai=30</code>, values currently not in use in CBOR; these encoding
@@ -2108,9 +2106,9 @@ indicators will be available if and when CBOR is extended to make use
 of them).<a href="#section-2.3.1-7" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-8">Note that the encoding indicator <code>_</code> is only available behind the opening
 brace/bracket for <code>map</code> and <code>array</code> (<a href="#ei-container" class="auto internal xref">Section 2.6.2</a>): strings have a special syntax
-<code>streamstring</code> for indefinite length encoding except for the special
+<code>streamstring</code> for indefinite-length encoding except for the special
 cases <code>''_</code> and <code>""_</code> (<a href="#ei-string" class="auto internal xref">Section 2.5.4</a>).<a href="#section-2.3.1-8" class="pilcrow">¶</a></p>
-<p id="section-2.3.1-9">The encoding indicators <code>_0</code> to <code>_3</code> can be used to indicate <code>ai=24</code>
+<p id="section-2.3.1-9">The encoding indicators <code>_0</code> to <code>_3</code> indicate <code>ai=24</code>
 to <code>ai=27</code>, respectively; they therefore stand for 1, 2, 4, and 8
 bytes of additional information (ai) following the initial byte in the
 head of the data item.<a href="#section-2.3.1-9" class="pilcrow">¶</a></p>
@@ -2127,7 +2125,7 @@ of the CBOR item.<a href="#section-2.3.1-11" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-12">Encoding indicators are an extension point for CDN; <a href="#reg-ei" class="auto internal xref">Section 6.2</a> defines
 a registry for additional values.<a href="#section-2.3.1-12" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-13">Specific forms of encoding indicators are discussed in further detail
-in <a href="#ei-string" class="auto internal xref">Section 2.5.4</a> for indefinite length strings and in <a href="#ei-container" class="auto internal xref">Section 2.6.2</a> for
+in <a href="#ei-string" class="auto internal xref">Section 2.5.4</a> for indefinite-length strings and in <a href="#ei-container" class="auto internal xref">Section 2.6.2</a> for
 arrays and maps.<a href="#section-2.3.1-13" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2139,8 +2137,8 @@ arrays and maps.<a href="#section-2.3.1-13" class="pilcrow">¶</a></p>
 <a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-numbers" class="section-name selfRef">Numbers</a>
         </h3>
 <p id="section-2.4-1">In addition to JSON's decimal number literals, CDN provides hexadecimal, octal,
-and binary number literals in the usual C-language notation (octal with <code>0o</code>
-prefix present only).<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+and binary number literals in the usual C-language notation (<code>0x</code>, <code>0o</code> prefix only, and <code>0b</code>,
+respectively).<a href="#section-2.4-1" class="pilcrow">¶</a></p>
 <p id="section-2.4-2">Numbers composed only of digits (of the respective base) are
 interpreted as CBOR integers (major type 0/1, or where the number
 cannot be represented in this way, major type 6 with tag 2/3).
@@ -2392,15 +2390,17 @@ of numbers in CBOR can be found in the informational document
 the string constitute UTF-8 <span>[<a href="#STD63" class="cite xref">STD63</a>]</span> text, major type 3), and byte strings
 (CBOR does not further characterize the bytes that constitute the
 string, major type 2).<a href="#section-2.5-1" class="pilcrow">¶</a></p>
-<p id="section-2.5-2">CDN has three direct (unprefixed) notations for strings: double-quoted and raw
-strings for (UTF-8) text strings, and single-quoted strings for byte strings.
-The latter are useful for byte strings carrying bytes that can be meaningfully
-notated as UTF-8 text (<a href="#sq-lit" class="auto internal xref">Section 2.5.2</a>).<a href="#section-2.5-2" class="pilcrow">¶</a></p>
+<p id="section-2.5-2">(UTF-8) text strings can be directly represented (unprefixed) in CDN either as double-quoted <a href="#dq-lit" class="auto internal xref">Section 2.5.1</a>
+or as raw strings <a href="#raw-lit" class="auto internal xref">Section 2.5.3</a>, while byte strings can be represented as
+single-quoted strings <a href="#sq-lit" class="auto internal xref">Section 2.5.2</a>.
+The latter is useful for byte strings carrying
+bytes that can be meaningfully notated as UTF-8 text.<a href="#section-2.5-2" class="pilcrow">¶</a></p>
 <p id="section-2.5-3">Many strings are best notated as extension literals, which may
 provide detailed access to the bits within those bytes (see
 <a href="#encoded-byte-strings" class="auto internal xref">Section 2.5.5</a>).
-An extension literal can be constructed out of an application-extension
-prefix and a single-quoted string, a raw string, or a sequence literal.<a href="#section-2.5-3" class="pilcrow">¶</a></p>
+Using an application-extension
+prefix, extension literals can be constructed out of single-quoted strings and
+raw strings, as well as sequence literals (cf. <a href="#app-lit" class="auto internal xref">Section 2.1</a>).<a href="#section-2.5-3" class="pilcrow">¶</a></p>
 <div id="dq-lit">
 <section id="section-2.5.1">
           <h4 id="name-double-quoted-string-litera">
@@ -2408,18 +2408,17 @@ prefix and a single-quoted string, a raw string, or a sequence literal.<a href="
           </h4>
 <p id="section-2.5.1-1">CDN enables notating text strings in a form compatible to that of notating text
 strings in JSON (i.e., as a double-quoted string literal), with a
-number of usability extensions.
-In JSON, no control characters are allowed to occur
-directly in text string literals; if needed, they can be specified using
-escapes such as <code>\t</code> or <code>\r</code>.
+number of usability enhancements.
+JSON allows no control characters in text-string literals;
+if needed, they can be specified using escapes such as <code>\t</code> or <code>\r</code>.
+This also applies to CDN, and all escaping rules apply as in JSON,
+with a single exception:
 In CDN, string literals additionally can contain newlines (LINEFEED
 U+000A), which are copied into the resulting string like other
 characters in the string literal.
 To deal with variability in platform presentation of newlines, any
 carriage return characters (U+000D) that may be present in the CDN
-string literal are not copied into the resulting string (see <a href="#cr" class="auto internal xref">Section 5.1, Paragraph 7, Item 2</a>).
-No other control characters can occur directly in a string literal,
-and the handling of escaped characters (<code>\r</code> etc.) is as in JSON.<a href="#section-2.5.1-1" class="pilcrow">¶</a></p>
+string literal are not copied into the resulting string (see <a href="#cr" class="auto internal xref">Section 5.1, Paragraph 7, Item 2</a>).<a href="#section-2.5.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.5.1-2">JSON's escape scheme for characters that are not on Unicode's basic
 multilingual plane (BMP) is cumbersome (see Section <a href="https://rfc-editor.org/rfc/rfc8259#section-7" class="relref">7</a> of RFC 8259 <span>[<a href="#STD90" class="cite xref">STD90</a>]</span>).
 CDN keeps it, but also adds the syntax <code>\u{NNN}</code> where NNN is the
@@ -2440,9 +2439,9 @@ This means the following are equivalent (the first <code>o</code> is escaped as
           <h4 id="name-single-quoted-string-litera">
 <a href="#section-2.5.2" class="section-number selfRef">2.5.2. </a><a href="#name-single-quoted-string-litera" class="section-name selfRef">Single-Quoted String Literals</a>
           </h4>
-<p id="section-2.5.2-1">Analogously to text string literals delimited by double quotes, CDN
-allows the use of single quotes (without a prefix) to express byte
-string literals with UTF-8 text; for instance, the following are
+<p id="section-2.5.2-1">Analogously to text-string literals delimited by double quotes, CDN
+allows the use of single quotes (without a prefix) to express
+byte-string literals with UTF-8 text; for instance, the following are
 equivalent:<a href="#section-2.5.2-1" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-2.5.2-2">
 <pre>
@@ -2451,7 +2450,7 @@ h'68656c6c6f20776f726c64'
 </pre><a href="#section-2.5.2-2" class="pilcrow">¶</a>
 </div>
 <p id="section-2.5.2-3">The escaping rules of JSON strings are applied equivalently for
-text-based byte string literals, e.g., <code>\\</code> stands for a single
+text-based byte-string literals, e.g., <code>\\</code> stands for a single
 backslash and <code>\'</code> stands for a single quote.
 However, to facilitate parsing, in single-quoted strings CDN excludes
 certain escaping mechanisms available for double-quoted strings:<a href="#section-2.5.2-3" class="pilcrow">¶</a></p>
@@ -2602,10 +2601,10 @@ provide additional motivation why this is a good case to handle.)<a href="#secti
           <h4 id="name-encoding-indicators-of-stri">
 <a href="#section-2.5.4" class="section-number selfRef">2.5.4. </a><a href="#name-encoding-indicators-of-stri" class="section-name selfRef">Encoding Indicators of Strings</a>
           </h4>
-<p id="section-2.5.4-1">For indefinite length encoding, strings (byte and text strings) have a
-special syntax <code>streamstring</code>.
-This is used (except for the special cases <code>''_</code> and <code>""_</code> below) to
-notate their detailed composition into individual "chunks" (Section <a href="https://rfc-editor.org/rfc/rfc8949#section-3.2.3" class="relref">3.2.3</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>), by representing the individual chunks in
+<p id="section-2.5.4-1">Indefinite-length (byte or text) strings are composed of
+"chunks" (Section <a href="https://rfc-editor.org/rfc/rfc8949#section-3.2.3" class="relref">3.2.3</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>).
+CDN provides a special syntax <code>streamstring</code> for them.
+This syntax represents the individual chunks in
 sequence within parentheses, each optionally followed by a comma, with
 an encoding indicator <code>_</code> immediately after the opening parenthesis:
 e.g., <code>(_ h'0123', h'4567')</code> or <code>(_ "foo", "bar")</code>.
@@ -2662,7 +2661,7 @@ instance, the following are equivalent:<a href="#section-2.5.5-3" class="pilcrow
 </pre><a href="#section-2.5.5-4" class="pilcrow">¶</a>
 </div>
 <p id="section-2.5.5-5">The internal syntax of prefixed single-quote literals such
-as <code>h''</code> and <code>b64''</code> can also allow comments as blank space (see <a href="#comments" class="auto internal xref">Section 2.2</a>).<a href="#section-2.5.5-5" class="pilcrow">¶</a></p>
+as <code>h''</code> and <code>b64''</code> might also allow comments as blank space (see <a href="#comments" class="auto internal xref">Section 2.2</a>).<a href="#section-2.5.5-5" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-2.5.5-6">
 <pre>
    h'68656c6c6f20776f726c64'
@@ -2674,8 +2673,8 @@ as <code>h''</code> and <code>b64''</code> can also allow comments as blank spac
 <p id="section-2.5.5-7">Slash characters are part of the base64 classic alphabet (see
 Table 1 in <span><a href="https://rfc-editor.org/rfc/rfc4648#section-4" class="relref">Section 4</a> of [<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>), and they therefore need to be in the
 <code>b64''</code> set of characters that contribute to the byte string.
-Therefore, only end-of-line comments are available inside b64 byte string
-literals.<a href="#section-2.5.5-7" class="pilcrow">¶</a></p>
+Therefore, only end-of-line comments starting with <code>#</code> are available inside
+b64 byte string literals.<a href="#section-2.5.5-7" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-2.5.5-8">
 <pre>
    b64'/base64 not a comment/ but one follows # comment'
@@ -2694,7 +2693,7 @@ which is the same as <code>h'968C2C'</code>.<a href="#section-2.5.5-9" class="pi
 <a href="#section-2.5.6" class="section-number selfRef">2.5.6. </a><a href="#name-cbor-sequence-literals" class="section-name selfRef">CBOR Sequence Literals</a>
           </h4>
 <p id="section-2.5.6-1">In diagnostic notation, a sequence of zero or more CBOR data item literals can
-be enclosed in <code>&lt;&lt;</code> and <code>&gt;&gt;</code>, optionally prefixed by an
+be enclosed in <code>&lt;&lt;</code> and <code>&gt;&gt;</code> and separated by comma or blank space, optionally prefixed by an
 application-extension prefix; this specification speaks of <em>sequence literals</em>.
 CDN mainly deals with individual data items, not with CBOR sequences
 <span>[<a href="#RFC8742" class="cite xref">RFC8742</a>]</span>, so the CBOR sequence represented by the sequence literal needs
@@ -2702,7 +2701,7 @@ to be further processed to obtain the value of the literal.<a href="#section-2.5
 <p id="section-2.5.6-2">Prefixed sequence literals refer to the application extension (see
 <a href="#app-lit" class="auto internal xref">Section 2.1</a>) identified by the prefix and apply the extension to its
 sequence content, resulting in a single data item.
-This data item may be a string or may not (always) be, depending on
+This data item may be a string or not (always), depending on
 the definition of the application extension.<a href="#section-2.5.6-2" class="pilcrow">¶</a></p>
 <p id="section-2.5.6-3">An unprefixed sequence literal applies CBOR encoding to the
 data items in its content, taken as a CBOR sequence.
@@ -2747,8 +2746,9 @@ implementations <span class="bcp14">MAY</span> support generation and possibly i
 for CBOR data items that are well-formed but not valid; when this is
 enabled, such implementations <span class="bcp14">MAY</span> relax the requirement on text
 strings to be valid UTF-8.<a href="#section-2.5.7-2" class="pilcrow">¶</a></p>
-<p id="section-2.5.7-3">Note that neither CBOR about its text strings nor CDN about its source
-language make any requirements except for conformance to <span>[<a href="#STD63" class="cite xref">STD63</a>]</span>.
+<p id="section-2.5.7-3">CBOR has no requirements for its text strings except for conformance to
+<span>[<a href="#STD63" class="cite xref">STD63</a>]</span>.
+The same applies to CDN and its source language.
 No additional Unicode processing or validation such as normalization
 or checking whether a scalar value is actually assigned is foreseen by
 CDN, particularly not any processing that is dependent on a specific
@@ -2854,7 +2854,7 @@ well-formed but not valid (Section <a href="https://rfc-editor.org/rfc/rfc8949#s
 in this CDN that is not representing a valid CBOR data item:<a href="#section-2.6.3-2" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-2.6.3-3">
 <pre>
-{1: "to", 1: "fro"}
+{1: "to", 1: "from"}
 </pre><a href="#section-2.6.3-3" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2910,7 +2910,7 @@ indicates major type 7, value 42, and »<code>simple(20)</code>« indicates
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-application-oriented-extensi" class="section-name selfRef">Application-Oriented Extension Literals</a>
       </h2>
 <p id="section-3-1">This document extends the syntax used in diagnostic notation to also
-enable application-oriented extensions.
+enable application-oriented extensions (<a href="#app-lit" class="auto internal xref">Section 2.1</a>).
 This section defines a number of application-oriented extensions.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <div id="dt">
 <section id="section-3.1">
@@ -3130,9 +3130,9 @@ equivalent notation not using an application-extension identifier.<a href="#sect
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-the-hash-extension" class="section-name selfRef">The "hash" Extension</a>
         </h3>
 <p id="section-3.3-1">The application-extension identifier "hash" is used to notate the
-input to a cryptographic hash function as well as identify such a hash
+input to a cryptographic hash function as well as to identify such a hash
 function.
-The result is a byte string that represents the output of that
+Its value is a byte string that represents the output of that
 hash function.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3-2">The input of the literal is a (text or byte) string, optionally followed by either
 an integer or a text string that identifies the hash function in the
@@ -3272,7 +3272,7 @@ chain.<a href="#section-4-3.1" class="pilcrow">¶</a></p>
         <h3 id="name-handling-unknown-applicatio">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-handling-unknown-applicatio" class="section-name selfRef">Handling unknown application-extension identifiers</a>
         </h3>
-<p id="section-4.1-1">When ingesting CDN, any
+<p id="section-4.1-1">When ingesting CDN,
 application-oriented extension literals are usually decoded and
 transformed into the corresponding data item during ingestion.
 If an application-extension is not known or not implemented by the
@@ -3300,7 +3300,7 @@ app-sequence.<a href="#section-4.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-4.1-5">For example, <code>cri'https://example.com'</code> can be represented as
-<code>/CPA/ 999(["cri", ["https://example.com"]])</code>, or
+<code>/CPA/ 999(["cri", ["https://example.com"]])</code>, and
 <code>hash&lt;&lt;"data", -44&gt;&gt;</code> as <code>/CPA/ 999(["hash", ["data", -44]])</code>.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
 <p id="section-4.1-6">If a stage of ingestion is not prepared to handle the Unresolved
 Application-Extension Tag, this is an error and processing has to
@@ -3341,7 +3341,7 @@ The content of this tag is one of:<a href="#section-4.2-4" class="pilcrow">¶</a
             <p id="section-4.2-5.1.1">null (indicating a data item entirely replaced by an ellipsis);<a href="#section-4.2-5.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.2-5.2">
-            <p id="section-4.2-5.2.1">an array, the elements of which are alternating between fragments
+            <p id="section-4.2-5.2.1">an array, the elements of which are alternating between parts
 of a string and the actual elisions, represented as ellipses
 carrying a null as content.<a href="#section-4.2-5.2.1" class="pilcrow">¶</a></p>
 </li>
@@ -3357,7 +3357,7 @@ carrying a null as content.<a href="#section-4.2-5.2.1" class="pilcrow">¶</a></
 </pre><a href="#section-4.2-7" class="pilcrow">¶</a>
 </div>
 <p id="section-4.2-8">A single ellipsis (or key/value pair of ellipses) can imply eliding
-multiple elements in an array (members in a map); if more detailed
+multiple elements in an array (members in a map). If more detailed
 control is required, a data definition language such as CDDL can be
 employed.
 (Note that the stand-in form defined here does not allow multiple
@@ -3383,14 +3383,14 @@ not be valid.)<a href="#section-4.2-8" class="pilcrow">¶</a></p>
 }
 </pre><a href="#section-4.2-12" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-13">The example "contract" combines string concatenation via the <code>+</code>
-operator (<a href="#grammar" class="auto internal xref">Section 5.1</a>) with an
+<p id="section-4.2-13">The examples "contract" and "bytes_in_IRI" combine (text and byte)
+string concatenation via the <code>+</code> operator (<a href="#grammar" class="auto internal xref">Section 5.1</a>) with an
 ellipsis.
 The example
 "signature" uses special syntax that allows the use of ellipses
 between the bytes notated <em>inside</em> <code>h''</code> literals.<a href="#section-4.2-13" class="pilcrow">¶</a></p>
 <p id="section-4.2-14">String elisions can be represented in a CBOR data item by a stand-in
-that wraps an array of string fragments alternating with ellipsis
+that wraps an array of string parts alternating with ellipsis
 indicators:<a href="#section-4.2-14" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-4.2-15">
 <pre>
@@ -4709,7 +4709,7 @@ initial entries have the Change Controller "IETF".<a href="#section-6.2-5" class
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">_</td>
-              <td class="text-left" rowspan="1" colspan="1">Indefinite Length Encoding (ai=31)</td>
+              <td class="text-left" rowspan="1" colspan="1">Indefinite-Length Encoding (ai=31)</td>
               <td class="text-left" rowspan="1" colspan="1">RFC8949, RFC-XXXX</td>
             </tr>
             <tr>
