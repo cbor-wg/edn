@@ -4,7 +4,7 @@ v: 3
 title: >
   Concise Diagnostic Notation (CDN)
 docname: draft-ietf-cbor-edn-literals-latest
-# date: 2026-04-06
+# date: 2026-06-12
 
 keyword: Internet-Draft
 cat: std
@@ -140,7 +140,9 @@ addresses and prefixes.
 [^status]:
     (This cref will be removed by the RFC editor:)\\
     This is a working copy, addressing some of the May/June 2026 Working
-    Group Last Call comments on `-25`.
+    Group Last Call comments on `-25`, specifically the idea to
+    entirely replace the non-backwards compatible update to the RFC
+    8610/G.4 concatenation by two new application extensions.
 
 --- middle
 
@@ -520,7 +522,7 @@ application-oriented extensions ({{app-ext}}), both to motivate
 making these extensions generally available, and to illustrate the
 concept.
 
-Of these, the application-oriented extensions `h`, `b64`, `dt` and `ip` are
+Of these, the application-oriented extensions `h`, `b64`, `t1`, `b1`, `dt` and `ip` are
 mandatory to implement.
 (As mentioned, for simplicity we use the term "application-oriented
 extensions" for the mechanism discussed in this section even if it is
@@ -1144,8 +1146,8 @@ For instance, each pair of columns in the following are equivalent:
 
 To be valid CBOR, {{Section 5.3.1 of RFC8949@-cbor}} requires that text
 strings are byte sequences in UTF-8 {{-utf8}} form.
-CDN provides several ways to construct such byte strings (see {{concat}}
-for details).
+CDN provides several ways to construct such byte strings (in
+particular, see also {{t1b1}}).
 These mechanisms might operate on subsequences that do not themselves
 constitute UTF-8, e.g., by building larger sequences out of
 concatenating the subsequences; for validity of a text string
@@ -1155,9 +1157,8 @@ Double-quoted, single-quoted, and raw string literals have been defined
 such that they lead to byte sequences that are UTF-8: the source
 language of CDN is UTF-8, and all escaping mechanisms lead only to
 adding further UTF-8 characters.
-Only prefixed string literals, other application-extensions, or
-in certain cases concatenation ({{concat}}) can generate non-UTF-8 byte
-sequences.
+Only application-extensions (invoked in prefixed literals) can
+generate non-UTF-8 byte sequences.
 
 As discussed at the start of {{diagnostic-notation}}, CDN
 implementations MAY support generation and possibly ingestion of CDN
@@ -1318,7 +1319,7 @@ enable application-oriented extensions ({{app-lit}}).
 This section defines a number of application-oriented extensions.
 
 
-The "dt" Extension {#dt}
+Date and Time: The "dt" Extension {#dt}
 ------------------
 
 The application-extension identifier "dt" is used to notate a
@@ -1355,7 +1356,7 @@ equivalent notation not using an application-extension identifier.
 See {{dt-grammar}} for an ABNF definition for the text string input of `dt` literals.
 
 
-The "ip" Extension {#ip}
+IP Addresses and Related Structures: The "ip" Extension {#ip}
 ------------------
 
 The application-extension identifier "ip" is used to notate an IP
@@ -1408,7 +1409,7 @@ equivalent notation not using an application-extension identifier.
 See {{ip-grammar}} for an ABNF definition for the content of `ip` literals.
 
 
-The "hash" Extension {#hash}
+Cryptographic Hash Values: The "hash" Extension {#hash}
 --------------------
 
 The application-extension identifier "hash" is used to notate the
@@ -1439,8 +1440,80 @@ identifier "hash".
 | `hash<<'foo', "SHA-512">>` | h'F7FBBA6E0636F890E56FBBF3283E524C<br>6FA3204AE298382D624741D0DC663832<br>6E282C41BE5E4254D8820772C5518A2C<br>5A8C0C7F7EDA19594A7EB539453E1ED7' |
 {: #tab-equiv-hash title="hash literals vs. plain CDN"}
 
+String Concatenation: The "b1" and "t1" Extensions {#t1b1}
+--------------------
 
-The "cri" Extension {#cri}
+[^t1b1name]
+
+[^t1b1name]: This section uses the placeholders t1 and b1 as provisional
+    application extension names, allowing the text to stabilize while
+    the actual names are still being decided by the WG.
+
+The "b1" and "t1" Extensions allow a (byte or text) string to be built
+up from multiple (byte or text) string literals; these are then
+concatenated into a single string.
+
+The following four text string values (adapted from {{Section G.4 of
+-cddl}}) are equivalent:
+
+    "Hello world"
+    t1<<"Hello ", "world">>
+    t1<<"Hello", h'20', "world">>
+    t1<<h'48656c6c6f20776f726c64'>>
+
+Similarly, the following byte string values are equivalent:
+
+    'Hello world'
+    b1<"Hello world">
+    b1<<'Hello ', 'world'>>
+    b1<<'Hello ', h'776f726c64'>>
+    b1<<'Hello', h'20', 'world'>>
+    b1<<h'48656c6c6f20776f726c64', '', b64''>>
+    b1<<h'4 86 56c 6c6f', h' 20776 f726c64'>>
+
+As the examples show, text strings and byte strings can mix within such a
+concatenation, so that, for instance, byte string literal notation can be used
+inside a sequence of concatenated text string notation literals, to
+encode characters that may be better represented in an encoded way.
+
+This is realized by simply joining together the bytes in the
+sequence of string arguments to the b1/t1 application extension,
+proceeding from left to right.
+
+For "b1", the joining operation results in a byte string.
+For "t1", the joining operation results in a text string, and the
+result therefore needs to be valid UTF-8 except for "diagnostic"
+implementations that support and are enabled for generation/ingestion
+of CDN for CBOR data items that are well-formed but not valid; see
+also {{text-validity}}.
+
+Besides strings, arguments to t1/b1 may include ellipses, in which
+case the result will be an ellipsis data item in turn (see
+{{elision}}).
+The semantic processing of these is governed by the
+following rules:
+
+* A single `...` is a general ellipsis, which by itself can stand for
+  any data item, but when used as argument to t1/b1 must stand in for
+  a string value.
+* Multiple adjacent ellipses are equivalent to a single ellipsis.
+* When an ellipsis is concatenated (on one or both sides) with
+  strings, the result is a CBOR tag number CPA888 that contains an
+  array with joined together spans of such strings plus the ellipses
+  represented by `/CPA/888(null)`.
+* Arguments with nested ellipses are flattened and the above
+  equivalences applied, so that, for instance, these values are
+  equivalent:
+
+         h'48656c6c6f...776f726c64'
+         b1<<h'48656c6c6f...', ..., h'...776f726c64'>>
+         b1<<'Hello', ..., 'world'>>
+
+* If there is no ellipsis in the concatenated list, the result of
+  processing the list will always be a single string data item.
+
+
+Concise Resource Identifiers: The "cri" Extension {#cri}
 --------------------
 
 The
@@ -1575,9 +1648,9 @@ ellipses in the automation scripts for the documents using them.
 This specification defines a CBOR Tag that can be used in the ingestion
 for this purpose:
 The Diagnostic Notation Ellipsis Tag, tag number CPA888 ({{iana-standin}}).
-The content of this tag either is
+The content of this tag is one of:
 
-1. null (indicating a data item entirely replaced by an ellipsis), or it is
+1. null (indicating a data item entirely replaced by an ellipsis);
 2. an array, the elements of which are alternating between parts
    of a string and the actual elisions, represented as ellipses
    carrying a null as content.
@@ -1614,14 +1687,14 @@ Subtree elisions can be represented in a CBOR data item by using
 Elisions also can be used as part of a (text or byte) string:
 
 ~~~ cbor-diag
-{ "contract": "Herewith I buy" + ... + "gned: Alice & Bob",
-  "bytes_in_IRI": 'https://a.example/' + ... + '&q=Übergrößenträger',
+{ "contract": t1<<"Herewith I buy", ..., "gned: Alice & Bob">>
+  "bytes_in_IRI": b1<<'https://a.example/', ..., '&q=Übergrößenträger'>
   "signature": h'4711...0815',
 }
 ~~~
 
 The examples "contract" and "bytes_in_IRI" combine (text and byte)
-string concatenation via the `+` operator ({{grammar}}) with an
+string concatenation via the t1/b1 application extension ({{t1b1}}) with an
 ellipsis.
 The example
 "signature" uses special syntax that allows the use of ellipses
@@ -1806,68 +1879,6 @@ The following additional items should help in the interpretation:
   >      shortrawdelim = rawdelim&{|(rd)|rd.text_value.length < @rdlen}
   >      matchrawdelim = rawdelim&{|(rd)|rd.text_value.length >= @rdlen}
 
-8. {: #concat}
-  Concise diagnostic notation allows a (text or byte) string to be
-  built up from multiple (text or byte) string literals, separated by
-  a `+` operator; these are then concatenated into a single string.
-
-    `string`, `string1e`, `string1`, and `ellipsis` realize: (1) the
-    representation of strings in this form split up into multiple
-    chunks, and (2) the use of ellipses to represent elisions
-    ({{elision}}).
-
-    Text strings and byte strings do not mix within such a
-    concatenation, except that byte string literal notation can be used
-    inside a sequence of concatenated text string notation literals, to
-    encode characters that may be better represented in an encoded way.
-    The following four text string values (adapted from {{Section G.4 of
-    -cddl}} by updating to explicit `+` operators) are equivalent:
-
-        "Hello world"
-        "Hello " + "world"
-        "Hello" + h'20' + "world"
-        "" + h'48656c6c6f20776f726c64' + ""
-
-    Similarly, the following byte string values are equivalent:
-
-        'Hello world'
-        'Hello ' + 'world'
-        'Hello ' + h'776f726c64'
-        'Hello' + h'20' + 'world'
-        '' + h'48656c6c6f20776f726c64' + '' + b64''
-        h'4 86 56c 6c6f' + h' 20776 f726c64'
-
-    The semantic processing of these constructs is governed by the
-    following rules:
-
-    * A single `...` is a general ellipsis, which by itself can stand
-      for any data item.
-      Multiple adjacent concatenated ellipses are equivalent to a single
-      ellipsis.
-    * An ellipsis can be concatenated (on one or both sides) with string
-      chunks (`string1`); the result is a CBOR tag number CPA888 that contains an
-      array with joined together spans of such chunks plus the ellipses
-      represented by `888(null)`.
-    * If there is no ellipsis in the concatenated list, the result of
-      processing the list will always be a single item.
-    * The bytes in the concatenated sequence of string chunks are simply
-      joined together, proceeding from left to right.
-      If the left hand side of a concatenation is a text string, the
-      joining operation results in a text string, and that
-      result needs to be valid UTF-8 except for implementations that
-      support and are enabled for generation/ingestion of CDN for CBOR
-      data items that are well-formed but not valid.
-      If the left hand side is a byte string, the right hand side also
-      needs to be a byte string.
-    * Some of the strings may be app-strings.
-      If the result type of the app-string is an actual (text or byte)
-      string, joining of those string chunks occurs as with chunks
-      directly notated as string literals; otherwise the occurrence of more than
-      one app-string or an app-string together with a directly notated
-      string cannot be processed.
-      (This determination must be made at the time the app-string is
-      interpreted; see {{unknown}} for how this may not be immediately
-      during parsing.)
 
 ### Discussion
 
@@ -1908,6 +1919,10 @@ which are not always repeated here.
 | IP         | "                                                  | Tag 54 (IPv6) or 52 (IPv4) on the above           |
 | hash       | string (usually used with sequences)               | byte string                                       |
 | HASH       | (not used)                                         |                                                   |
+| t1         | strings (usually used with sequences)              | text string                                   |
+| T1         | (not used)                                         |                                                   |
+| b1         | strings (usually used with sequences)              | byte string                               |
+| B1         | (not used)                                         |                                                   |
 | cri        | RFC 3986 URI or URI reference                      | CBOR structure representing equivalent CRI        |
 | CRI        | "                                                  | Tag 99 on the above                               |
 {: #tab-prefixes title="App-prefix Values Defined in this Document"}
@@ -2448,6 +2463,8 @@ initial entries have the Change Controller "IETF".
 | dt                               | Date/Time                       | RFC-XXXX         |
 | ip                               | IP Address/Prefix               | RFC-XXXX         |
 | hash                             | Cryptographic Hash              | RFC-XXXX         |
+| b1                               | Byte String Concatenation       | RFC-XXXX         |
+| t1                               | Text String Concatenation       | RFC-XXXX         |
 | cri                              | Constrained Resource Identifier | RFC-XXXX, {{-cri}} |
 {: #tab-iana title="Initial Content of Application-extension
 Identifier Registry"}
