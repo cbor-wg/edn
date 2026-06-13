@@ -2631,24 +2631,43 @@ specification reference.
 Security considerations {#seccons}
 =======================
 
-The security considerations of {{-cbor}} and {{-cddl}} apply.
+The security considerations of {{-cbor}} apply, including by applying
+the considerations about the CBOR format to the CDN format in an
+analogous sense.
+Security considerations documented in {{-cddl}} for the CDDL language
+often are also applicable to the CDN language in an analogous sense.
 
-The CDN specification provides two explicit extension points,
+The CDN specification defines two explicit extension points:
 application-extension identifiers ({{appext-iana}}) and encoding
 indicators ({{reg-ei}}).
-Extensions introduced this way can have their own security
-considerations (see, e.g., {{Section 5 of -eref}}).
-When implementing tools that support the use of CDN extensions, the
-implementer needs to be careful not to inadvertently introduce a
-vector for an attacker to invoke extensions not planned for by the
-tool operator, who might not have considered security considerations
-of specific extensions such as those posed by their use of
-dereferenceable identifiers ({{Section 6 of -deref}}).
-For instance, tools might require explicitly enabling the use of each
-extension that is not on an allowlist.
-This task can possibly be
-made less onerous by combining it with a mechanism for supplying any
-parameters controlling such an extension.
+Extensions introduced through these can have their own security
+considerations, which need to be considered in the specification for
+the extension (see, e.g., {{Section 5 of -eref}}).
+
+Implementers of tools that support the use of CDN extensions need to
+avoid inadvertently introducing a vector that allows attackers to
+invoke extensions not planned for by the tool operator, who might not
+have considered security considerations of specific extensions such as
+those posed by their use of dereferenceable identifiers ({{Section 6 of
+-deref}}).
+
+Tools might require explicitly enabling the use of each extension that
+is not on an allowlist.
+(This task can possibly be made less onerous by combining it with a
+mechanism for supplying any parameters that control such an extension.)
+
+Tools that process application extensions — directly from their use in
+CDN or later via Tag CPA999 ({{unknown}}) — need to be configured out of
+band to enable processing each specific application extension only if
+that is desired.
+An allowlist built out of the mandatory-to-implement application
+extensions may be an exception.
+
+Similarly, inputs to validators may be prepared with partially
+specified subtrees by representing ellipses via Tag CPA888
+({{elision}}).
+Validators that want to accept such partially specified CBOR data
+items need to require explicit configuration to do so.
 
 --- back
 
