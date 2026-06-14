@@ -273,9 +273,7 @@ The diagnostic notation extensions include popular features such as
 embedded CBOR (encoded CBOR data items in byte strings) and comments.
 A simple diagnostic notation extension that enables representing CBOR
 sequences was added in {{Section 4.2 of -seq}}.
-As diagnostic notation is not used in the kind of interchange
-situations where backward compatibility would pose a significant
-obstacle, there is little point in not using these extensions; as at
+As at
 least some elements of the extended form are now near-universally
 used, the terms "diagnostic notation" and "extended diagnostic
 notation" have become synonyms in the context of CBOR, with "concise
@@ -396,6 +394,41 @@ test data.
 Information obtained from a CDDL model can help in choosing
 application-oriented literals or specific string representations such
 as embedded CBOR or `b64''` in the appropriate places.
+
+### Evolution {#evolution}
+
+Diagnostic notation is often used in interchange
+situations where backward compatibility is much less of a concern than
+in the kinds of interchanges enabled by binary CBOR.
+This meant that extensions to diagnostic notation could be introduced
+relatively freely in {{Appendix G of -cddl}} and in {{Section 4.2 of
+-seq}}.
+There was little point in not using these extensions for instance in the examples
+contained in specifications.
+With the landscape of CBOR related tools becoming more populated,
+this kind of evolution is now less desirable.
+
+For the CBOR representation format, {{Section 7.1 of RFC8949@-cbor}}
+introduced a limited number of specific _extension points_, in
+particular the concept of _tags_, to enable the introduction of new
+constructs such as data types without a need to update the base
+specification.
+
+The present specification follows suit by adding extension points to
+CDN, one very general one ({{app-lit}}) and one specific to diagnostic
+processing of encoding variants ({{encoding-indicators}}).
+
+From the relatively unconstrained way extensions were added in
+{{-cddl}}, the present specification also derives taking the liberty to
+make two changes to these extensions that are not entirely backwards
+compatible.
+{{comment-discussion}} and {{plus-discussion}} have more details.
+Changes of this kind would be unacceptable for the binary CBOR format
+itself, but can be OK just once now, considering the more permissive
+conditions under which the features that will suffer these changes
+were originally introduced.
+With CDN now featuring the new extension points, a need for this kind
+of changes should arise much less.
 
 Concise Diagnostic Notation (CDN) {#diagnostic-notation}
 =====================================================
@@ -592,29 +625,41 @@ alphabet in classic base64 encoding).
 None of the other application-oriented extensions supplied in this
 specification provides for such a kind of internal comment syntax.
 
-### Discussion
+### Discussion {#comment-discussion}
 
-As a backwards-incompatible change, this specification
-restricts slash-delimited comments that were allowed in {{Section G.6 of RFC8610}} in two ways:
+{{Section G.6 of RFC8610}} introduced comments into the diagnostic
+notation syntax, limited to inline comments using a bare "`/`" as the
+comment delimiter.
+It however also hinted at the potential desire to add
+end-of-line comments, mentioning both "`//`" and "`#`" as start delimiters.
+
+The present specification adds both, as well as C-style inline
+comments ("`/*`" and "`*/`" delimiters).
+
+This introduces a backwards-incompatible change, restricting
+slash-delimited comments that were allowed by {{Section G.6 of RFC8610}}
+in two ways:
 
 * Inline comments no longer can be empty: The construct "`//`" that was
   an empty comment in {{Section G.6 of RFC8610}} is now used instead to introduce an
   end-of-line comment.
   (Note that "`//`" still can be used in what is visually "within" a
-  slash-delimited comment; its first slash actually ends the current comment and
-  the second slash starts a new one.)
-* CDN now enables the use of C-style inline comments: for instance, "`/*foo/`"
+  slash-delimited comment like in the second example below; its first
+  slash actually ends the current comment and the second slash starts
+  a new one.)
+* Enabling the use of C-style inline comments can extend the scope of
+  what previously were parsed as slash-delimited comments: for instance, "`/*foo/`"
   was a complete comment in {{Section G.6 of RFC8610}} and now is the beginning of a
   C-style comment that goes on up to a "`*/`".
 
-As an example, the introduction of C-style inline comments enables a
+As an example for what is enabled by this change, the introduction of C-style inline comments enables a
 comment explaining a COSE algorithm identifier, as in
 
 ~~~ cbor-diag
 4 /* HMAC 256/64 */
 ~~~
 
-instead of the conventional, but often less familiar
+instead of the previously conventional, but often less familiar
 
 ~~~ cbor-diag
 4 / HMAC 256//64 /
@@ -1869,7 +1914,8 @@ The following additional items should help in the interpretation:
       interpreted; see {{unknown}} for how this may not be immediately
       during parsing.)
 
-### Discussion
+### Discussion {#plus-discussion}
+<!-- This section will be fixed in the t1/b1 PR -->
 
 Note that the syntax defined here for concatenation of components
 uses an explicit `+` operator between the components to be
