@@ -2039,7 +2039,7 @@ The following additional items should help in the interpretation:
 2. {: #cr} See {{repertoire}} for more considerations about the
   character repertoire used for CDN source text and, in particular,
   the special handling of newline characters in the source.
-  
+
 3. {: #decnumber}
   `decnumber` stands for an integer in the usual decimal notation, unless at
   least one of the optional parts starting with "." and "e" are
