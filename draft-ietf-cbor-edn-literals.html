@@ -18,7 +18,9 @@ to support text representations such as of epoch-based dates/times and of IP
 addresses and prefixes. 
        (This cref will be removed by the RFC editor:) 
 This is a working copy, addressing some of the May/June 2026 Working
-Group Last Call comments on  -25 . 
+Group Last Call comments on  -25 , specifically the idea to
+entirely replace the non-backwards compatible update to the RFC
+8610/G.4 concatenation by two new application extensions. 
     " name="description">
 <meta content="xml2rfc 3.33.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -1103,7 +1105,9 @@ to support text representations such as of epoch-based dates/times and of IP
 addresses and prefixes.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 <p id="section-abstract-4"><span class="cref" id="status">(This cref will be removed by the RFC editor:)<br>
 This is a working copy, addressing some of the May/June 2026 Working
-Group Last Call comments on <code>-25</code>.</span><a href="#section-abstract-4" class="pilcrow">¶</a></p>
+Group Last Call comments on <code>-25</code>, specifically the idea to
+entirely replace the non-backwards compatible update to the RFC
+8610/G.4 concatenation by two new application extensions.</span><a href="#section-abstract-4" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1274,19 +1278,22 @@ Group Last Call comments on <code>-25</code>.</span><a href="#section-abstract-4
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-application-oriented-extensi" class="internal xref">Application-Oriented Extension Literals</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-the-dt-extension" class="internal xref">The "dt" Extension</a></p>
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-date-and-time-the-dt-extens" class="internal xref">Date and Time: The "dt" Extension</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-the-ip-extension" class="internal xref">The "ip" Extension</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-ip-addresses-and-related-st" class="internal xref">IP Addresses and Related Structures: The "ip" Extension</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-the-hash-extension" class="internal xref">The "hash" Extension</a></p>
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-cryptographic-hash-values-t" class="internal xref">Cryptographic Hash Values: The "hash" Extension</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
-                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-the-cri-extension" class="internal xref">The "cri" Extension</a></p>
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-string-concatenation-the-b1" class="internal xref">String Concatenation: The "b1" and "t1" Extensions</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
-                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-the-float-extension" class="internal xref">The "float" Extension</a></p>
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-concise-resource-identifier" class="internal xref">Concise Resource Identifiers: The "cri" Extension</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6">
+                <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="auto internal xref">3.6</a>.  <a href="#name-the-float-extension" class="internal xref">The "float" Extension</a></p>
 </li>
             </ul>
 </li>
@@ -1835,7 +1842,7 @@ string data item (as illustrated for instance in Tables <a href="#tab-equiv-dt" 
 application-oriented extensions (<a href="#app-ext" class="auto internal xref">Section 3</a>), both to motivate
 making these extensions generally available, and to illustrate the
 concept.<a href="#section-2.1-9" class="pilcrow">¶</a></p>
-<p id="section-2.1-10">Of these, the application-oriented extensions <code>h</code>, <code>b64</code>, <code>dt</code> and <code>ip</code> are
+<p id="section-2.1-10">Of these, the application-oriented extensions <code>h</code>, <code>b64</code>, <code>t1</code>, <code>b1</code>, <code>dt</code> and <code>ip</code> are
 mandatory to implement.
 (As mentioned, for simplicity we use the term "application-oriented
 extensions" for the mechanism discussed in this section even if it is
@@ -2776,8 +2783,8 @@ For instance, each pair of columns in the following are equivalent:<a href="#sec
           </h4>
 <p id="section-2.5.7-1">To be valid CBOR, Section <a href="https://rfc-editor.org/rfc/rfc8949#section-5.3.1" class="relref">5.3.1</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> requires that text
 strings are byte sequences in UTF-8 <span>[<a href="#STD63" class="cite xref">STD63</a>]</span> form.
-CDN provides several ways to construct such byte strings (see <a href="#concat" class="auto internal xref">Section 5.1, Paragraph 9, Item 1</a>
-for details).
+CDN provides several ways to construct such byte strings (in
+particular, see also <a href="#t1b1" class="auto internal xref">Section 3.4</a>).
 These mechanisms might operate on subsequences that do not themselves
 constitute UTF-8, e.g., by building larger sequences out of
 concatenating the subsequences; for validity of a text string
@@ -2787,9 +2794,8 @@ Double-quoted, single-quoted, and raw string literals have been defined
 such that they lead to byte sequences that are UTF-8: the source
 language of CDN is UTF-8, and all escaping mechanisms lead only to
 adding further UTF-8 characters.
-Only prefixed string literals, other application-extensions, or
-in certain cases concatenation (<a href="#concat" class="auto internal xref">Section 5.1, Paragraph 9, Item 1</a>) can generate non-UTF-8 byte
-sequences.<a href="#section-2.5.7-1" class="pilcrow">¶</a></p>
+Only application-extensions (invoked in prefixed literals) can
+generate non-UTF-8 byte sequences.<a href="#section-2.5.7-1" class="pilcrow">¶</a></p>
 <p id="section-2.5.7-2">As discussed at the start of <a href="#diagnostic-notation" class="auto internal xref">Section 2</a>, CDN
 implementations <span class="bcp14">MAY</span> support generation and possibly ingestion of CDN
 for CBOR data items that are well-formed but not valid; when this is
@@ -2963,8 +2969,8 @@ enable application-oriented extensions (<a href="#app-lit" class="auto internal 
 This section defines a number of application-oriented extensions.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <div id="dt">
 <section id="section-3.1">
-        <h3 id="name-the-dt-extension">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-the-dt-extension" class="section-name selfRef">The "dt" Extension</a>
+        <h3 id="name-date-and-time-the-dt-extens">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-date-and-time-the-dt-extens" class="section-name selfRef">Date and Time: The "dt" Extension</a>
         </h3>
 <p id="section-3.1-1">The application-extension identifier "dt" is used to notate a
 date/time literal that can be used as an Epoch-Based Date/Time as per
@@ -3066,8 +3072,8 @@ equivalent notation not using an application-extension identifier.<a href="#sect
 </div>
 <div id="ip">
 <section id="section-3.2">
-        <h3 id="name-the-ip-extension">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-the-ip-extension" class="section-name selfRef">The "ip" Extension</a>
+        <h3 id="name-ip-addresses-and-related-st">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-ip-addresses-and-related-st" class="section-name selfRef">IP Addresses and Related Structures: The "ip" Extension</a>
         </h3>
 <p id="section-3.2-1">The application-extension identifier "ip" is used to notate an IP
 address literal that can be used as an IP address as per <span><a href="https://rfc-editor.org/rfc/rfc9164#section-3" class="relref">Section 3</a> of [<a href="#RFC9164" class="cite xref">RFC9164</a>]</span>.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
@@ -3175,8 +3181,8 @@ equivalent notation not using an application-extension identifier.<a href="#sect
 </div>
 <div id="hash">
 <section id="section-3.3">
-        <h3 id="name-the-hash-extension">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-the-hash-extension" class="section-name selfRef">The "hash" Extension</a>
+        <h3 id="name-cryptographic-hash-values-t">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-cryptographic-hash-values-t" class="section-name selfRef">Cryptographic Hash Values: The "hash" Extension</a>
         </h3>
 <p id="section-3.3-1">The application-extension identifier "hash" is used to notate the
 input to a cryptographic hash function as well as to identify such a hash
@@ -3247,62 +3253,146 @@ identifier "hash".<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 </div>
 </section>
 </div>
-<div id="cri">
+<div id="t1b1">
 <section id="section-3.4">
-        <h3 id="name-the-cri-extension">
-<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-the-cri-extension" class="section-name selfRef">The "cri" Extension</a>
+        <h3 id="name-string-concatenation-the-b1">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-string-concatenation-the-b1" class="section-name selfRef">String Concatenation: The "b1" and "t1" Extensions</a>
         </h3>
-<p id="section-3.4-1">The
+<p id="section-3.4-1"><span class="cref" id="t1b1name">This section uses the placeholders t1 and b1 as provisional
+application extension names, allowing the text to stabilize while
+the actual names are still being decided by the WG.</span><a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-2">The "b1" and "t1" Extensions allow a (byte or text) string to be built
+up from multiple (byte or text) string literals; these are then
+concatenated into a single string.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.4-3">The following four text string values (adapted from <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.4" class="relref">Appendix G.4</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>) are equivalent:<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.4-4">
+<pre>
+"Hello world"
+t1&lt;&lt;"Hello ", "world"&gt;&gt;
+t1&lt;&lt;"Hello", h'20', "world"&gt;&gt;
+t1&lt;&lt;h'48656c6c6f20776f726c64'&gt;&gt;
+</pre><a href="#section-3.4-4" class="pilcrow">¶</a>
+</div>
+<p id="section-3.4-5">Similarly, the following byte string values are equivalent:<a href="#section-3.4-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.4-6">
+<pre>
+'Hello world'
+b1&lt;"Hello world"&gt;
+b1&lt;&lt;'Hello ', 'world'&gt;&gt;
+b1&lt;&lt;'Hello ', h'776f726c64'&gt;&gt;
+b1&lt;&lt;'Hello', h'20', 'world'&gt;&gt;
+b1&lt;&lt;h'48656c6c6f20776f726c64', '', b64''&gt;&gt;
+b1&lt;&lt;h'4 86 56c 6c6f', h' 20776 f726c64'&gt;&gt;
+</pre><a href="#section-3.4-6" class="pilcrow">¶</a>
+</div>
+<p id="section-3.4-7">As the examples show, text strings and byte strings can mix within such a
+concatenation, so that, for instance, byte string literal notation can be used
+inside a sequence of concatenated text string notation literals, to
+encode characters that may be better represented in an encoded way.<a href="#section-3.4-7" class="pilcrow">¶</a></p>
+<p id="section-3.4-8">This is realized by simply joining together the bytes in the
+sequence of string arguments to the b1/t1 application extension,
+proceeding from left to right.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
+<p id="section-3.4-9">For "b1", the joining operation results in a byte string.
+For "t1", the joining operation results in a text string, and the
+result therefore needs to be valid UTF-8 except for "diagnostic"
+implementations that support and are enabled for generation/ingestion
+of CDN for CBOR data items that are well-formed but not valid; see
+also <a href="#text-validity" class="auto internal xref">Section 2.5.7</a>.<a href="#section-3.4-9" class="pilcrow">¶</a></p>
+<p id="section-3.4-10">Besides strings, arguments to t1/b1 may include ellipses, in which
+case the result will be an ellipsis data item in turn (see
+<a href="#elision" class="auto internal xref">Section 4.2</a>).
+The semantic processing of these is governed by the
+following rules:<a href="#section-3.4-10" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.4-11.1">
+            <p id="section-3.4-11.1.1">A single <code>...</code> is a general ellipsis, which by itself can stand for
+any data item, but when used as argument to t1/b1 must stand in for
+a string value.<a href="#section-3.4-11.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.4-11.2">
+            <p id="section-3.4-11.2.1">Multiple adjacent ellipses are equivalent to a single ellipsis.<a href="#section-3.4-11.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.4-11.3">
+            <p id="section-3.4-11.3.1">When an ellipsis is concatenated (on one or both sides) with
+strings, the result is a CBOR tag number CPA888 that contains an
+array with joined together spans of such strings plus the ellipses
+represented by <code>/CPA/888(null)</code>.<a href="#section-3.4-11.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.4-11.4">
+            <p id="section-3.4-11.4.1">Arguments with nested ellipses are flattened and the above
+equivalences applied, so that, for instance, these values are
+equivalent:<a href="#section-3.4-11.4.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.4-11.4.2">
+<pre>
+   h'48656c6c6f...776f726c64'
+   b1&lt;&lt;h'48656c6c6f...', ..., h'...776f726c64'&gt;&gt;
+   b1&lt;&lt;'Hello', ..., 'world'&gt;&gt;
+</pre><a href="#section-3.4-11.4.2" class="pilcrow">¶</a>
+</div>
+</li>
+          <li class="normal" id="section-3.4-11.5">
+            <p id="section-3.4-11.5.1">If there is no ellipsis in the concatenated list, the result of
+processing the list will always be a single string data item.<a href="#section-3.4-11.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="cri">
+<section id="section-3.5">
+        <h3 id="name-concise-resource-identifier">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-concise-resource-identifier" class="section-name selfRef">Concise Resource Identifiers: The "cri" Extension</a>
+        </h3>
+<p id="section-3.5-1">The
 application-extension identifier "<code>cri</code>" is used to notate
-a CDN literal for a CRI reference as defined in <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.4-2">The input of the literal is a URI Reference as per <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> or an IRI
-Reference as per <span>[<a href="#RFC3987" class="cite xref">RFC3987</a>]</span>.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
-<p id="section-3.4-3">The value of the literal is a CRI reference that can be converted to
+a CDN literal for a CRI reference as defined in <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-2">The input of the literal is a URI Reference as per <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> or an IRI
+Reference as per <span>[<a href="#RFC3987" class="cite xref">RFC3987</a>]</span>.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+<p id="section-3.5-3">The value of the literal is a CRI reference that can be converted to
 the text of the literal using the procedure of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-30#section-6.1" class="relref">Section 6.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>.  
 Note that there may be more than one CRI reference that can be
 converted to the URI/IRI reference given; implementations are expected
 to favor the simplest variant available and make non-surprising
 choices otherwise.
 In the all-uppercase variant of the app-prefix, the value is enclosed
-in a tag number 99.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
-<p id="section-3.4-4">As an example, the CDN<a href="#section-3.4-4" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-3.4-5">
+in a tag number 99.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
+<p id="section-3.5-4">As an example, the CDN<a href="#section-3.5-4" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.5-5">
 <pre>
 cri'https://example.com/bottarga/shaved'
 CRI'https://example.com/bottarga/shaved'
-</pre><a href="#section-3.4-5" class="pilcrow">¶</a>
+</pre><a href="#section-3.5-5" class="pilcrow">¶</a>
 </div>
-<p id="section-3.4-6">is equivalent to<a href="#section-3.4-6" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-3.4-7">
+<p id="section-3.5-6">is equivalent to<a href="#section-3.5-6" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.5-7">
 <pre>
 [-4, ["example", "com"], ["bottarga", "shaved"]]
 99([-4, ["example", "com"], ["bottarga", "shaved"]])
-</pre><a href="#section-3.4-7" class="pilcrow">¶</a>
+</pre><a href="#section-3.5-7" class="pilcrow">¶</a>
 </div>
-<p id="section-3.4-8">See <a href="#cri-grammar" class="auto internal xref">Section 5.2.5</a> for an ABNF definition for the content of <code>cri</code> literals.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
+<p id="section-3.5-8">See <a href="#cri-grammar" class="auto internal xref">Section 5.2.5</a> for an ABNF definition for the content of <code>cri</code> literals.<a href="#section-3.5-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="the-float-extension">
-<section id="section-3.5">
+<section id="section-3.6">
         <h3 id="name-the-float-extension">
-<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-the-float-extension" class="section-name selfRef">The "float" Extension</a>
+<a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-the-float-extension" class="section-name selfRef">The "float" Extension</a>
         </h3>
-<p id="section-3.5-1">The "<code>float</code>" application extension enables the notation of 2-byte,
+<p id="section-3.6-1">The "<code>float</code>" application extension enables the notation of 2-byte,
 4-byte, and 8-byte byte strings to express floating point values
 (mt=7, ai=25/26/27 respectively) by giving their IEEE 754
 representation.
 A text string used as an argument is interpreted exactly as a hex
 literal (like the <code>h</code> application prefix); the result is used as the
-byte string.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
-<p id="section-3.5-2">The application-oriented literal is interpreted as an encoded data
+byte string.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.6-2">The application-oriented literal is interpreted as an encoded data
 item would be that prefixes the byte string by a single byte 0xF9
 (2 bytes, i.e., binary16), 0xFA (4 bytes, i.e., binary32), and 0xFB (8
 bytes, i.e., binary64), respectively.
 Byte strings of a different length than 2, 4, or 8 raise an error.
 Note that the interpretation as an encoded data item does not create
-or imply an encoding indicator; that can be added separately.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
-<p id="section-3.5-3">Example (tool used: <code>edn-abnf -afloat -e</code>):<a href="#section-3.5-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.5-4">
+or imply an encoding indicator; that can be added separately.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
+<p id="section-3.6-3">Example (tool used: <code>edn-abnf -afloat -e</code>):<a href="#section-3.6-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.6-4">
 <pre>🔧 "[float'fe00', float'fe00'_2, float'47110815']" -tpretty ➔
 83             # array(3)
    F9 FE00     # primitive(65024)
@@ -3311,15 +3401,15 @@ or imply an encoding indicator; that can be added separately.<a href="#section-3
 
 🔧 "[float'fe00', float'fe00'_2, float'47110815', 0x1.22102ap+15]" ➔
 [float'fe00', float'fe00'_2, 37128.08203125, 37128.08203125]
-</pre><a href="#section-3.5-4" class="pilcrow">¶</a>
+</pre><a href="#section-3.6-4" class="pilcrow">¶</a>
 </div>
-<p id="section-3.5-5">The purpose of this application extension is to close a gap in CDN's
+<p id="section-3.6-5">The purpose of this application extension is to close a gap in CDN's
 <span>[<a href="#IEEE754" class="cite xref">IEEE754</a>]</span> binary64 support:
 Without this (or a similar) extension there is no way to represent NaN
 values different from the one called out at the end of Section <a href="https://rfc-editor.org/rfc/rfc8949#section-4.1" class="relref">4.1</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>: "(for many applications, the single NaN encoding
 0xf97e00 will suffice)".
 For finite floating point numbers, the decimal or hex floating point
-representations are preferred.<a href="#section-3.5-5" class="pilcrow">¶</a></p>
+representations are preferred.<a href="#section-3.6-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3422,66 +3512,66 @@ processing has to stop.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
 <p id="section-4.2-4">However, it is useful to be able to process CDN documents with
 ellipses in the automation scripts for the documents using them.
 This specification defines a CBOR Tag that can be used in the ingestion
-for this purpose:
-The Diagnostic Notation Ellipsis Tag, tag number CPA888 (<a href="#iana-tags" class="auto internal xref">Section 6.5</a>).
-The content of this tag is one of:<a href="#section-4.2-4" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-4.2-5">
-<li id="section-4.2-5.1">
-            <p id="section-4.2-5.1.1">null (indicating a data item entirely replaced by an ellipsis);<a href="#section-4.2-5.1.1" class="pilcrow">¶</a></p>
+for this purpose:<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-5">The Diagnostic Notation Ellipsis Tag, tag number CPA888 (<a href="#iana-tags" class="auto internal xref">Section 6.5</a>).
+The content of this tag is one of:<a href="#section-4.2-5" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.2-6">
+<li id="section-4.2-6.1">
+            <p id="section-4.2-6.1.1">null (indicating a data item entirely replaced by an ellipsis);<a href="#section-4.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-4.2-5.2">
-            <p id="section-4.2-5.2.1">an array, the elements of which are alternating between parts
+          <li id="section-4.2-6.2">
+            <p id="section-4.2-6.2.1">an array, the elements of which are alternating between parts
 of a string and the actual elisions, represented as ellipses
-carrying a null as content.<a href="#section-4.2-5.2.1" class="pilcrow">¶</a></p>
+carrying a null as content.<a href="#section-4.2-6.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-4.2-6">Elisions can stand in for entire subtrees, e.g. in:<a href="#section-4.2-6" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-4.2-7">
+<p id="section-4.2-7">Elisions can stand in for entire subtrees, e.g. in:<a href="#section-4.2-7" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-4.2-8">
 <pre>
 [1, 2, ..., 3]
 { "a": 1,
   "b": ...,
   ...: ...
 }
-</pre><a href="#section-4.2-7" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-8" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-8">A single ellipsis (or key/value pair of ellipses) can imply eliding
+<p id="section-4.2-9">A single ellipsis (or key/value pair of ellipses) can imply eliding
 multiple elements in an array (members in a map). If more detailed
 control is required, a data definition language such as CDDL can be
 employed.
 (Note that the tag-based representation form defined here does not allow multiple
 key/value pairs with an ellipsis as a key: the CBOR data item would
-not be valid.)<a href="#section-4.2-8" class="pilcrow">¶</a></p>
-<p id="section-4.2-9">Subtree elisions can be represented in a CBOR data item by using
-<code>/CPA/888(null)</code> as the placeholder CBOR data item:<a href="#section-4.2-9" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-4.2-10">
+not be valid.)<a href="#section-4.2-9" class="pilcrow">¶</a></p>
+<p id="section-4.2-10">Subtree elisions can be represented in a CBOR data item by using
+<code>/CPA/888(null)</code> as the placeholder CBOR data item:<a href="#section-4.2-10" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-4.2-11">
 <pre>
 [1, 2, 888(null), 3]
 { "a": 1,
   "b": 888(null),
   888(null): 888(null)
 }
-</pre><a href="#section-4.2-10" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-11" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-11">Elisions also can be used as part of a (text or byte) string:<a href="#section-4.2-11" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-4.2-12">
+<p id="section-4.2-12">Elisions also can be used as part of a (text or byte) string:<a href="#section-4.2-12" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-4.2-13">
 <pre>
-{ "contract": "Herewith I buy" + ... + "gned: Alice &amp; Bob",
-  "bytes_in_IRI": 'https://a.example/' + ... + '&amp;q=Übergrößenträger',
+{ "contract": t1&lt;&lt;"Herewith I buy", ..., "gned: Alice &amp; Bob"&gt;&gt;
+  "bytes_in_IRI": b1&lt;&lt;'https://a.example/', ..., '&amp;q=Übergrößenträger'&gt;
   "signature": h'4711...0815',
 }
-</pre><a href="#section-4.2-12" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-13" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-13">The examples "contract" and "bytes_in_IRI" combine (text and byte)
-string concatenation via the <code>+</code> operator (<a href="#grammar" class="auto internal xref">Section 5.1</a>) with an
+<p id="section-4.2-14">The examples "contract" and "bytes_in_IRI" combine (text and byte)
+string concatenation via the t1/b1 application extension (<a href="#t1b1" class="auto internal xref">Section 3.4</a>) with an
 ellipsis.
 The example
 "signature" uses special syntax that allows the use of ellipses
-between the bytes notated <em>inside</em> <code>h''</code> literals.<a href="#section-4.2-13" class="pilcrow">¶</a></p>
-<p id="section-4.2-14">String elisions can be represented in a CBOR data item by a tag CPA888
+between the bytes notated <em>inside</em> <code>h''</code> literals.<a href="#section-4.2-14" class="pilcrow">¶</a></p>
+<p id="section-4.2-15">String elisions can be represented in a CBOR data item by a tag CPA888
 that wraps an array containing string parts alternating with ellipsis
-indicators:<a href="#section-4.2-14" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-4.2-15">
+indicators:<a href="#section-4.2-15" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-4.2-16">
 <pre>
 { "contract": /CPA/888(["Herewith I buy", 888(null),
                         "gned: Alice &amp; Bob"]),
@@ -3489,21 +3579,21 @@ indicators:<a href="#section-4.2-14" class="pilcrow">¶</a></p>
                        '&amp;q=Übergrößenträger']),
   "signature": 888([h'4711', 888(null), h'0815']),
 }
-</pre><a href="#section-4.2-15" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-16" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-16">Note that the use of elisions is different from "commenting out" CDN
-text, e.g.:<a href="#section-4.2-16" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-4.2-17">
+<p id="section-4.2-17">Note that the use of elisions is different from "commenting out" CDN
+text, e.g.:<a href="#section-4.2-17" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-4.2-18">
 <pre>
 { "signature": h'4711/.../0815',
   # ...: ...
 }
-</pre><a href="#section-4.2-17" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-18" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-18">The consumer of this CDN will ignore the comments and therefore will
+<p id="section-4.2-19">The consumer of this CDN will ignore the comments and therefore will
 have no idea after ingestion that some information has been elided;
 validation steps may then simply fail instead of being informed about
-the elisions.<a href="#section-4.2-18" class="pilcrow">¶</a></p>
+the elisions.<a href="#section-4.2-19" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3558,9 +3648,8 @@ item            = map / array / tagged
                 / string / streamstring
 
 string1         = (tstr / bstr) spec
-string1e        = string1 / ellipsis
+string          = string1 / ellipsis
 ellipsis        = 3*"." ; "..." or more dots
-string          = string1e *(S "+" S string1e)
 
 number          = (hexfloat / hexint / octint / binint
                    / decnumber / nonfin) spec
@@ -3853,88 +3942,6 @@ can for instance be implemented as follows:<a href="#section-5.1-8.1" class="pil
 </pre><a href="#section-5.1-8.2" class="pilcrow">¶</a>
 </div>
 </aside>
-<ol start="8" type="1" class="normal type-1" id="section-5.1-9">
-<li id="section-5.1-9.1">
-<div id="concat">
-            <p id="section-5.1-9.1.1">Concise diagnostic notation allows a (text or byte) string to be
-  built up from multiple (text or byte) string literals, separated by
-  a <code>+</code> operator; these are then concatenated into a single string.<a href="#section-5.1-9.1.1" class="pilcrow">¶</a></p>
-<p id="section-5.1-9.1.2"><code>string</code>, <code>string1e</code>, <code>string1</code>, and <code>ellipsis</code> realize: (1) the
-representation of strings in this form split up into multiple
-chunks, and (2) the use of ellipses to represent elisions
-(<a href="#elision" class="auto internal xref">Section 4.2</a>).<a href="#section-5.1-9.1.2" class="pilcrow">¶</a></p>
-<p id="section-5.1-9.1.3">
-Text strings and byte strings do not mix within such a
-concatenation, except that byte string literal notation can be used
-inside a sequence of concatenated text string notation literals, to
-encode characters that may be better represented in an encoded way.
-The following four text string values (adapted from <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.4" class="relref">Appendix G.4</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> by updating to explicit <code>+</code> operators) are equivalent:<a href="#section-5.1-9.1.3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.1-9.1.4">
-<pre>
-"Hello world"
-"Hello " + "world"
-"Hello" + h'20' + "world"
-"" + h'48656c6c6f20776f726c64' + ""
-</pre><a href="#section-5.1-9.1.4" class="pilcrow">¶</a>
-</div>
-<p id="section-5.1-9.1.5">
-Similarly, the following byte string values are equivalent:<a href="#section-5.1-9.1.5" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.1-9.1.6">
-<pre>
-'Hello world'
-'Hello ' + 'world'
-'Hello ' + h'776f726c64'
-'Hello' + h'20' + 'world'
-'' + h'48656c6c6f20776f726c64' + '' + b64''
-h'4 86 56c 6c6f' + h' 20776 f726c64'
-</pre><a href="#section-5.1-9.1.6" class="pilcrow">¶</a>
-</div>
-<p id="section-5.1-9.1.7">
-The semantic processing of these constructs is governed by the
-following rules:<a href="#section-5.1-9.1.7" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.1-9.1.8.1">
-                <p id="section-5.1-9.1.8.1.1">A single <code>...</code> is a general ellipsis, which by itself can stand
-for any data item.
-Multiple adjacent concatenated ellipses are equivalent to a single
-ellipsis.<a href="#section-5.1-9.1.8.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-5.1-9.1.8.2">
-                <p id="section-5.1-9.1.8.2.1">An ellipsis can be concatenated (on one or both sides) with string
-chunks (<code>string1</code>); the result is a CBOR tag number CPA888 that contains an
-array with joined together spans of such chunks plus the ellipses
-represented by <code>/CPA/888(null)</code>.<a href="#section-5.1-9.1.8.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-5.1-9.1.8.3">
-                <p id="section-5.1-9.1.8.3.1">If there is no ellipsis in the concatenated list, the result of
-processing the list will always be a single item.<a href="#section-5.1-9.1.8.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-5.1-9.1.8.4">
-                <p id="section-5.1-9.1.8.4.1">The bytes in the concatenated sequence of string chunks are simply
-joined together, proceeding from left to right.
-If the left hand side of a concatenation is a text string, the
-joining operation results in a text string, and that
-result needs to be valid UTF-8 except for implementations that
-support and are enabled for generation/ingestion of CDN for CBOR
-data items that are well-formed but not valid.
-If the left hand side is a byte string, the right hand side also
-needs to be a byte string.<a href="#section-5.1-9.1.8.4.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-5.1-9.1.8.5">
-                <p id="section-5.1-9.1.8.5.1">Some of the strings may be app-strings.
-If the result type of the app-string is an actual (text or byte)
-string, joining of those string chunks occurs as with chunks
-directly notated as string literals; otherwise the occurrence of more than
-one app-string or an app-string together with a directly notated
-string cannot be processed.
-(This determination must be made at the time the app-string is
-interpreted; see <a href="#unknown" class="auto internal xref">Section 4.1</a> for how this may not be immediately
-during parsing.)<a href="#section-5.1-9.1.8.5.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</div>
-        </li>
-</ol>
 <div id="plus-discussion">
 <section id="section-5.1.1">
           <h4 id="name-discussion-2">
@@ -4029,6 +4036,26 @@ which are not always repeated here.<a href="#section-5.2-1" class="pilcrow">¶</
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">HASH</td>
+              <td class="text-left" rowspan="1" colspan="1">(not used)</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">t1</td>
+              <td class="text-left" rowspan="1" colspan="1">strings (usually used with sequences)</td>
+              <td class="text-left" rowspan="1" colspan="1">text string</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">T1</td>
+              <td class="text-left" rowspan="1" colspan="1">(not used)</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">b1</td>
+              <td class="text-left" rowspan="1" colspan="1">strings (usually used with sequences)</td>
+              <td class="text-left" rowspan="1" colspan="1">byte string</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">B1</td>
               <td class="text-left" rowspan="1" colspan="1">(not used)</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
@@ -4729,6 +4756,16 @@ initial entries have the Change Controller "IETF".<a href="#section-6.1-5" class
             <tr>
               <td class="text-left" rowspan="1" colspan="1">hash</td>
               <td class="text-left" rowspan="1" colspan="1">Cryptographic Hash</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC-XXXX</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">b1</td>
+              <td class="text-left" rowspan="1" colspan="1">Byte String Concatenation</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC-XXXX</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">t1</td>
+              <td class="text-left" rowspan="1" colspan="1">Text String Concatenation</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-XXXX</td>
             </tr>
             <tr>
