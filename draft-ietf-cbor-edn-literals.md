@@ -136,10 +136,24 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    This is a working copy, addressing some of the May/June 2026 Working
-    Group Last Call comments on `-25`, specifically the idea to
-    entirely replace the non-backwards compatible update to the RFC
-    8610/G.4 concatenation by two new application extensions.
+    -26 is intended to address the May/June 2026
+    Working Group Last Call comments on `-25` and the ensuing WG discussions.\\
+    Specifically, this update:\\
+    • is going further with the idea to entirely replace the non-backwards
+    compatible update considered for the RFC 8610/G.4 concatenation by two new
+    application extensions (temporarily named `b1`/`t1`), and to add
+    related application-oriented extensions
+    that deprecate the original `streamstring` syntax.\\
+    • includes the float'' application-extension so that the entire
+    CBOR format can be covered.\\
+    • now uses rules closer to those of markdown for handling data
+      transparency in raw strings, simplifying their implementation.\\
+    • adds security considerations.\\
+    • proactively reserves the application-extension identifier
+      "pragma" for potential future standardization.
+    • This update does not address certain comments that propose some
+    editorial restructuring requiring moving text around; this is best
+    done in a next revision after the technical comments are addressed.
 
 --- middle
 
@@ -247,7 +261,7 @@ the present document its name.
 
 After introductory material, {{app-ext}}
 illustrates the concept of application-oriented extension literals by
-defining the "dt", "ip", "hash", and "cri" extensions.
+defining a number of application-extensions.
 {{cdn-tags}} defines mechanisms
 for dealing with unknown application-oriented literals and
 deliberately elided information.
@@ -374,18 +388,8 @@ configured to some basic output format, which:
   pretty-printing, but does use common blank spaces such as after `,`
   and `:`.
 
-CDN generators may provide configuration to consistently select either
-the unescaped (directly readable) or an escaped (ASCII equivalent) form of
-characters in string literals; the latter allows CDN to be used when the
-diagnostic value of fully escaped characters may be desired or in
-environments where non-ASCII characters may not enjoy full data
-transparency.
-Similar to JSON, CDN is designed to allow a simple tool to convert any
-CDN (including CDN with application extensions unknown to the tool)
-into fully escaped (printable ASCII and newlines only) form, as well
-as to inversely recover unescaped characters for all escapes where
-this is possible or for certain subsets of the characters (such as
-Unicode categories L, M, N, P, S, plus Zs or just ASCII space).
+See {{repertoire}} for more considerations about the character
+repertoire used for CDN source text.
 
 Additional features such as ensuring
 deterministic map ordering ({{Section 4.2 of RFC8949@-cbor}}) on output,
@@ -423,13 +427,63 @@ From the relatively unconstrained way extensions were added in
 {{-cddl}}, the present specification also derives taking the liberty to
 make two changes to these extensions that are not entirely backwards
 compatible.
-{{comment-discussion}} and {{plus-discussion}} have more details.
+{{comment-discussion}} and {{concat-removed}} have more details.
+Also, some syntax that has been part of the original diagnostic
+notation has been deprecated ({{ei-string}}) and replaced ({{ilxs}}).
 Changes of this kind would be unacceptable for the binary CBOR format
 itself, but can be OK just once now, considering the more permissive
 conditions under which the features that will suffer these changes
 were originally introduced.
 With CDN now featuring the new extension points, a need for this kind
 of changes should arise much less.
+
+### Character Repertoire of Source {#repertoire}
+
+Similar to JSON, CDN is designed to enable representing all CBOR data
+items using a source character repertoire just containing printable
+ASCII characters (`%x20-7e` in ABNF) and newlines.
+However, if appropriate, CDN can also make full use of larger Unicode
+repertoires.
+
+CDN generators may provide configuration to consistently select either
+the unescaped (directly readable) or an escaped (ASCII equivalent) form of
+characters in string literals; the latter allows CDN to be used when the
+diagnostic value of fully escaped characters may be desired or in
+environments where non-ASCII characters may not enjoy full data
+transparency.
+Similar to JSON, CDN is designed to allow a simple tool to convert any
+CDN (including CDN with application extensions unknown to the tool)
+into a fully escaped (printable ASCII and newlines only) form, as well
+as to inversely recover unescaped characters for all escapes where
+this is possible or for certain subsets of the characters (such as
+Unicode categories L, M, N, P, S, plus Zs or just ASCII space).
+
+Special considerations apply to newlines in the source.
+On some platforms, a CARRIAGE RETURN character (U+000D or CR, often seen
+escaped as "\r" in many programming languages) is always
+added in front of a LINE FEED (U+000A or LF) to represent a newline
+(which are then referred to as CRLF).
+On other platforms, carriage returns are not used at line breaks at
+all, so a newline is just an LF.
+(Platforms that use just a CARRIAGE RETURN by itself to signify an end
+of line are no longer relevant and the files they produce are out of
+scope for this document.)
+
+Files are often freely converted between these two newline
+representations, including by source code revision control systems.
+To ensure that platforms will generate the same bytes in the CBOR data
+items created from input in either conversion state, CDN MUST create
+the same processing result independent of which newline representation
+is used by its input.
+
+To deal with this variability in platform presentation of newlines,
+Unicode CARRIAGE RETURN characters that exist in the input unescaped are
+ignored as if they were not in the input wherever they appear.
+Specifically, any carriage return characters that may be present in a
+CDN (text or byte) string literal are not copied into the resulting string.
+If a carriage return is needed in a CBOR string data item, it can be
+added explicitly, for instance by using the escaped form `\r` in
+single-quoted or double-quoted strings.
 
 Concise Diagnostic Notation (CDN) {#diagnostic-notation}
 =====================================================
@@ -792,7 +846,8 @@ indicators will be available if and when CBOR is extended to make use
 of them).
 
 Note that the encoding indicator `_` is only available behind the opening
-brace/bracket for `map` and `array` ({{ei-container}}): strings have a special syntax
+brace/bracket for `map` and `array` ({{ei-container}}): strings
+originally had a now deprecated special syntax
 `streamstring` for indefinite-length encoding except for the special
 cases `''_` and `""_` ({{ei-string}}).
 
@@ -817,8 +872,8 @@ Encoding indicators are an extension point for CDN; {{reg-ei}} defines
 a registry for additional values.
 
 Specific forms of encoding indicators are discussed in further detail
-in {{ei-string}} for indefinite-length strings and in {{ei-container}} for
-arrays and maps.
+in {{ei-string}} for the deprecated syntax for indefinite-length strings
+and in {{ei-container}} for arrays and maps.
 
 ## Numbers
 
@@ -912,9 +967,9 @@ the string constitute UTF-8 {{-utf8}} text, major type 3), and byte strings
 (CBOR does not further characterize the bytes that constitute the
 string, major type 2).
 
-(UTF-8) text strings can be directly represented (unprefixed) in CDN either as double-quoted {{dq-lit}}
-or as raw strings {{raw-lit}}, while byte strings can be represented as
-single-quoted strings {{sq-lit}}.
+(UTF-8) text strings can be directly represented (unprefixed) in CDN either as double-quoted ({{dq-lit}})
+or as raw strings ({{raw-lit}}), while byte strings can be represented as
+single-quoted strings ({{sq-lit}}).
 The latter is useful for byte strings carrying
 bytes that can be meaningfully notated as UTF-8 text.
 
@@ -924,6 +979,17 @@ provide detailed access to the bits within those bytes (see
 Using an application-extension
 prefix, extension literals can be constructed out of single-quoted strings and
 raw strings, as well as sequence literals (cf. {{app-lit}}).
+
+### No Special String Concatenation Syntax {#concat-removed}
+
+Before extension literals were added to diagnostic notation, {{Appendix
+G.4 of -cddl}} added a syntax for concatenating strings by just
+juxtaposing them.
+This syntax was not widely implemented and is problematic in the
+presence of optional commas; it is now entirely removed from CDN.
+(Previous revisions of the present document proposed yet another
+alternative syntax; this is now entirely withdrawn and replaced by
+application-extensions such as {{t1b1}}.)
 
 ### Double-Quoted String Literals {#dq-lit}
 
@@ -939,7 +1005,7 @@ U+000A), which are copied into the resulting string like other
 characters in the string literal.
 To deal with variability in platform presentation of newlines, any
 carriage return characters (U+000D) that may be present in the CDN
-string literal are not copied into the resulting string (see {{cr}}).
+string literal are not copied into the resulting string (see {{repertoire}}).
 
 JSON's escape scheme for characters that are not on Unicode's basic
 multilingual plane (BMP) is cumbersome (see {{Section 7 of RFC8259@-json}}).
@@ -1043,21 +1109,24 @@ forward single quotes are used, as in ``text.''
 ~~~
 
 This mechanism is easy to use for the large majority of cases.
-However:
+However, without additional rules:
 
-* Raw strings cannot be used for empty string data items, which
+* raw strings could not be used for empty string data items, which
   therefore need to be notated using double- or single-quoted strings.
   (Obviously, there is no need to escape the content of empty strings,
   so this should not be a problem.)
 
-* Without additional rules, raw strings could not be used for string
+* raw strings could not be used for string
   data items that start or end with backquotes, as these would
   amalgamate with the start and end delimiters.
 
-To address the latter cases, two additional rules are added:
+To address these cases (predominantly the latter), two additional
+rules are added to perform after processing the backquotes used as
+delimiters:
 
-* After processing the backquotes used as delimiters, any single
-  newline at the start of a raw string is removed.
+* any single newline (LF or CRLF, see {{repertoire}}) at the start of
+  the inner string is removed to
+  yield the string content.
   As a result:
 
        ```a```
@@ -1075,25 +1144,38 @@ To address the latter cases, two additional rules are added:
       ```
       ``text''```
 
-* An ending delimiter with more backquotes than were used in the
-  starting delimiter contributes the superfluous ones to the string.
+* if the first rule does not apply, but the inner string starts
+  with a space character as well as ends with one, exactly one single space
+  character starting the inner string together with exactly one single space
+  character ending the inner string are removed to yield the string
+  content.
 
   This allows notating »``` a = ``foo`` ```« as:
 
-      ```a = ``foo`````
+      ``` a = ``foo`` ```
+
+If neither of these rules apply, the inner string between the raw
+delimiters is used as the raw string unchanged.
 
 (The examples given here are minimal in that they show how the
 additional rules work; more complex examples would be necessary to
-provide additional motivation why this is a good case to handle.)
+provide additional motivation why this is a good way to handle the
+various cases.)
 
-See {{grammar}} for a more formal approach to defining these rules.
 
+### Deprecated: Indefinite-length Encoding Indicators for Strings {#ei-string}
 
-### Encoding Indicators of Strings {#ei-string}
+[^move1]
 
-Indefinite-length (byte or text) strings are composed of
+[^move1]: This section will move to 2.3.2; it is left here at the
+    moment for easier comparison.
+
+In CBOR, indefinite-length encoded (byte or text) strings are composed of
 "chunks" ({{Section 3.2.3 of RFC8949@-cbor}}).
-CDN provides a special syntax `streamstring` for them.
+
+The original diagnostic notation ({{Section 6.1 of -old-cbor}}) provided
+a special syntax `streamstring` for them, which was retained and
+further clarified in {{Section 8.1 of RFC8949@-cbor}}.
 This syntax represents the individual chunks in
 sequence within parentheses, each optionally followed by a comma, with
 an encoding indicator `_` immediately after the opening parenthesis:
@@ -1102,7 +1184,7 @@ The overall type (byte string or text string) of the string is
 provided by the types of the individual chunks, which all need to be
 of the same type ({{Section 3.2.3 of RFC8949@-cbor}}).
 
-For an indefinite-length string with no chunks inside, `(_ )`
+In this syntax, an indefinite-length string with no chunks inside, `(_ )`
 would be ambiguous as to whether a byte string (encoded `5f ff`) or a text string
 (encoded `7f ff`) is meant and is therefore not used.
 The basic forms `''_` and `""_` can be used instead and are reserved for
@@ -1111,8 +1193,15 @@ but not really useful) encodings with only empty chunks, which
 need to be notated as `(_ '')`, `(_ "")`, etc.,
 when it is desired to preserve the chunk structure.
 
+With this document, the `streamstring` syntax is now deprecated; new
+CDN documents should instead use the `ilbs`/`ilts` application
+extensions ({{ilxs}}) to build indefinite-length encoded strings.
 
 ### Base-Encoded Byte String Literals {#encoded-byte-strings}
+
+[^move2]
+
+[^move2]: This section will move to new subsections of Section 3.
 
 Besides the unprefixed byte string literals that are analogous to JSON text
 string literals, CDN provides extension literals that can represent
@@ -1206,6 +1295,24 @@ For instance, each pair of columns in the following are equivalent:
    <<"hello", null>>  h'65 68656c6c6f f6'
    <<>>               h''
 ~~~~
+
+A diagnostic implementation is expected to honor encoding indicators
+on the individual items in the supplied sequence before assembling
+them into an encoded CBOR sequence.
+For instance, each pair of columns in the following are equivalent:
+
+~~~~ cbor-diag
+   <<1_1>>              h'190001'
+   <<1_0, 2_2>>         h'1801 1a00000002'
+   <<"hello"_0, null>>  h'7805 68656c6c6f f6'
+~~~~
+
+For prefixed sequence literals, the processing of encoding indicators
+on the arguments can be defined by the application extension being
+used.
+See {{ilxs}} for an example of where this is done.
+Encoding indicators on the arguments are ignored if the application
+extension does not define their handling.
 
 ### Validity of Text Strings {#text-validity}
 
@@ -1570,13 +1677,36 @@ following rules:
   equivalences applied, so that, for instance, these values are
   equivalent:
 
-         h'48656c6c6f...776f726c64'
-         b1<<h'48656c6c6f...', ..., h'...776f726c64'>>
-         b1<<'Hello', ..., 'world'>>
+      h'48656c6c6f...776f726c64'
+      b1<<h'48656c6c6f...', ..., h'...776f726c64'>>
+      b1<<'Hello', ..., 'world'>>
 
 * If there is no ellipsis in the concatenated list, the result of
   processing the list will always be a single string data item.
 
+Creating Indefinite-length Encoded Strings: The "ilbs" and "ilts" Extensions {#ilxs}
+----------------------------------------------------------------------------
+
+The `ilbs` and `ilts` application extensions are semantically
+identical to `t1` and `b1` at the data model level, but instead of
+concatenating the arguments to a single (byte/text) string data item,
+they build an indefinite length string out of the arguments, with one
+chunk of the correct major type (byte string/text string for
+`ilbs`/`ilts`, respectively) created per argument.
+
+A diagnostic implementation would honor encoding indicators on each of
+the arguments, creating a chunk with the same encoding.
+As the application-extension is implying indefinite length encoding,
+there is no point in applying an encoding indicator to the entire
+application-extension literal.
+
+    'Hello world'                4b 48656c6c6f20776f726c64
+    ilbs<<>>                     5f ff
+    ilbs<<"Hello world">>        5f 4b 48656c6c6f20776f726c64 ff
+    ilbs<<'Hello ', "world">>    5f 46 48656c6c6f20 45 776f726c64 ff
+    ilbs<<'Hello '_0, 'world'>>  5f 5806 48656c6c6f20 45 776f726c64 ff
+
+There is no way to include ellipses in an indefinite length string.
 
 Concise Resource Identifiers: The "cri" Extension {#cri}
 --------------------
@@ -1893,6 +2023,12 @@ considered to be valid CDN by this ABNF, the mapping of these
 character strings into the generic data model of CBOR is not always
 obvious.
 
+[^move3]
+
+[^move3]: Further information can be moved up to Section 2 by
+    splitting it up into information specific to the ABNF grammar and
+    general information.
+
 The following additional items should help in the interpretation:
 
 1. As mentioned in the terminology ({{terminology}}), the ABNF terminal
@@ -1900,31 +2036,15 @@ The following additional items should help in the interpretation:
   rather than their UTF-8 encoding.  For example, the Unicode PLACE OF
   INTEREST SIGN (U+2318) would be defined in ABNF as %x2318.
 
-2. {: #cr} Unicode CARRIAGE RETURN characters (U+000D, often seen
-  escaped as "\r" in many
-  programming languages) that exist in the input (unescaped) are
-  ignored as if they were not in the input wherever they appear.
-  This is most important when they are found in (text or byte) string
-  contexts (see the "unescaped" ABNF rule).
-  On some platforms, a carriage return is always added in front of a
-  LINE FEED (U+000A, also often seen escaped as "\n" in many
-  programming languages), but on other platforms, carriage returns are
-  not used at line breaks.
-  The intent behind ignoring unescaped carriage returns is to ensure
-  that input generated or processed on either of these kinds of
-  platforms will generate the same bytes in the CBOR data items
-  created from that input.
-  (Platforms that use just a CARRIAGE RETURN by itself to signify an end of line
-  are no longer relevant and the files they produce are out of scope
-  for this document.)
-  If a carriage return is needed in the CBOR data item, it can be
-  added explicitly using the escaped form `\r`.
-
+2. {: #cr} See {{repertoire}} for more considerations about the
+  character repertoire used for CDN source text and, in particular,
+  the special handling of newline characters in the source.
+  
 3. {: #decnumber}
   `decnumber` stands for an integer in the usual decimal notation, unless at
   least one of the optional parts starting with "." and "e" are
   present, in which case it stands for a floating point value in the
-  usual decimal notation.  Note that the grammar now allows `3.` for
+  usual decimal notation.  Note that the grammar allows `3.` for
   `3.0` and `.3` for `0.3` (also for hexadecimal floating point
   below); implementers are advised that some platform numeric parsers
   accept only a subset of the floating point syntax in this document
@@ -1972,14 +2092,12 @@ The following additional items should help in the interpretation:
 
 7. {: #rawstring-grammar}
   The ABNF grammar for raw strings is lenient; a parser needs to
-  implement the ABNF comments on `matchrawdelim` and `shortrawdelim` as
+  implement the ABNF comments on `alikerawdelim` and `shortrawdelim` as
   well.
   `shortrawdelim` only matches sequences of backquotes that are
   shorter than `startrawdelim`.
-  `matchrawdelim` only matches sequences of backquotes that are as
-  long or longer than `startrawdelim`.
-  Any excess number of backquotes in `matchrawdelim` are added to the
-  string content.
+  `alikerawdelim` only matches sequences of backquotes that are
+  exactly as long as `startrawdelim`.
 
   {:aside}
   > In a PEG parser that implements predicates, these matching rules
@@ -1987,21 +2105,8 @@ The following additional items should help in the interpretation:
   >
   >      startrawdelim = rawdelim&{|(rd)|@rdlen = rd.text_value.length}
   >      shortrawdelim = rawdelim&{|(rd)|rd.text_value.length < @rdlen}
-  >      matchrawdelim = rawdelim&{|(rd)|rd.text_value.length >= @rdlen}
+  >      alikerawdelim = rawdelim&{|(rd)|rd.text_value.length == @rdlen}
 
-
-### Discussion {#plus-discussion}
-<!-- This section will be fixed in the t1/b1 PR -->
-
-Note that the syntax defined here for concatenation of components
-uses an explicit `+` operator between the components to be
-concatenated.
-
-{:aside}
-> This is not entirely backward compatible to {{Section G.4 of -cddl}},
-> which used simple juxtaposition to indicate concatenation of strings.
-> This was not widely implemented and got in the way of making the use
-> of commas optional in other places via the rule `SOC`.
 
 ABNF Definitions for Application Extension Content {#app-grammars}
 ---------------------------------------
@@ -2376,23 +2481,14 @@ title="ABNF Definitions Useful for Integrated Extension Parsers"}
 
 Similarly, for integrated parsers for extension literals built from raw strings, the ABNF
 definitions in {{abnf-grammar-rs}} can be useful.
-`fitrawdelim` only matches sequences of backquotes that are exactly as
+`alikerawdelim` only matches sequences of backquotes that are exactly as
 long as a previous `startrawdelim`.
 
 ~~~ abnf
-fitrawdelim  = rawdelim ; width == previous startrawdelim
 r-non-lf = %x0D / %x20-5f / %x61-7f / NONASCII / shortrawdelim
 ~~~
 {: #abnf-grammar-rs sourcecode-name="cdn-raw-intcommon.abnf"
 title="ABNF Definitions Useful for Raw String Integrated Extension Parsers"}
-
-
-  {:aside}
-  > In a PEG parser that implements predicates, the matching rule for fitrawdelim
-  > can for instance be implemented as follows:
-  >
-  >      fitrawdelim = rawdelim&{|(rd)|rd.text_value.length == @rdlen}
-
 
 Four subsections with ABNF for integrated parsers follow, a pair for
 `h''` and `b64''`, and a pair for ``` h`` ``` and ``` b64`` ```.
@@ -2468,7 +2564,7 @@ be used as an integrated parser for ``` h ``` prefixed raw strings.
 ~~~ abnf
 raw-app-string-h = %s"h" startrawdelim r-app-string-h
 r-app-string-h = rh-S *(HEXDIG rh-S HEXDIG rh-S / ellipsis rh-S)
-    (eol-comment *r-non-lf matchrawdelim / fitrawdelim)
+    (eol-comment *r-non-lf alikerawdelim / alikerawdelim)
 rh-S = *(lblank) *(rh-comment *(lblank))
 rh-2 = %x61-7f / NONASCII / shortrawdelim
 rh-non-slash = lblank / %x21-2e / %x30-5f / rh-2
@@ -2500,7 +2596,7 @@ raw-app-string-b64 = %s"b64" startrawdelim r-app-string-b64
 r-app-string-b64  = rb64-S *(4(b64dig rb64-S))
                   [b64dig rb64-S b64dig rb64-S
                    ["=" rb64-S "=" / b64dig rb64-S ["="]] rb64-S]
-                  ("#" *r-non-lf matchrawdelim / fitrawdelim)
+                  ("#" *r-non-lf alikerawdelim / alikerawdelim)
 rb64-S           = *lblank *(rb64-comment *lblank)
 rb64-comment     = "#" *r-non-lf %x0A
 ~~~
@@ -2573,6 +2669,7 @@ initial entries have the Change Controller "IETF".
 | true                             | Reserved                        | RFC-XXXX         |
 | null                             | Reserved                        | RFC-XXXX         |
 | undefined                        | Reserved                        | RFC-XXXX         |
+| pragma                           | Reserved for future use         | RFC-XXXX         |
 | dt                               | Date/Time                       | RFC-XXXX         |
 | ip                               | IP Address/Prefix               | RFC-XXXX         |
 | hash                             | Cryptographic Hash              | RFC-XXXX         |
