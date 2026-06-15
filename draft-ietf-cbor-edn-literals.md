@@ -114,9 +114,6 @@ informative:
     date: 2021-10-01
     refcontent:
     - Revision 1.2.2
-  ABNFROB:
-    target: https://github.com/cabo/abnftt
-    title: PEG-parsing using ABNF grammars (via treetop)
   CDN-WIKI:
     target: https://github.com/cbor-wg/edn/wiki
     title: CDN Wiki
@@ -167,9 +164,10 @@ previous descriptions, and is known as Concise Diagnostic Notation (CDN).
 Diagnostic notation syntax is based on JSON, with extensions
 for representing CBOR constructs such as binary data and tags.
 
-Standardizing CDN in addition to the actual binary interchange format CBOR does
-not serve to create a competing interchange format, but enables the use of
-a shared diagnostic notation in tools for and in documents about CBOR.
+The interchange format created by standardizing CDN is not intended to
+compete with the actual binary interchange format CBOR, but enables
+the use of a shared diagnostic notation in tools for and in documents
+about CBOR.
 Still, between tools for CBOR development and diagnosis, document
 generation systems, continuous integration (CI)
 environments, configuration files, and user interfaces for viewing and
@@ -216,7 +214,7 @@ interaction between tools is often smoother if media types can be used.
 >
 > * `cbor` (which is actually not useful, as CBOR is a binary format
 >   and cannot be used in textual examples in an RFC),
-> * `cbor-diag` (which is another name for CDN, as defined in the
+> * `cbor-diag` (which is another name for CDN, as is now defined in the
 >   present document),
 > * `cbor-pretty` (which is a possibly annotated and pretty-printed
 >   hexdump of an encoded CBOR data item, along the lines of the
@@ -250,7 +248,7 @@ the present document its name.
 After introductory material, {{app-ext}}
 illustrates the concept of application-oriented extension literals by
 defining the "dt", "ip", "hash", and "cri" extensions.
-{{stand-in}} defines mechanisms
+{{cdn-tags}} defines mechanisms
 for dealing with unknown application-oriented literals and
 deliberately elided information.
 {{grammars}} gives the formal syntax of CDN in ABNF, with
@@ -275,9 +273,7 @@ The diagnostic notation extensions include popular features such as
 embedded CBOR (encoded CBOR data items in byte strings) and comments.
 A simple diagnostic notation extension that enables representing CBOR
 sequences was added in {{Section 4.2 of -seq}}.
-As diagnostic notation is not used in the kind of interchange
-situations where backward compatibility would pose a significant
-obstacle, there is little point in not using these extensions; as at
+As at
 least some elements of the extended form are now near-universally
 used, the terms "diagnostic notation" and "extended diagnostic
 notation" have become synonyms in the context of CBOR, with "concise
@@ -350,7 +346,8 @@ However, there are even more representation variants in CDN than in
 binary CBOR, and there is little point in specifically endorsing a
 single variant as "deterministic" when other variants may be more
 useful for human understanding, e.g., the `<< >>` notation as
-opposed to `h''`; a CDN generator may have quite a few options
+opposed to, say, hexadecimal `h''` notation;
+a CDN generator may have quite a few options
 that control what presentation variant is most desirable for the
 application that it is being used for.
 
@@ -398,6 +395,41 @@ test data.
 Information obtained from a CDDL model can help in choosing
 application-oriented literals or specific string representations such
 as embedded CBOR or `b64''` in the appropriate places.
+
+### Evolution {#evolution}
+
+Diagnostic notation is often used in interchange
+situations where backward compatibility is much less of a concern than
+in the kinds of interchanges enabled by binary CBOR.
+This meant that extensions to diagnostic notation could be introduced
+relatively freely in {{Appendix G of -cddl}} and in {{Section 4.2 of
+-seq}}.
+There was little point in not using these extensions for instance in the examples
+contained in specifications.
+With the landscape of CBOR related tools becoming more populated,
+this kind of evolution is now less desirable.
+
+For the CBOR representation format, {{Section 7.1 of RFC8949@-cbor}}
+introduced a limited number of specific _extension points_, in
+particular the concept of _tags_, to enable the introduction of new
+constructs such as data types without a need to update the base
+specification.
+
+The present specification follows suit by adding extension points to
+CDN, one very general one ({{app-lit}}) and one specific to diagnostic
+processing of encoding variants ({{encoding-indicators}}).
+
+From the relatively unconstrained way extensions were added in
+{{-cddl}}, the present specification also derives taking the liberty to
+make two changes to these extensions that are not entirely backwards
+compatible.
+{{comment-discussion}} and {{plus-discussion}} have more details.
+Changes of this kind would be unacceptable for the binary CBOR format
+itself, but can be OK just once now, considering the more permissive
+conditions under which the features that will suffer these changes
+were originally introduced.
+With CDN now featuring the new extension points, a need for this kind
+of changes should arise much less.
 
 Concise Diagnostic Notation (CDN) {#diagnostic-notation}
 =====================================================
@@ -462,9 +494,10 @@ _application-oriented extension literals_, or _extension literals_ for short.
 Extension literals start with a _prefix_ that identifies the
 application-oriented extension, immediately followed by a sequence
 literal ({{embedded}}) or a single-quoted or raw string literal ({{strings}}).
-The latter form uses its string literal as a shorthand
+The string-based forms use their string literal as a shorthand
 form for a sequence literal representing a sequence with exactly that
-one text string data item.
+one text string data item, e.g., ``b64`Zm9v` `` is a shorthand for
+`b64<<"Zm9v">>` or ``b64<<`Zm9v`>>``.
 
 {:aside}
 > This notation is generalized from
@@ -510,6 +543,8 @@ string, the input takes the form of a single text string CBOR data
 item.
 When used immediately in front of a sequence literal, the input is a
 CBOR sequence of elements of the sequence literal as input.
+(For a single parameter, this is equivalent to receiving a single CBOR
+data item as the argument.)
 The application extension can provide behavior that depends on the
 number of items supplied as input to it and their data types; it
 cannot distinguish between its prefix being used with a single-quoted
@@ -580,6 +615,21 @@ the use of inline and end-of-line comments:
 This reduces to `{1: 4, 3: 5, -1:
 h'6684523AB17337F173500E5728C628547CB37DFE68449C65F885D1B73B49EAE1'}`.
 
+A CDN file used for configuration might look like this (employing
+'//' end of line comments throughout and an ornamental C-Style comment at the start):
+
+~~~ cbor-diag
+/* ### MyApp Configuration
+ * John Example, 2026-06-09
+ */
+{
+  // Top-level config for the app
+  "appName": "MyApp", // short name shown in UI
+  "version": "1.2.0",
+  ...: ...
+}
+~~~
+
 {:aside}
 >
 Note that application-oriented extensions can define their own
@@ -594,29 +644,41 @@ alphabet in classic base64 encoding).
 None of the other application-oriented extensions supplied in this
 specification provides for such a kind of internal comment syntax.
 
-### Discussion
+### Discussion {#comment-discussion}
 
-As a backwards-incompatible change, this specification
-restricts slash-delimited comments that were allowed in {{Section G.6 of RFC8610}} in two ways:
+{{Section G.6 of RFC8610}} introduced comments into the diagnostic
+notation syntax, limited to inline comments using a bare "`/`" as the
+comment delimiter.
+It however also hinted at the potential desire to add
+end-of-line comments, mentioning both "`//`" and "`#`" as start delimiters.
+
+The present specification adds both, as well as C-style inline
+comments ("`/*`" and "`*/`" delimiters).
+
+This introduces a backwards-incompatible change, restricting
+slash-delimited comments that were allowed by {{Section G.6 of RFC8610}}
+in two ways:
 
 * Inline comments no longer can be empty: The construct "`//`" that was
   an empty comment in {{Section G.6 of RFC8610}} is now used instead to introduce an
   end-of-line comment.
   (Note that "`//`" still can be used in what is visually "within" a
-  slash-delimited comment; its first slash actually ends the current comment and
-  the second slash starts a new one.)
-* CDN now enables the use of C-style inline comments: for instance, "`/*foo/`"
+  slash-delimited comment like in the second example below; its first
+  slash actually ends the current comment and the second slash starts
+  a new one.)
+* Enabling the use of C-style inline comments can extend the scope of
+  what previously were parsed as slash-delimited comments: for instance, "`/*foo/`"
   was a complete comment in {{Section G.6 of RFC8610}} and now is the beginning of a
   C-style comment that goes on up to a "`*/`".
 
-As an example, the introduction of C-style inline comments enables a
+As an example for what is enabled by this change, the introduction of C-style inline comments enables a
 comment explaining a COSE algorithm identifier, as in
 
 ~~~ cbor-diag
 4 /* HMAC 256/64 */
 ~~~
 
-instead of the conventional, but often less familiar
+instead of the previously conventional, but often less familiar
 
 ~~~ cbor-diag
 4 / HMAC 256//64 /
@@ -888,7 +950,7 @@ This means the following are equivalent (the first `o` is escaped as
 
 ~~~ cbor-diag
 "D\u{6f}mino's \u{1F073} + \u{2318}"   # \u{}-escape 3 chars
-"Domino's \uD83C\uDC73 + \u2318"       # escape JSON-like
+"D\u006Fmino's \uD83C\uDC73 + \u2318"  # escape JSON-like
 "Domino's 🁳 + ⌘"                       # unescaped
 ~~~
 
@@ -917,6 +979,9 @@ certain escaping mechanisms available for double-quoted strings:
   compatibility feature is not available for them.
 * `\u`-based escapes are not available for characters in the range
   from U+0020 through U+007E (essentially, printable ASCII).
+
+All other escaping mechanisms that are available in double-quoted
+string literals are available in single-quoted string literals.
 
 Single-quoted string literals can occur unprefixed and stand for the
 byte string that encodes its text string value (the "content"), or be
@@ -1549,12 +1614,56 @@ is equivalent to
 See {{cri-grammar}} for an ABNF definition for the content of `cri` literals.
 
 
-Stand-in Representations in Binary CBOR {#stand-in}
-=======================================
+## The "float" Extension
+
+<!-- IEEE754-oriented literals for more floating point values -->
+
+The "`float`" application extension enables the notation of 2-byte,
+4-byte, and 8-byte byte strings to express floating point values
+(mt=7, ai=25/26/27 respectively) by giving their IEEE 754
+representation.
+A text string used as an argument is interpreted exactly as a hex
+literal (like the `h` application prefix); the result is used as the
+byte string.
+
+The application-oriented literal is interpreted as an encoded data
+item would be that prefixes the byte string by a single byte 0xF9
+(2 bytes, i.e., binary16), 0xFA (4 bytes, i.e., binary32), and 0xFB (8
+bytes, i.e., binary64), respectively.
+Byte strings of a different length than 2, 4, or 8 raise an error.
+Note that the interpretation as an encoded data item does not create
+or imply an encoding indicator; that can be added separately.
+
+Example (tool used: `edn-abnf -afloat -e`):
+
+~~~
+🔧 "[float'fe00', float'fe00'_2, float'47110815']" -tpretty ➔
+83             # array(3)
+   F9 FE00     # primitive(65024)
+   FA FFC00000 # primitive(4290772992)
+   FA 47110815 # primitive(1192298517)
+
+🔧 "[float'fe00', float'fe00'_2, float'47110815', 0x1.22102ap+15]" ➔
+[float'fe00', float'fe00'_2, 37128.08203125, 37128.08203125]
+~~~
+{: post="fold"}
+
+The purpose of this application extension is to close a gap in CDN's
+{{IEEE754}} binary64 support:
+Without this (or a similar) extension there is no way to represent NaN
+values different from the one called out at the end of {{Section 4.1 of
+RFC8949@-cbor}}: "(for many applications, the single NaN encoding
+0xf97e00 will suffice)".
+For finite floating point numbers, the decimal or hex floating point
+representations are preferred.
+
+
+Tag-based Representations of CDN Input in Binary CBOR {#cdn-tags}
+=====================================================
 
 In some cases, a CDN consumer cannot construct actual CBOR items that
 represent the CBOR data intended for eventual interchange.
-This document defines a stand-in representation for two such cases:
+This document defines a CBOR tags-based representation for two such cases:
 
 * The CDN consumer does not know (or does not implement) an
   application-extension identifier used in the CDN document
@@ -1574,7 +1683,7 @@ unknown to them, which the ones defined in this section likely are.
 Where chains of tools are involved in processing CDN, it may be useful
 to fail earlier than at the ultimate receiver in the chain unless
 specific processing options (e.g., command line flags) are given that
-indicate which of these stand-ins are expected at this stage in the
+indicate which of these CDN-related tags are expected at this stage in the
 chain.
 
 Handling unknown application-extension identifiers {#unknown}
@@ -1594,7 +1703,7 @@ stage of ingestion.
 
 This specification defines a CBOR Tag for this purpose:
 The Diagnostic Notation Unresolved Application-Extension Tag, tag
-number CPA999 ({{iana-standin}}).
+number CPA999 ({{iana-tags}}).
 The content of this tag is an array of a text string for the
 application-extension prefix, and another array:
 
@@ -1647,7 +1756,8 @@ However, it is useful to be able to process CDN documents with
 ellipses in the automation scripts for the documents using them.
 This specification defines a CBOR Tag that can be used in the ingestion
 for this purpose:
-The Diagnostic Notation Ellipsis Tag, tag number CPA888 ({{iana-standin}}).
+
+The Diagnostic Notation Ellipsis Tag, tag number CPA888 ({{iana-tags}}).
 The content of this tag is one of:
 
 1. null (indicating a data item entirely replaced by an ellipsis);
@@ -1669,12 +1779,12 @@ A single ellipsis (or key/value pair of ellipses) can imply eliding
 multiple elements in an array (members in a map). If more detailed
 control is required, a data definition language such as CDDL can be
 employed.
-(Note that the stand-in form defined here does not allow multiple
+(Note that the tag-based representation form defined here does not allow multiple
 key/value pairs with an ellipsis as a key: the CBOR data item would
 not be valid.)
 
 Subtree elisions can be represented in a CBOR data item by using
-`/CPA/888(null)` as the stand-in:
+`/CPA/888(null)` as the placeholder CBOR data item:
 
 ~~~ cbor-diag
 [1, 2, 888(null), 3]
@@ -1700,8 +1810,8 @@ The example
 "signature" uses special syntax that allows the use of ellipses
 between the bytes notated _inside_ `h''` literals.
 
-String elisions can be represented in a CBOR data item by a stand-in
-that wraps an array of string parts alternating with ellipsis
+String elisions can be represented in a CBOR data item by a tag CPA888
+that wraps an array containing string parts alternating with ellipsis
 indicators:
 
 ~~~ cbor-diag
@@ -1880,7 +1990,8 @@ The following additional items should help in the interpretation:
   >      matchrawdelim = rawdelim&{|(rd)|rd.text_value.length >= @rdlen}
 
 
-### Discussion
+### Discussion {#plus-discussion}
+<!-- This section will be fixed in the t1/b1 PR -->
 
 Note that the syntax defined here for concatenation of components
 uses an explicit `+` operator between the components to be
@@ -1925,6 +2036,8 @@ which are not always repeated here.
 | B1         | (not used)                                         |                                                   |
 | cri        | RFC 3986 URI or URI reference                      | CBOR structure representing equivalent CRI        |
 | CRI        | "                                                  | Tag 99 on the above                               |
+| float      | floating point value from input bytes              | floating point value (mt=7)                       |
+| FLOAT      | (not used)                                         |                                                   |
 {: #tab-prefixes title="App-prefix Values Defined in this Document"}
 
 Note that implementation platforms may already provide implementations
@@ -2283,14 +2396,14 @@ title="ABNF Definitions Useful for Raw String Integrated Extension Parsers"}
 
 Four subsections with ABNF for integrated parsers follow, a pair for
 `h''` and `b64''`, and a pair for ``` h`` ``` and ``` b64`` ```.
-There is no requirement for a new application-extension to supply ABNF
+There is no expectation for a new application-extension to supply ABNF
 for an integrated parser (or any ABNF at all!), in particular if the
 parsing function is likely to be fulfilled by a platform library.
 If ABNF for the content of a single-quoted string is available in an
 application-extension specification, ABNF for an integrated parser can
-be written as a separate activity or also automatically derived.
-At the time of writing, one example for a tool performing such a
-derivation is available as open-source software {{ABNFROB}}.
+be written as a separate activity or also automatically derived (see
+also {{CDN-WIKI}}, where more information about implementing integrated
+parsers is being collected).
 
 ### h'': ABNF Definition of Integrated Parser {#sq-h-grammar}
 
@@ -2418,11 +2531,11 @@ The experts are instructed to be frugal in the allocation of
 application-extension identifiers that are suggestive of generally applicable semantics,
 keeping them in reserve for application-extensions that are likely to enjoy wide
 use and can make good use of their conciseness.
-The expert is also instructed to direct the registrant to provide a
+The experts are also instructed to direct the registrant to provide a
 specification ({{Section 4.6 of RFC8126@-ianacons}}), but can make exceptions,
 for instance when a specification is not available at the time of
 registration but is likely forthcoming.
-If the expert becomes aware of application-extension identifiers that are deployed and
+If the experts become aware of application-extension identifiers that are deployed and
 in use, they may also initiate a registration on their own if
 they deem such a registration can avert potential future collisions.
 {: #de-instructions}
@@ -2466,10 +2579,9 @@ initial entries have the Change Controller "IETF".
 | b1                               | Byte String Concatenation       | RFC-XXXX         |
 | t1                               | Text String Concatenation       | RFC-XXXX         |
 | cri                              | Constrained Resource Identifier | RFC-XXXX, {{-cri}} |
+| float                            | Floating-Point Value            | RFC-XXXX         |
 {: #tab-iana title="Initial Content of Application-extension
 Identifier Registry"}
-
-
 
 ## Encoding Indicators {#reg-ei}
 
@@ -2482,7 +2594,7 @@ The experts are instructed to be frugal in the allocation of
 encoding indicators that are suggestive of generally applicable semantics,
 keeping them in reserve for encoding indicator registrations that are likely to enjoy wide
 use and can make good use of their conciseness.
-If the expert becomes aware of encoding indicators that are deployed and
+If the experts become aware of encoding indicators that are deployed and
 in use, they may also solicit a specification and initiate a registration on their own if
 they deem such a registration can avert potential future collisions.
 {: #de-instructions-ei}
@@ -2630,7 +2742,7 @@ TBD1 is to be assigned from the space 256..9999, according to the
 procedure "IETF Review or IESG Approval", preferably a number less
 than 1000.
 
-## Stand-in Tags {#iana-standin}
+## Tags {#iana-tags}
 
 [^cpa]
 
@@ -2648,24 +2760,43 @@ specification reference.
 Security considerations {#seccons}
 =======================
 
-The security considerations of {{-cbor}} and {{-cddl}} apply.
+The security considerations of {{-cbor}} apply, including by applying
+the considerations about the CBOR format to the CDN format in an
+analogous sense.
+Security considerations documented in {{-cddl}} for the CDDL language
+often are also applicable to the CDN language in an analogous sense.
 
-The CDN specification provides two explicit extension points,
+The CDN specification defines two explicit extension points:
 application-extension identifiers ({{appext-iana}}) and encoding
 indicators ({{reg-ei}}).
-Extensions introduced this way can have their own security
-considerations (see, e.g., {{Section 5 of -eref}}).
-When implementing tools that support the use of CDN extensions, the
-implementer needs to be careful not to inadvertently introduce a
-vector for an attacker to invoke extensions not planned for by the
-tool operator, who might not have considered security considerations
-of specific extensions such as those posed by their use of
-dereferenceable identifiers ({{Section 6 of -deref}}).
-For instance, tools might require explicitly enabling the use of each
-extension that is not on an allowlist.
-This task can possibly be
-made less onerous by combining it with a mechanism for supplying any
-parameters controlling such an extension.
+Extensions introduced through these can have their own security
+considerations, which need to be considered in the specification for
+the extension (see, e.g., {{Section 5 of -eref}}).
+
+Implementers of tools that support the use of CDN extensions need to
+avoid inadvertently introducing a vector that allows attackers to
+invoke extensions not planned for by the tool operator, who might not
+have considered security considerations of specific extensions such as
+those posed by their use of dereferenceable identifiers ({{Section 6 of
+-deref}}).
+
+Tools might require explicitly enabling the use of each extension that
+is not on an allowlist.
+(This task can possibly be made less onerous by combining it with a
+mechanism for supplying any parameters that control such an extension.)
+
+Tools that process application extensions — directly from their use in
+CDN or later via Tag CPA999 ({{unknown}}) — need to be configured out of
+band to enable processing each specific application extension only if
+that is desired.
+An allowlist built out of the mandatory-to-implement application
+extensions may be an exception.
+
+Similarly, inputs to validators may be prepared with partially
+specified subtrees by representing ellipses via Tag CPA888
+({{elision}}).
+Validators that want to accept such partially specified CBOR data
+items need to require explicit configuration to do so.
 
 --- back
 
