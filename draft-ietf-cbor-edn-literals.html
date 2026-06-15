@@ -5088,23 +5088,37 @@ specification reference.<a href="#section-6.5-2" class="pilcrow">¶</a></p>
       <h2 id="name-security-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security considerations</a>
       </h2>
-<p id="section-7-1">The security considerations of <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> and <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> apply.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">The CDN specification provides two explicit extension points,
+<p id="section-7-1">The security considerations of <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> apply, including by applying
+the considerations about the CBOR format to the CDN format in an
+analogous sense.
+Security considerations documented in <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> for the CDDL language
+often are also applicable to the CDN language in an analogous sense.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">The CDN specification defines two explicit extension points:
 application-extension identifiers (<a href="#appext-iana" class="auto internal xref">Section 6.1</a>) and encoding
 indicators (<a href="#reg-ei" class="auto internal xref">Section 6.2</a>).
-Extensions introduced this way can have their own security
-considerations (see, e.g., <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-e-ref-03#section-5" class="relref">Section 5</a> of [<a href="#I-D.ietf-cbor-edn-e-ref" class="cite xref">I-D.ietf-cbor-edn-e-ref</a>]</span>).
-When implementing tools that support the use of CDN extensions, the
-implementer needs to be careful not to inadvertently introduce a
-vector for an attacker to invoke extensions not planned for by the
-tool operator, who might not have considered security considerations
-of specific extensions such as those posed by their use of
-dereferenceable identifiers (<span><a href="https://datatracker.ietf.org/doc/html/draft-bormann-t2trg-deref-id-07#section-6" class="relref">Section 6</a> of [<a href="#I-D.bormann-t2trg-deref-id" class="cite xref">I-D.bormann-t2trg-deref-id</a>]</span>).
-For instance, tools might require explicitly enabling the use of each
-extension that is not on an allowlist.
-This task can possibly be
-made less onerous by combining it with a mechanism for supplying any
-parameters controlling such an extension.<a href="#section-7-2" class="pilcrow">¶</a></p>
+Extensions introduced through these can have their own security
+considerations, which need to be considered in the specification for
+the extension (see, e.g., <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-e-ref-03#section-5" class="relref">Section 5</a> of [<a href="#I-D.ietf-cbor-edn-e-ref" class="cite xref">I-D.ietf-cbor-edn-e-ref</a>]</span>).<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">Implementers of tools that support the use of CDN extensions need to
+avoid inadvertently introducing a vector that allows attackers to
+invoke extensions not planned for by the tool operator, who might not
+have considered security considerations of specific extensions such as
+those posed by their use of dereferenceable identifiers (<span><a href="https://datatracker.ietf.org/doc/html/draft-bormann-t2trg-deref-id-07#section-6" class="relref">Section 6</a> of [<a href="#I-D.bormann-t2trg-deref-id" class="cite xref">I-D.bormann-t2trg-deref-id</a>]</span>).<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-4">Tools might require explicitly enabling the use of each extension that
+is not on an allowlist.
+(This task can possibly be made less onerous by combining it with a
+mechanism for supplying any parameters that control such an extension.)<a href="#section-7-4" class="pilcrow">¶</a></p>
+<p id="section-7-5">Tools that process application extensions — directly from their use in
+CDN or later via Tag CPA999 (<a href="#unknown" class="auto internal xref">Section 4.1</a>) — need to be configured out of
+band to enable processing each specific application extension only if
+that is desired.
+An allowlist built out of the mandatory-to-implement application
+extensions may be an exception.<a href="#section-7-5" class="pilcrow">¶</a></p>
+<p id="section-7-6">Similarly, inputs to validators may be prepared with partially
+specified subtrees by representing ellipses via Tag CPA888
+(<a href="#elision" class="auto internal xref">Section 4.2</a>).
+Validators that want to accept such partially specified CBOR data
+items need to require explicit configuration to do so.<a href="#section-7-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">

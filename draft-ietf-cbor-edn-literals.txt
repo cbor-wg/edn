@@ -178,8 +178,8 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .  63
      8.2.  Informative References  . . . . . . . . . . . . . . . . .  66
    Appendix A.  CDN and CDDL . . . . . . . . . . . . . . . . . . . .  68
-   List of Figures . . . . . . . . . . . . . . . . . . . . . . . . .  69
-   List of Tables  . . . . . . . . . . . . . . . . . . . . . . . . .  69
+   List of Figures . . . . . . . . . . . . . . . . . . . . . . . . .  70
+   List of Tables  . . . . . . . . . . . . . . . . . . . . . . . . .  70
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  70
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  70
 
@@ -3476,23 +3476,42 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 7.  Security considerations
 
-   The security considerations of [STD94] and [RFC8610] apply.
+   The security considerations of [STD94] apply, including by applying
+   the considerations about the CBOR format to the CDN format in an
+   analogous sense.  Security considerations documented in [RFC8610] for
+   the CDDL language often are also applicable to the CDN language in an
+   analogous sense.
 
-   The CDN specification provides two explicit extension points,
+   The CDN specification defines two explicit extension points:
    application-extension identifiers (Section 6.1) and encoding
-   indicators (Section 6.2).  Extensions introduced this way can have
-   their own security considerations (see, e.g., Section 5 of
-   [I-D.ietf-cbor-edn-e-ref]).  When implementing tools that support the
-   use of CDN extensions, the implementer needs to be careful not to
-   inadvertently introduce a vector for an attacker to invoke extensions
-   not planned for by the tool operator, who might not have considered
-   security considerations of specific extensions such as those posed by
-   their use of dereferenceable identifiers (Section 6 of
-   [I-D.bormann-t2trg-deref-id]).  For instance, tools might require
-   explicitly enabling the use of each extension that is not on an
-   allowlist.  This task can possibly be made less onerous by combining
-   it with a mechanism for supplying any parameters controlling such an
-   extension.
+   indicators (Section 6.2).  Extensions introduced through these can
+   have their own security considerations, which need to be considered
+   in the specification for the extension (see, e.g., Section 5 of
+   [I-D.ietf-cbor-edn-e-ref]).
+
+   Implementers of tools that support the use of CDN extensions need to
+   avoid inadvertently introducing a vector that allows attackers to
+   invoke extensions not planned for by the tool operator, who might not
+   have considered security considerations of specific extensions such
+   as those posed by their use of dereferenceable identifiers (Section 6
+   of [I-D.bormann-t2trg-deref-id]).
+
+   Tools might require explicitly enabling the use of each extension
+   that is not on an allowlist.  (This task can possibly be made less
+   onerous by combining it with a mechanism for supplying any parameters
+   that control such an extension.)
+
+   Tools that process application extensions — directly from their use
+   in CDN or later via Tag CPA999 (Section 4.1) — need to be configured
+   out of band to enable processing each specific application extension
+   only if that is desired.  An allowlist built out of the mandatory-to-
+   implement application extensions may be an exception.
+
+   Similarly, inputs to validators may be prepared with partially
+   specified subtrees by representing ellipses via Tag CPA888
+   (Section 4.2).  Validators that want to accept such partially
+   specified CBOR data items need to require explicit configuration to
+   do so.
 
 8.  References
 
@@ -3501,6 +3520,15 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    [BCP14]    Best Current Practice 14,
               <https://www.rfc-editor.org/info/bcp14>.
               At the time of writing, this BCP comprises the following:
+
+
+
+
+
+Bormann                 Expires 17 December 2026               [Page 63]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
 
               Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -3519,16 +3547,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
               Writing an IANA Considerations Section in RFCs", BCP 26,
               RFC 8126, DOI 10.17487/RFC8126, June 2017,
               <https://www.rfc-editor.org/info/rfc8126>.
-
-
-
-
-
-
-Bormann                 Expires 17 December 2026               [Page 63]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
 
    [C]        International Organization for Standardization,
               "Information technology — Programming languages — C",
@@ -3558,6 +3576,16 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
               href-30>.
 
+
+
+
+
+
+Bormann                 Expires 17 December 2026               [Page 64]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
+
    [IANA.cbor-tags]
               IANA, "Concise Binary Object Representation (CBOR) Tags",
               <https://www.iana.org/assignments/cbor-tags>.
@@ -3578,13 +3606,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    [IEEE754]  IEEE, "IEEE Standard for Floating-Point Arithmetic", IEEE
               Std 754-2019, DOI 10.1109/IEEESTD.2019.8766229,
               <https://ieeexplore.ieee.org/document/8766229>.
-
-
-
-Bormann                 Expires 17 December 2026               [Page 64]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
 
    [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
               Timestamps", RFC 3339, DOI 10.17487/RFC3339, July 2002,
@@ -3612,6 +3633,15 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
               Prefixes", RFC 9164, DOI 10.17487/RFC9164, December 2021,
               <https://www.rfc-editor.org/rfc/rfc9164>.
 
+
+
+
+
+Bormann                 Expires 17 December 2026               [Page 65]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
+
    [RFC9485]  Bormann, C. and T. Bray, "I-Regexp: An Interoperable
               Regular Expression Format", RFC 9485,
               DOI 10.17487/RFC9485, October 2023,
@@ -3633,14 +3663,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
               Specifications: ABNF", STD 68, RFC 5234,
               DOI 10.17487/RFC5234, January 2008,
               <https://www.rfc-editor.org/info/rfc5234>.
-
-
-
-
-Bormann                 Expires 17 December 2026               [Page 65]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
 
    [STD80]    Internet Standard 80,
               <https://www.rfc-editor.org/info/std80>.
@@ -3666,6 +3688,16 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
    [CDN-WIKI] "CDN Wiki", n.d., <https://github.com/cbor-wg/edn/wiki>.
 
+
+
+
+
+
+Bormann                 Expires 17 December 2026               [Page 66]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
+
    [I-D.bormann-cbor-numbers]
               Bormann, C., "On Numbers in CBOR", Work in Progress,
               Internet-Draft, draft-bormann-cbor-numbers-03, 1 March
@@ -3689,14 +3721,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
               Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
               <https://www.rfc-editor.org/rfc/rfc4648>.
-
-
-
-
-Bormann                 Expires 17 December 2026               [Page 66]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
 
    [RFC7049]  Bormann, C. and P. Hoffman, "Concise Binary Object
               Representation (CBOR)", RFC 7049, DOI 10.17487/RFC7049,
@@ -3722,6 +3746,14 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
               DOI 10.17487/RFC9290, October 2022,
               <https://www.rfc-editor.org/rfc/rfc9290>.
 
+
+
+
+Bormann                 Expires 17 December 2026               [Page 67]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
+
    [RFC9512]  Polli, R., Wilde, E., and E. Aro, "YAML Media Type",
               RFC 9512, DOI 10.17487/RFC9512, February 2024,
               <https://www.rfc-editor.org/rfc/rfc9512>.
@@ -3743,16 +3775,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
               Interchange Format", STD 90, RFC 8259,
               DOI 10.17487/RFC8259, December 2017,
               <https://www.rfc-editor.org/info/rfc8259>.
-
-
-
-
-
-
-Bormann                 Expires 17 December 2026               [Page 67]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
 
    [YAML]     Ben-Kiki, O., Evans, C., and I. döt Net, "YAML Ain't
               Markup Language (YAML™) Version 1.2", Revision 1.2.2, 1
@@ -3778,6 +3800,16 @@ Appendix A.  CDN and CDDL
 
    *  CDDL syntax is inspired by ABNF's syntax [STD68].
 
+
+
+
+
+
+Bormann                 Expires 17 December 2026               [Page 68]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
+
    For engineers that are using both CDN and CDDL, it is easy to write
    "CDDLisms" or "CDNisms" into their drafts that are meant to be in the
    other language.  (This is one more of the many motivations to always
@@ -3799,16 +3831,6 @@ Appendix A.  CDN and CDDL
              -7 # ECDSA 256
          }
       CDDL:  ? 1 => int / tstr, ; algorithm identifier
-
-
-
-
-
-
-Bormann                 Expires 17 December 2026               [Page 68]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
 
    *  Syntax for tags.  CDDL's tag syntax is part of the system for
       referring to CBOR's fundamentals (the major type 6, in this case)
@@ -3835,6 +3857,15 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
       CDDL:  serialized_map = bytes .cbor header_map
 
+
+
+
+
+Bormann                 Expires 17 December 2026               [Page 69]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
+
 List of Figures
 
    Figure 1:  Overall ABNF Definition of CDN
@@ -3858,14 +3889,6 @@ List of Tables
 
    Table 1:   Examples of Definite Length Encoding Indicators for
               Different Data Items
-
-
-
-Bormann                 Expires 17 December 2026               [Page 69]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
-
    Table 2:   Example Sets of Equivalent Notations for Some Numbers
    Table 3:   Encoding indicators on floating point values
    Table 4:   dt and DT literals vs. plain CDN
@@ -3888,6 +3911,16 @@ Acknowledgements
    (TBD)
 
 Author's Address
+
+
+
+
+
+
+Bormann                 Expires 17 December 2026               [Page 70]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
 
    Carsten Bormann
    Universität Bremen TZI
@@ -3917,4 +3950,27 @@ Author's Address
 
 
 
-Bormann                 Expires 17 December 2026               [Page 70]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bormann                 Expires 17 December 2026               [Page 71]
