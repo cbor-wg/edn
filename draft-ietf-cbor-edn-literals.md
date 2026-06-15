@@ -248,7 +248,7 @@ the present document its name.
 After introductory material, {{app-ext}}
 illustrates the concept of application-oriented extension literals by
 defining the "dt", "ip", "hash", and "cri" extensions.
-{{stand-in}} defines mechanisms
+{{cdn-tags}} defines mechanisms
 for dealing with unknown application-oriented literals and
 deliberately elided information.
 {{grammars}} gives the formal syntax of CDN in ABNF, with
@@ -1564,12 +1564,13 @@ RFC8949@-cbor}}: "(for many applications, the single NaN encoding
 For finite floating point numbers, the decimal or hex floating point
 representations are preferred.
 
-Stand-in Representations in Binary CBOR {#stand-in}
-=======================================
+
+Tag-based Representations of CDN Input in Binary CBOR {#cdn-tags}
+=====================================================
 
 In some cases, a CDN consumer cannot construct actual CBOR items that
 represent the CBOR data intended for eventual interchange.
-This document defines a stand-in representation for two such cases:
+This document defines a CBOR tags-based representation for two such cases:
 
 * The CDN consumer does not know (or does not implement) an
   application-extension identifier used in the CDN document
@@ -1589,7 +1590,7 @@ unknown to them, which the ones defined in this section likely are.
 Where chains of tools are involved in processing CDN, it may be useful
 to fail earlier than at the ultimate receiver in the chain unless
 specific processing options (e.g., command line flags) are given that
-indicate which of these stand-ins are expected at this stage in the
+indicate which of these CDN-related tags are expected at this stage in the
 chain.
 
 Handling unknown application-extension identifiers {#unknown}
@@ -1609,7 +1610,7 @@ stage of ingestion.
 
 This specification defines a CBOR Tag for this purpose:
 The Diagnostic Notation Unresolved Application-Extension Tag, tag
-number CPA999 ({{iana-standin}}).
+number CPA999 ({{iana-tags}}).
 The content of this tag is an array of a text string for the
 application-extension prefix, and another array:
 
@@ -1662,7 +1663,7 @@ However, it is useful to be able to process CDN documents with
 ellipses in the automation scripts for the documents using them.
 This specification defines a CBOR Tag that can be used in the ingestion
 for this purpose:
-The Diagnostic Notation Ellipsis Tag, tag number CPA888 ({{iana-standin}}).
+The Diagnostic Notation Ellipsis Tag, tag number CPA888 ({{iana-tags}}).
 The content of this tag either is
 
 1. null (indicating a data item entirely replaced by an ellipsis), or it is
@@ -1684,12 +1685,12 @@ A single ellipsis (or key/value pair of ellipses) can imply eliding
 multiple elements in an array (members in a map). If more detailed
 control is required, a data definition language such as CDDL can be
 employed.
-(Note that the stand-in form defined here does not allow multiple
+(Note that the tag-based representation form defined here does not allow multiple
 key/value pairs with an ellipsis as a key: the CBOR data item would
 not be valid.)
 
 Subtree elisions can be represented in a CBOR data item by using
-`/CPA/888(null)` as the stand-in:
+`/CPA/888(null)` as the placeholder CBOR data item:
 
 ~~~ cbor-diag
 [1, 2, 888(null), 3]
@@ -1715,8 +1716,8 @@ The example
 "signature" uses special syntax that allows the use of ellipses
 between the bytes notated _inside_ `h''` literals.
 
-String elisions can be represented in a CBOR data item by a stand-in
-that wraps an array of string parts alternating with ellipsis
+String elisions can be represented in a CBOR data item by a tag CPA888
+that wraps an array containing string parts alternating with ellipsis
 indicators:
 
 ~~~ cbor-diag
@@ -2703,7 +2704,7 @@ TBD1 is to be assigned from the space 256..9999, according to the
 procedure "IETF Review or IESG Approval", preferably a number less
 than 1000.
 
-## Stand-in Tags {#iana-standin}
+## Tags {#iana-tags}
 
 [^cpa]
 
