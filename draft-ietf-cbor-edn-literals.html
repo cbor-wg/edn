@@ -1285,6 +1285,9 @@ Group Last Call comments on <code>-25</code>.</span><a href="#section-abstract-4
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
                 <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-the-cri-extension" class="internal xref">The "cri" Extension</a></p>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-the-float-extension" class="internal xref">The "float" Extension</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
@@ -3257,6 +3260,46 @@ CRI'https://example.com/bottarga/shaved'
 <p id="section-3.4-8">See <a href="#cri-grammar" class="auto internal xref">Section 5.2.5</a> for an ABNF definition for the content of <code>cri</code> literals.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="the-float-extension">
+<section id="section-3.5">
+        <h3 id="name-the-float-extension">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-the-float-extension" class="section-name selfRef">The "float" Extension</a>
+        </h3>
+<p id="section-3.5-1">The "<code>float</code>" application extension enables the notation of 2-byte,
+4-byte, and 8-byte byte strings to express floating point values
+(mt=7, ai=25/26/27 respectively) by giving their IEEE 754
+representation.
+A text string used as an argument is interpreted exactly as a hex
+literal (like the <code>h</code> application prefix); the result is used as the
+byte string.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-2">The application-oriented literal is interpreted as an encoded data
+item would be that prefixes the byte string by a single byte 0xF9
+(2 bytes, i.e., binary16), 0xFA (4 bytes, i.e., binary32), and 0xFB (8
+bytes, i.e., binary64), respectively.
+Byte strings of a different length than 2, 4, or 8 raise an error.
+Note that the interpretation as an encoded data item does not create
+or imply an encoding indicator; that can be added separately.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+<p id="section-3.5-3">Example (tool used: <code>edn-abnf -afloat -e</code>):<a href="#section-3.5-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.5-4">
+<pre>🔧 "[float'fe00', float'fe00'_2, float'47110815']" -tpretty ➔
+83             # array(3)
+   F9 FE00     # primitive(65024)
+   FA FFC00000 # primitive(4290772992)
+   FA 47110815 # primitive(1192298517)
+
+🔧 "[float'fe00', float'fe00'_2, float'47110815', 0x1.22102ap+15]" ➔
+[float'fe00', float'fe00'_2, 37128.08203125, 37128.08203125]
+</pre><a href="#section-3.5-4" class="pilcrow">¶</a>
+</div>
+<p id="section-3.5-5">The purpose of this application extension is to close a gap in CDN's
+<span>[<a href="#IEEE754" class="cite xref">IEEE754</a>]</span> binary64 support:
+Without this (or a similar) extension there is no way to represent NaN
+values different from the one called out at the end of Section <a href="https://rfc-editor.org/rfc/rfc8949#section-4.1" class="relref">4.1</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>: "(for many applications, the single NaN encoding
+0xf97e00 will suffice)".
+For finite floating point numbers, the decimal or hex floating point
+representations are preferred.<a href="#section-3.5-5" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="stand-in">
@@ -3977,6 +4020,16 @@ which are not always repeated here.<a href="#section-5.2-1" class="pilcrow">¶</
               <td class="text-left" rowspan="1" colspan="1">"</td>
               <td class="text-left" rowspan="1" colspan="1">Tag 99 on the above</td>
             </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">float</td>
+              <td class="text-left" rowspan="1" colspan="1">floating point value from input bytes</td>
+              <td class="text-left" rowspan="1" colspan="1">floating point value (mt=7)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">FLOAT</td>
+              <td class="text-left" rowspan="1" colspan="1">(not used)</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
           </tbody>
         </table>
 </div>
@@ -4661,6 +4714,11 @@ initial entries have the Change Controller "IETF".<a href="#section-6.1-5" class
               <td class="text-left" rowspan="1" colspan="1">Constrained Resource Identifier</td>
               <td class="text-left" rowspan="1" colspan="1">RFC-XXXX, <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>
 </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">float</td>
+              <td class="text-left" rowspan="1" colspan="1">Floating-Point Value</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC-XXXX</td>
             </tr>
           </tbody>
         </table>
