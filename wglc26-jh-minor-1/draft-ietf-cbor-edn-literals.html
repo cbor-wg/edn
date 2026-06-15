@@ -1058,7 +1058,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Bormann</td>
-<td class="center">Expires 12 December 2026</td>
+<td class="center">Expires 17 December 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1074,12 +1074,12 @@ svg {
 <a href="https://www.rfc-editor.org/rfc/rfc8610" class="eref">8610</a>, <a href="https://www.rfc-editor.org/rfc/rfc8949" class="eref">8949</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-06-10" class="published">10 June 2026</time>
+<time datetime="2026-06-15" class="published">15 June 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-12-12">12 December 2026</time></dd>
+<dd class="expires"><time datetime="2026-12-17">17 December 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1140,7 +1140,7 @@ Group Last Call comments on <code>-25</code>.</span><a href="#section-abstract-4
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1189,6 +1189,9 @@ Group Last Call comments on <code>-25</code>.</span><a href="#section-abstract-4
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3.2.3">
                     <p id="section-toc.1-1.1.2.3.2.3.1"><a href="#section-1.3.3" class="auto internal xref">1.3.3</a>.  <a href="#name-basic-output-format" class="internal xref">Basic Output Format</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3.2.4">
+                    <p id="section-toc.1-1.1.2.3.2.4.1"><a href="#section-1.3.4" class="auto internal xref">1.3.4</a>.  <a href="#name-evolution" class="internal xref">Evolution</a></p>
 </li>
                 </ul>
 </li>
@@ -1282,10 +1285,13 @@ Group Last Call comments on <code>-25</code>.</span><a href="#section-abstract-4
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
                 <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-the-cri-extension" class="internal xref">The "cri" Extension</a></p>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-the-float-extension" class="internal xref">The "float" Extension</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-stand-in-representations-in" class="internal xref">Stand-in Representations in Binary CBOR</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-tag-based-representations-o" class="internal xref">Tag-based Representations of CDN Input in Binary CBOR</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-handling-unknown-applicatio" class="internal xref">Handling unknown application-extension identifiers</a></p>
@@ -1361,7 +1367,7 @@ Group Last Call comments on <code>-25</code>.</span><a href="#section-abstract-4
                 <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="auto internal xref">6.4</a>.  <a href="#name-content-format" class="internal xref">Content-Format</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5">
-                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="auto internal xref">6.5</a>.  <a href="#name-stand-in-tags" class="internal xref">Stand-in Tags</a></p>
+                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="auto internal xref">6.5</a>.  <a href="#name-tags-2" class="internal xref">Tags</a></p>
 </li>
             </ul>
 </li>
@@ -1505,7 +1511,7 @@ the present document its name.<a href="#section-1.1-1" class="pilcrow">¶</a></p
 <p id="section-1.1-2">After introductory material, <a href="#app-ext" class="auto internal xref">Section 3</a>
 illustrates the concept of application-oriented extension literals by
 defining the "dt", "ip", "hash", and "cri" extensions.
-<a href="#stand-in" class="auto internal xref">Section 4</a> defines mechanisms
+<a href="#cdn-tags" class="auto internal xref">Section 4</a> defines mechanisms
 for dealing with unknown application-oriented literals and
 deliberately elided information.
 <a href="#grammars" class="auto internal xref">Section 5</a> gives the formal syntax of CDN in ABNF, with
@@ -1534,9 +1540,7 @@ The diagnostic notation extensions include popular features such as
 embedded CBOR (encoded CBOR data items in byte strings) and comments.
 A simple diagnostic notation extension that enables representing CBOR
 sequences was added in <span><a href="https://rfc-editor.org/rfc/rfc8742#section-4.2" class="relref">Section 4.2</a> of [<a href="#RFC8742" class="cite xref">RFC8742</a>]</span>.
-As diagnostic notation is not used in the kind of interchange
-situations where backward compatibility would pose a significant
-obstacle, there is little point in not using these extensions; as at
+As at
 least some elements of the extended form are now near-universally
 used, the terms "diagnostic notation" and "extended diagnostic
 notation" have become synonyms in the context of CBOR, with "concise
@@ -1675,6 +1679,41 @@ test data.
 Information obtained from a CDDL model can help in choosing
 application-oriented literals or specific string representations such
 as embedded CBOR or <code>b64''</code> in the appropriate places.<a href="#section-1.3.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="evolution">
+<section id="section-1.3.4">
+          <h4 id="name-evolution">
+<a href="#section-1.3.4" class="section-number selfRef">1.3.4. </a><a href="#name-evolution" class="section-name selfRef">Evolution</a>
+          </h4>
+<p id="section-1.3.4-1">Diagnostic notation is often used in interchange
+situations where backward compatibility is much less of a concern than
+in the kinds of interchanges enabled by binary CBOR.
+This meant that extensions to diagnostic notation could be introduced
+relatively freely in <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G" class="relref">Appendix G</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> and in <span><a href="https://rfc-editor.org/rfc/rfc8742#section-4.2" class="relref">Section 4.2</a> of [<a href="#RFC8742" class="cite xref">RFC8742</a>]</span>.
+There was little point in not using these extensions for instance in the examples
+contained in specifications.
+With the landscape of CBOR related tools becoming more populated,
+this kind of evolution is now less desirable.<a href="#section-1.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-1.3.4-2">For the CBOR representation format, Section <a href="https://rfc-editor.org/rfc/rfc8949#section-7.1" class="relref">7.1</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>
+introduced a limited number of specific <em>extension points</em>, in
+particular the concept of <em>tags</em>, to enable the introduction of new
+constructs such as data types without a need to update the base
+specification.<a href="#section-1.3.4-2" class="pilcrow">¶</a></p>
+<p id="section-1.3.4-3">The present specification follows suit by adding extension points to
+CDN, one very general one (<a href="#app-lit" class="auto internal xref">Section 2.1</a>) and one specific to diagnostic
+processing of encoding variants (<a href="#encoding-indicators" class="auto internal xref">Section 2.3</a>).<a href="#section-1.3.4-3" class="pilcrow">¶</a></p>
+<p id="section-1.3.4-4">From the relatively unconstrained way extensions were added in
+<span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>, the present specification also derives taking the liberty to
+make two changes to these extensions that are not entirely backwards
+compatible.
+<a href="#comment-discussion" class="auto internal xref">Section 2.2.1</a> and <a href="#plus-discussion" class="auto internal xref">Section 5.1.1</a> have more details.
+Changes of this kind would be unacceptable for the binary CBOR format
+itself, but can be OK just once now, considering the more permissive
+conditions under which the features that will suffer these changes
+were originally introduced.
+With CDN now featuring the new extension points, a need for this kind
+of changes should arise much less.<a href="#section-1.3.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1891,40 +1930,50 @@ alphabet in classic base64 encoding).
 None of the other application-oriented extensions supplied in this
 specification provides for such a kind of internal comment syntax.<a href="#section-2.2-12.1" class="pilcrow">¶</a></p>
 </aside>
-<div id="discussion">
+<div id="comment-discussion">
 <section id="section-2.2.1">
           <h4 id="name-discussion">
 <a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-discussion" class="section-name selfRef">Discussion</a>
           </h4>
-<p id="section-2.2.1-1">As a backwards-incompatible change, this specification
-restricts slash-delimited comments that were allowed in <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> in two ways:<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-1"><span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> introduced comments into the diagnostic
+notation syntax, limited to inline comments using a bare "<code>/</code>" as the
+comment delimiter.
+It however also hinted at the potential desire to add
+end-of-line comments, mentioning both "<code>//</code>" and "<code>#</code>" as start delimiters.<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-2">The present specification adds both, as well as C-style inline
+comments ("<code>/*</code>" and "<code>*/</code>" delimiters).<a href="#section-2.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-3">This introduces a backwards-incompatible change, restricting
+slash-delimited comments that were allowed by <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>
+in two ways:<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.2.1-2.1">
-              <p id="section-2.2.1-2.1.1">Inline comments no longer can be empty: The construct "<code>//</code>" that was
+<li class="normal" id="section-2.2.1-4.1">
+              <p id="section-2.2.1-4.1.1">Inline comments no longer can be empty: The construct "<code>//</code>" that was
 an empty comment in <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> is now used instead to introduce an
 end-of-line comment.
 (Note that "<code>//</code>" still can be used in what is visually "within" a
-slash-delimited comment; its first slash actually ends the current comment and
-the second slash starts a new one.)<a href="#section-2.2.1-2.1.1" class="pilcrow">¶</a></p>
+slash-delimited comment like in the second example below; its first
+slash actually ends the current comment and the second slash starts
+a new one.)<a href="#section-2.2.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.2.1-2.2">
-              <p id="section-2.2.1-2.2.1">CDN now enables the use of C-style inline comments: for instance, "<code>/*foo/</code>"
+            <li class="normal" id="section-2.2.1-4.2">
+              <p id="section-2.2.1-4.2.1">Enabling the use of C-style inline comments can extend the scope of
+what previously were parsed as slash-delimited comments: for instance, "<code>/*foo/</code>"
 was a complete comment in <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G.6" class="relref">Appendix G.6</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> and now is the beginning of a
-C-style comment that goes on up to a "<code>*/</code>".<a href="#section-2.2.1-2.2.1" class="pilcrow">¶</a></p>
+C-style comment that goes on up to a "<code>*/</code>".<a href="#section-2.2.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.1-3">As an example, the introduction of C-style inline comments enables a
-comment explaining a COSE algorithm identifier, as in<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-2.2.1-4">
-<pre>
-4 /* HMAC 256/64 */
-</pre><a href="#section-2.2.1-4" class="pilcrow">¶</a>
-</div>
-<p id="section-2.2.1-5">instead of the conventional, but often less familiar<a href="#section-2.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-5">As an example for what is enabled by this change, the introduction of C-style inline comments enables a
+comment explaining a COSE algorithm identifier, as in<a href="#section-2.2.1-5" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-2.2.1-6">
 <pre>
-4 / HMAC 256//64 /
+4 /* HMAC 256/64 */
 </pre><a href="#section-2.2.1-6" class="pilcrow">¶</a>
+</div>
+<p id="section-2.2.1-7">instead of the previously conventional, but often less familiar<a href="#section-2.2.1-7" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-2.2.1-8">
+<pre>
+4 / HMAC 256//64 /
+</pre><a href="#section-2.2.1-8" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -3233,16 +3282,56 @@ CRI'https://example.com/bottarga/shaved'
 <p id="section-3.4-8">See <a href="#cri-grammar" class="auto internal xref">Section 5.2.5</a> for an ABNF definition for the content of <code>cri</code> literals.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="the-float-extension">
+<section id="section-3.5">
+        <h3 id="name-the-float-extension">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-the-float-extension" class="section-name selfRef">The "float" Extension</a>
+        </h3>
+<p id="section-3.5-1">The "<code>float</code>" application extension enables the notation of 2-byte,
+4-byte, and 8-byte byte strings to express floating point values
+(mt=7, ai=25/26/27 respectively) by giving their IEEE 754
+representation.
+A text string used as an argument is interpreted exactly as a hex
+literal (like the <code>h</code> application prefix); the result is used as the
+byte string.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-2">The application-oriented literal is interpreted as an encoded data
+item would be that prefixes the byte string by a single byte 0xF9
+(2 bytes, i.e., binary16), 0xFA (4 bytes, i.e., binary32), and 0xFB (8
+bytes, i.e., binary64), respectively.
+Byte strings of a different length than 2, 4, or 8 raise an error.
+Note that the interpretation as an encoded data item does not create
+or imply an encoding indicator; that can be added separately.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+<p id="section-3.5-3">Example (tool used: <code>edn-abnf -afloat -e</code>):<a href="#section-3.5-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.5-4">
+<pre>🔧 "[float'fe00', float'fe00'_2, float'47110815']" -tpretty ➔
+83             # array(3)
+   F9 FE00     # primitive(65024)
+   FA FFC00000 # primitive(4290772992)
+   FA 47110815 # primitive(1192298517)
+
+🔧 "[float'fe00', float'fe00'_2, float'47110815', 0x1.22102ap+15]" ➔
+[float'fe00', float'fe00'_2, 37128.08203125, 37128.08203125]
+</pre><a href="#section-3.5-4" class="pilcrow">¶</a>
+</div>
+<p id="section-3.5-5">The purpose of this application extension is to close a gap in CDN's
+<span>[<a href="#IEEE754" class="cite xref">IEEE754</a>]</span> binary64 support:
+Without this (or a similar) extension there is no way to represent NaN
+values different from the one called out at the end of Section <a href="https://rfc-editor.org/rfc/rfc8949#section-4.1" class="relref">4.1</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>: "(for many applications, the single NaN encoding
+0xf97e00 will suffice)".
+For finite floating point numbers, the decimal or hex floating point
+representations are preferred.<a href="#section-3.5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="stand-in">
+</section>
+</div>
+<div id="cdn-tags">
 <section id="section-4">
-      <h2 id="name-stand-in-representations-in">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-stand-in-representations-in" class="section-name selfRef">Stand-in Representations in Binary CBOR</a>
+      <h2 id="name-tag-based-representations-o">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-tag-based-representations-o" class="section-name selfRef">Tag-based Representations of CDN Input in Binary CBOR</a>
       </h2>
 <p id="section-4-1">In some cases, a CDN consumer cannot construct actual CBOR items that
 represent the CBOR data intended for eventual interchange.
-This document defines a stand-in representation for two such cases:<a href="#section-4-1" class="pilcrow">¶</a></p>
+This document defines a CBOR tags-based representation for two such cases:<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4-2.1">
           <p id="section-4-2.1.1">The CDN consumer does not know (or does not implement) an
@@ -3264,7 +3353,7 @@ unknown to them, which the ones defined in this section likely are.
 Where chains of tools are involved in processing CDN, it may be useful
 to fail earlier than at the ultimate receiver in the chain unless
 specific processing options (e.g., command line flags) are given that
-indicate which of these stand-ins are expected at this stage in the
+indicate which of these CDN-related tags are expected at this stage in the
 chain.<a href="#section-4-3.1" class="pilcrow">¶</a></p>
 </aside>
 <div id="unknown">
@@ -3284,7 +3373,7 @@ data item, allowing to postpone its decoding to a specific later
 stage of ingestion.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.1-3">This specification defines a CBOR Tag for this purpose:
 The Diagnostic Notation Unresolved Application-Extension Tag, tag
-number CPA999 (<a href="#iana-standin" class="auto internal xref">Section 6.5</a>).
+number CPA999 (<a href="#iana-tags" class="auto internal xref">Section 6.5</a>).
 The content of this tag is an array of a text string for the
 application-extension prefix, and another array:<a href="#section-4.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3334,7 +3423,7 @@ processing has to stop.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
 ellipses in the automation scripts for the documents using them.
 This specification defines a CBOR Tag that can be used in the ingestion
 for this purpose:
-The Diagnostic Notation Ellipsis Tag, tag number CPA888 (<a href="#iana-standin" class="auto internal xref">Section 6.5</a>).
+The Diagnostic Notation Ellipsis Tag, tag number CPA888 (<a href="#iana-tags" class="auto internal xref">Section 6.5</a>).
 The content of this tag is one of:<a href="#section-4.2-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.2-5">
 <li id="section-4.2-5.1">
@@ -3360,11 +3449,11 @@ carrying a null as content.<a href="#section-4.2-5.2.1" class="pilcrow">¶</a></
 multiple elements in an array (members in a map). If more detailed
 control is required, a data definition language such as CDDL can be
 employed.
-(Note that the stand-in form defined here does not allow multiple
+(Note that the tag-based representation form defined here does not allow multiple
 key/value pairs with an ellipsis as a key: the CBOR data item would
 not be valid.)<a href="#section-4.2-8" class="pilcrow">¶</a></p>
 <p id="section-4.2-9">Subtree elisions can be represented in a CBOR data item by using
-<code>/CPA/888(null)</code> as the stand-in:<a href="#section-4.2-9" class="pilcrow">¶</a></p>
+<code>/CPA/888(null)</code> as the placeholder CBOR data item:<a href="#section-4.2-9" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-4.2-10">
 <pre>
 [1, 2, 888(null), 3]
@@ -3389,8 +3478,8 @@ ellipsis.
 The example
 "signature" uses special syntax that allows the use of ellipses
 between the bytes notated <em>inside</em> <code>h''</code> literals.<a href="#section-4.2-13" class="pilcrow">¶</a></p>
-<p id="section-4.2-14">String elisions can be represented in a CBOR data item by a stand-in
-that wraps an array of string parts alternating with ellipsis
+<p id="section-4.2-14">String elisions can be represented in a CBOR data item by a tag CPA888
+that wraps an array containing string parts alternating with ellipsis
 indicators:<a href="#section-4.2-14" class="pilcrow">¶</a></p>
 <div class="lang-cbor-diag sourcecode" id="section-4.2-15">
 <pre>
@@ -3846,7 +3935,7 @@ during parsing.)<a href="#section-5.1-9.1.8.5.1" class="pilcrow">¶</a></p>
 </div>
         </li>
 </ol>
-<div id="discussion-1">
+<div id="plus-discussion">
 <section id="section-5.1.1">
           <h4 id="name-discussion-2">
 <a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-discussion-2" class="section-name selfRef">Discussion</a>
@@ -3952,6 +4041,16 @@ which are not always repeated here.<a href="#section-5.2-1" class="pilcrow">¶</
               <td class="text-left" rowspan="1" colspan="1">CRI</td>
               <td class="text-left" rowspan="1" colspan="1">"</td>
               <td class="text-left" rowspan="1" colspan="1">Tag 99 on the above</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">float</td>
+              <td class="text-left" rowspan="1" colspan="1">floating point value from input bytes</td>
+              <td class="text-left" rowspan="1" colspan="1">floating point value (mt=7)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">FLOAT</td>
+              <td class="text-left" rowspan="1" colspan="1">(not used)</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
@@ -4638,6 +4737,11 @@ initial entries have the Change Controller "IETF".<a href="#section-6.1-5" class
               <td class="text-left" rowspan="1" colspan="1">RFC-XXXX, <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>
 </td>
             </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">float</td>
+              <td class="text-left" rowspan="1" colspan="1">Floating-Point Value</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC-XXXX</td>
+            </tr>
           </tbody>
         </table>
 </div>
@@ -4951,10 +5055,10 @@ procedure "IETF Review or IESG Approval", preferably a number less
 than 1000.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="iana-standin">
+<div id="iana-tags">
 <section id="section-6.5">
-        <h3 id="name-stand-in-tags">
-<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-stand-in-tags" class="section-name selfRef">Stand-in Tags</a>
+        <h3 id="name-tags-2">
+<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-tags-2" class="section-name selfRef">Tags</a>
         </h3>
 <p id="section-6.5-1"><span class="cref" id="cpa_1">RFC-Editor: This document uses the CPA (code point allocation)
   convention described in [I-D.bormann-cbor-draft-numbers].  For
@@ -5006,23 +5110,37 @@ specification reference.<a href="#section-6.5-2" class="pilcrow">¶</a></p>
       <h2 id="name-security-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security considerations</a>
       </h2>
-<p id="section-7-1">The security considerations of <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> and <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> apply.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">The CDN specification provides two explicit extension points,
+<p id="section-7-1">The security considerations of <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> apply, including by applying
+the considerations about the CBOR format to the CDN format in an
+analogous sense.
+Security considerations documented in <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> for the CDDL language
+often are also applicable to the CDN language in an analogous sense.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">The CDN specification defines two explicit extension points:
 application-extension identifiers (<a href="#appext-iana" class="auto internal xref">Section 6.1</a>) and encoding
 indicators (<a href="#reg-ei" class="auto internal xref">Section 6.2</a>).
-Extensions introduced this way can have their own security
-considerations (see, e.g., <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-e-ref-03#section-5" class="relref">Section 5</a> of [<a href="#I-D.ietf-cbor-edn-e-ref" class="cite xref">I-D.ietf-cbor-edn-e-ref</a>]</span>).
-When implementing tools that support the use of CDN extensions, the
-implementer needs to be careful not to inadvertently introduce a
-vector for an attacker to invoke extensions not planned for by the
-tool operator, who might not have considered security considerations
-of specific extensions such as those posed by their use of
-dereferenceable identifiers (<span><a href="https://datatracker.ietf.org/doc/html/draft-bormann-t2trg-deref-id-07#section-6" class="relref">Section 6</a> of [<a href="#I-D.bormann-t2trg-deref-id" class="cite xref">I-D.bormann-t2trg-deref-id</a>]</span>).
-For instance, tools might require explicitly enabling the use of each
-extension that is not on an allowlist.
-This task can possibly be
-made less onerous by combining it with a mechanism for supplying any
-parameters controlling such an extension.<a href="#section-7-2" class="pilcrow">¶</a></p>
+Extensions introduced through these can have their own security
+considerations, which need to be considered in the specification for
+the extension (see, e.g., <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-e-ref-03#section-5" class="relref">Section 5</a> of [<a href="#I-D.ietf-cbor-edn-e-ref" class="cite xref">I-D.ietf-cbor-edn-e-ref</a>]</span>).<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">Implementers of tools that support the use of CDN extensions need to
+avoid inadvertently introducing a vector that allows attackers to
+invoke extensions not planned for by the tool operator, who might not
+have considered security considerations of specific extensions such as
+those posed by their use of dereferenceable identifiers (<span><a href="https://datatracker.ietf.org/doc/html/draft-bormann-t2trg-deref-id-07#section-6" class="relref">Section 6</a> of [<a href="#I-D.bormann-t2trg-deref-id" class="cite xref">I-D.bormann-t2trg-deref-id</a>]</span>).<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-4">Tools might require explicitly enabling the use of each extension that
+is not on an allowlist.
+(This task can possibly be made less onerous by combining it with a
+mechanism for supplying any parameters that control such an extension.)<a href="#section-7-4" class="pilcrow">¶</a></p>
+<p id="section-7-5">Tools that process application extensions — directly from their use in
+CDN or later via Tag CPA999 (<a href="#unknown" class="auto internal xref">Section 4.1</a>) — need to be configured out of
+band to enable processing each specific application extension only if
+that is desired.
+An allowlist built out of the mandatory-to-implement application
+extensions may be an exception.<a href="#section-7-5" class="pilcrow">¶</a></p>
+<p id="section-7-6">Similarly, inputs to validators may be prepared with partially
+specified subtrees by representing ellipses via Tag CPA888
+(<a href="#elision" class="auto internal xref">Section 4.2</a>).
+Validators that want to accept such partially specified CBOR data
+items need to require explicit configuration to do so.<a href="#section-7-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
