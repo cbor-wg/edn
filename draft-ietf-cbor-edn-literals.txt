@@ -134,7 +134,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
      3.3.  The "hash" Extension  . . . . . . . . . . . . . . . . . .  32
      3.4.  The "cri" Extension . . . . . . . . . . . . . . . . . . .  33
      3.5.  The "float" Extension . . . . . . . . . . . . . . . . . .  33
-   4.  Stand-in Representations in Binary CBOR . . . . . . . . . . .  34
+   4.  Tag-based Representations of CDN Input in Binary CBOR . . . .  34
      4.1.  Handling unknown application-extension identifiers  . . .  35
      4.2.  Handling information deliberately elided from a CDN
            document  . . . . . . . . . . . . . . . . . . . . . . . .  36
@@ -172,7 +172,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
      6.3.  Media Type  . . . . . . . . . . . . . . . . . . . . . . .  60
      6.4.  Content-Format  . . . . . . . . . . . . . . . . . . . . .  62
-     6.5.  Stand-in Tags . . . . . . . . . . . . . . . . . . . . . .  62
+     6.5.  Tags  . . . . . . . . . . . . . . . . . . . . . . . . . .  62
    7.  Security considerations . . . . . . . . . . . . . . . . . . .  63
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  63
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .  63
@@ -1867,11 +1867,11 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    finite floating point numbers, the decimal or hex floating point
    representations are preferred.
 
-4.  Stand-in Representations in Binary CBOR
+4.  Tag-based Representations of CDN Input in Binary CBOR
 
    In some cases, a CDN consumer cannot construct actual CBOR items that
    represent the CBOR data intended for eventual interchange.  This
-   document defines a stand-in representation for two such cases:
+   document defines a CBOR tags-based representation for two such cases:
 
    *  The CDN consumer does not know (or does not implement) an
       application-extension identifier used in the CDN document
@@ -1890,8 +1890,8 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
       |  involved in processing CDN, it may be useful to fail earlier
       |  than at the ultimate receiver in the chain unless specific
       |  processing options (e.g., command line flags) are given that
-      |  indicate which of these stand-ins are expected at this stage in
-      |  the chain.
+      |  indicate which of these CDN-related tags are expected at this
+      |  stage in the chain.
 
 
 
@@ -2001,12 +2001,12 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    A single ellipsis (or key/value pair of ellipses) can imply eliding
    multiple elements in an array (members in a map).  If more detailed
    control is required, a data definition language such as CDDL can be
-   employed.  (Note that the stand-in form defined here does not allow
-   multiple key/value pairs with an ellipsis as a key: the CBOR data
-   item would not be valid.)
+   employed.  (Note that the tag-based representation form defined here
+   does not allow multiple key/value pairs with an ellipsis as a key:
+   the CBOR data item would not be valid.)
 
    Subtree elisions can be represented in a CBOR data item by using
-   /CPA/888(null) as the stand-in:
+   /CPA/888(null) as the placeholder CBOR data item:
 
 
 
@@ -2036,9 +2036,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    ellipsis.  The example "signature" uses special syntax that allows
    the use of ellipses between the bytes notated _inside_ h'' literals.
 
-   String elisions can be represented in a CBOR data item by a stand-in
-   that wraps an array of string parts alternating with ellipsis
-   indicators:
+   String elisions can be represented in a CBOR data item by a tag
+   CPA888 that wraps an array containing string parts alternating with
+   ellipsis indicators:
 
    { "contract": /CPA/888(["Herewith I buy", 888(null),
                            "gned: Alice & Bob"]),
@@ -3437,7 +3437,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    procedure "IETF Review or IESG Approval", preferably a number less
    than 1000.
 
-6.5.  Stand-in Tags
+6.5.  Tags
 
 
    // RFC-Editor: This document uses the CPA (code point allocation)
