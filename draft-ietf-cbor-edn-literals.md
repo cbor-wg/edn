@@ -2564,7 +2564,7 @@ be used as an integrated parser for ``` h ``` prefixed raw strings.
 ~~~ abnf
 raw-app-string-h = %s"h" startrawdelim r-app-string-h
 r-app-string-h = rh-S *(HEXDIG rh-S HEXDIG rh-S / ellipsis rh-S)
-    (eol-comment *r-non-lf alikerawdelim / alikerawdelim)
+    [eol-comment *r-non-lf] alikerawdelim
 rh-S = *(lblank) *(rh-comment *(lblank))
 rh-2 = %x61-7f / NONASCII / shortrawdelim
 rh-non-slash = lblank / %x21-2e / %x30-5f / rh-2
@@ -2596,7 +2596,7 @@ raw-app-string-b64 = %s"b64" startrawdelim r-app-string-b64
 r-app-string-b64  = rb64-S *(4(b64dig rb64-S))
                   [b64dig rb64-S b64dig rb64-S
                    ["=" rb64-S "=" / b64dig rb64-S ["="]] rb64-S]
-                  ("#" *r-non-lf alikerawdelim / alikerawdelim)
+                  ["#" *r-non-lf] alikerawdelim
 rb64-S           = *lblank *(rb64-comment *lblank)
 rb64-comment     = "#" *r-non-lf %x0A
 ~~~
