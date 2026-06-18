@@ -1863,7 +1863,9 @@ literal (<a href="#embedded" class="auto internal xref">Section 2.5.7</a>) or a 
 The string-based forms use their string literal as a shorthand
 form for a sequence literal representing a sequence with exactly that
 one text string data item, e.g., <code>b64`Zm9v`</code> is a shorthand for
-<code>b64&lt;&lt;"Zm9v"&gt;&gt;</code> or <code>b64&lt;&lt;`Zm9v`&gt;&gt;</code>.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<code>b64&lt;&lt;"Zm9v"&gt;&gt;</code> or <code>b64&lt;&lt;`Zm9v`&gt;&gt;</code> (this specific example obviously depends on
+<code>Zm9v</code> being allowed and meaning the same within the different forms of
+string literals used in the example).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <aside id="section-2.1-3">
           <p id="section-2.1-3.1">This notation is generalized from
 Section <a href="https://rfc-editor.org/rfc/rfc8949#section-8" class="relref">8</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>, which provides for notating byte
@@ -1900,7 +1902,8 @@ specific semantics, the application extension specifies what input the
 extension takes.<a href="#section-2.1-7" class="pilcrow">¶</a></p>
 <p id="section-2.1-8">When the prefix is used immediately in front of a single-quoted or a raw
 string, the input takes the form of a single text string CBOR data
-item.
+item (this is useful only if the application extension is designed to
+receive a text string as input).
 When used immediately in front of a sequence literal, the input is a
 CBOR sequence of elements of the sequence literal as input.
 (For a single parameter, this is equivalent to receiving a single CBOR
@@ -2521,8 +2524,10 @@ the string constitute UTF-8 <span>[<a href="#STD63" class="cite xref">STD63</a>]
 (CBOR does not further characterize the bytes that constitute the
 string, major type 2).<a href="#section-2.5-1" class="pilcrow">¶</a></p>
 <p id="section-2.5-2">(UTF-8) text strings can be directly represented (unprefixed) in CDN either as double-quoted (<a href="#dq-lit" class="auto internal xref">Section 2.5.2</a>)
-or as raw strings (<a href="#raw-lit" class="auto internal xref">Section 2.5.4</a>), while byte strings can be represented as
-single-quoted strings (<a href="#sq-lit" class="auto internal xref">Section 2.5.3</a>).
+or as raw strings (<a href="#raw-lit" class="auto internal xref">Section 2.5.4</a>).
+(Text strings using either kind of literal are indistinguishable after
+decoding the specific literal syntax.)
+Byte strings can be directly represented as single-quoted strings (<a href="#sq-lit" class="auto internal xref">Section 2.5.3</a>).
 The latter is useful for byte strings carrying
 bytes that can be meaningfully notated as UTF-8 text.<a href="#section-2.5-2" class="pilcrow">¶</a></p>
 <p id="section-2.5-3">Many strings are best notated as extension literals, which may
@@ -3540,23 +3545,48 @@ bytes, i.e., binary64), respectively.
 Byte strings of a different length than 2, 4, or 8 raise an error.
 Note that the interpretation as an encoded data item does not create
 or imply an encoding indicator; that can be added separately.<a href="#section-3.7-2" class="pilcrow">¶</a></p>
-<p id="section-3.7-3">Example (tool used: <code>edn-abnf -afloat -e</code>):<a href="#section-3.7-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.7-4">
-<pre>🔧 "[float'fe00', float'fe00'_2, float'47110815']" -tpretty ➔
-83             # array(3)
-   F9 FE00     # primitive(65024)
-   FA FFC00000 # primitive(4290772992)
-   FA 47110815 # primitive(1192298517)
-
-🔧 "[float'fe00', float'fe00'_2, float'47110815', 0x1.22102ap+15]" ➔
-[float'fe00', float'fe00'_2, 37128.08203125, 37128.08203125]
-</pre><a href="#section-3.7-4" class="pilcrow">¶</a>
+<p id="section-3.7-3"><a href="#tab-float" class="auto internal xref">Table 7</a> shows a number of examples:<a href="#section-3.7-3" class="pilcrow">¶</a></p>
+<span id="name-examples-for-use-of-float-e"></span><div id="tab-float">
+<table class="center" id="table-7">
+          <caption>
+<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#name-examples-for-use-of-float-e" class="selfRef">Examples for use of float Extension</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">CDN</th>
+              <th class="text-left" rowspan="1" colspan="1">hex CBOR</th>
+              <th class="text-left" rowspan="1" colspan="1">preferred CDN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">float'fe00'</td>
+              <td class="text-left" rowspan="1" colspan="1">F9 FE00</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">float'ffc00000'</td>
+              <td class="text-left" rowspan="1" colspan="1">F9 FE00</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">float'fe00'_2</td>
+              <td class="text-left" rowspan="1" colspan="1">FA FFC00000</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">float'47110815'</td>
+              <td class="text-left" rowspan="1" colspan="1">FA 47110815</td>
+              <td class="text-left" rowspan="1" colspan="1">0x1.22102ap+15<br>37128.08203125</td>
+            </tr>
+          </tbody>
+        </table>
 </div>
 <p id="section-3.7-5">The purpose of this application extension is to close a gap in CDN's
 <span>[<a href="#IEEE754" class="cite xref">IEEE754</a>]</span> binary64 support:
-Without this (or a similar) extension there is no way to represent NaN
-values different from the one called out at the end of Section <a href="https://rfc-editor.org/rfc/rfc8949#section-4.1" class="relref">4.1</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>: "(for many applications, the single NaN encoding
-0xf97e00 will suffice)".
+Without this or a similar extension, there is no way to represent NaN
+values other than the NaN represented as 0xf97e00 (see Section <a href="https://rfc-editor.org/rfc/rfc8949#section-4.1" class="relref">4.1</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>).
 For finite floating point numbers, the decimal or hex floating point
 representations are preferred.<a href="#section-3.7-5" class="pilcrow">¶</a></p>
 </section>
@@ -4091,11 +4121,11 @@ combine with the application-extension identifiers used as prefixes to form
 application-oriented extension literals.
 Each of these may integrate ABNF rules defined in <a href="#abnf-grammar" class="auto internal xref">Figure 1</a>,
 which are not always repeated here.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2"><a href="#tab-prefixes" class="auto internal xref">Table 7</a> summarizes the app-prefix values defined in this document.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-2"><a href="#tab-prefixes" class="auto internal xref">Table 8</a> summarizes the app-prefix values defined in this document.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <span id="name-app-prefix-values-defined-i"></span><div id="tab-prefixes">
-<table class="center" id="table-7">
+<table class="center" id="table-8">
           <caption>
-<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#table-8" class="selfRef">Table 8</a>:
 <a href="#name-app-prefix-values-defined-i" class="selfRef">App-prefix Values Defined in this Document</a>
           </caption>
 <thead>
@@ -4794,12 +4824,12 @@ application-extension identifier<a href="#section-6.1-4.8.1" class="pilcrow">¶<
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-6.1-5">The initial content of the registry is shown in <a href="#tab-iana" class="auto internal xref">Table 8</a>; all
+<p id="section-6.1-5">The initial content of the registry is shown in <a href="#tab-iana" class="auto internal xref">Table 9</a>; all
 initial entries have the Change Controller "IETF".<a href="#section-6.1-5" class="pilcrow">¶</a></p>
 <span id="name-initial-content-of-applicat"></span><div id="tab-iana">
-<table class="center" id="table-8">
+<table class="center" id="table-9">
           <caption>
-<a href="#table-8" class="selfRef">Table 8</a>:
+<a href="#table-9" class="selfRef">Table 9</a>:
 <a href="#name-initial-content-of-applicat" class="selfRef">Initial Content of Application-extension Identifier Registry</a>
           </caption>
 <thead>
@@ -4944,12 +4974,12 @@ application-extension identifier<a href="#section-6.2-4.8.1" class="pilcrow">¶<
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-6.2-5">The initial content of the registry is shown in <a href="#tab-iana-ei" class="auto internal xref">Table 9</a>; all
+<p id="section-6.2-5">The initial content of the registry is shown in <a href="#tab-iana-ei" class="auto internal xref">Table 10</a>; all
 initial entries have the Change Controller "IETF".<a href="#section-6.2-5" class="pilcrow">¶</a></p>
 <span id="name-initial-content-of-encoding"></span><div id="tab-iana-ei">
-<table class="center" id="table-9">
+<table class="center" id="table-10">
           <caption>
-<a href="#table-9" class="selfRef">Table 9</a>:
+<a href="#table-10" class="selfRef">Table 10</a>:
 <a href="#name-initial-content-of-encoding" class="selfRef">Initial Content of Encoding Indicator Registry</a>
           </caption>
 <thead>
@@ -5029,9 +5059,9 @@ present document.<a href="#section-6.2-7.1" class="pilcrow">¶</a></p>
 <p id="section-6.3-1">IANA is requested to add the following Media-Type to the "Media Types"
 registry <span>[<a href="#IANA.media-types" class="cite xref">IANA.media-types</a>]</span>.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <span id="name-new-media-type-application-"></span><div id="new-media-type">
-<table class="center" id="table-10">
+<table class="center" id="table-11">
           <caption>
-<a href="#table-10" class="selfRef">Table 10</a>:
+<a href="#table-11" class="selfRef">Table 11</a>:
 <a href="#name-new-media-type-application-" class="selfRef">New Media Type application/cdn</a>
           </caption>
 <thead>
@@ -5176,9 +5206,9 @@ data edited by humans, often under source-code control.<a href="#section-6.3-3.2
 sub-registry, within the "Constrained RESTful Environments (CoRE)
 Parameters" Registry <span>[<a href="#IANA.core-parameters" class="cite xref">IANA.core-parameters</a>]</span>, as follows:<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <span id="name-new-content-format-for-appl"></span><div id="tab-content-format">
-<table class="center" id="table-11">
+<table class="center" id="table-12">
           <caption>
-<a href="#table-11" class="selfRef">Table 11</a>:
+<a href="#table-12" class="selfRef">Table 12</a>:
 <a href="#name-new-content-format-for-appl" class="selfRef">New Content-Format for application/cdn</a>
           </caption>
 <thead>
@@ -5217,13 +5247,13 @@ than 1000.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
   occurrences of the prefix "CPA" in the document.  Finally,
   please remove this note.</span><a href="#section-6.5-1" class="pilcrow">¶</a></p>
 <p id="section-6.5-2">In the "CBOR Tags" registry <span>[<a href="#IANA.cbor-tags" class="cite xref">IANA.cbor-tags</a>]</span>, IANA is requested to assign the
-tags in <a href="#tab-tag-values" class="auto internal xref">Table 12</a> from the "specification required" space
+tags in <a href="#tab-tag-values" class="auto internal xref">Table 13</a> from the "specification required" space
 (suggested assignments: 888 and 999), with the present document as the
 specification reference.<a href="#section-6.5-2" class="pilcrow">¶</a></p>
 <span id="name-values-for-tags"></span><div id="tab-tag-values">
-<table class="center" id="table-12">
+<table class="center" id="table-13">
           <caption>
-<a href="#table-12" class="selfRef">Table 12</a>:
+<a href="#table-13" class="selfRef">Table 13</a>:
 <a href="#name-values-for-tags" class="selfRef">Values for Tags</a>
           </caption>
 <thead>
@@ -5742,37 +5772,37 @@ these with a control operator, which looks very different.<a href="#appendix-A-7
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.13">
-<a href="#tab-prefixes" class="auto internal xref">Table 7</a>:</dt>
+<a href="#tab-prefixes" class="auto internal xref">Table 8</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.14">
           <p id="appendix-C-1.14.1"><a href="#tab-prefixes" class="internal xref">App-prefix Values Defined in this Document</a><a href="#appendix-C-1.14.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.15">
-<a href="#tab-iana" class="auto internal xref">Table 8</a>:</dt>
+<a href="#tab-iana" class="auto internal xref">Table 9</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.16">
           <p id="appendix-C-1.16.1"><a href="#tab-iana" class="internal xref">Initial Content of Application-extension Identifier Registry</a><a href="#appendix-C-1.16.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.17">
-<a href="#tab-iana-ei" class="auto internal xref">Table 9</a>:</dt>
+<a href="#tab-iana-ei" class="auto internal xref">Table 10</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.18">
           <p id="appendix-C-1.18.1"><a href="#tab-iana-ei" class="internal xref">Initial Content of Encoding Indicator Registry</a><a href="#appendix-C-1.18.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.19">
-<a href="#new-media-type" class="auto internal xref">Table 10</a>:</dt>
+<a href="#new-media-type" class="auto internal xref">Table 11</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.20">
           <p id="appendix-C-1.20.1"><a href="#new-media-type" class="internal xref">New Media Type application/cdn</a><a href="#appendix-C-1.20.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.21">
-<a href="#tab-content-format" class="auto internal xref">Table 11</a>:</dt>
+<a href="#tab-content-format" class="auto internal xref">Table 12</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.22">
           <p id="appendix-C-1.22.1"><a href="#tab-content-format" class="internal xref">New Content-Format for application/cdn</a><a href="#appendix-C-1.22.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="appendix-C-1.23">
-<a href="#tab-tag-values" class="auto internal xref">Table 12</a>:</dt>
+<a href="#tab-tag-values" class="auto internal xref">Table 13</a>:</dt>
         <dd style="margin-left: 5.5em" id="appendix-C-1.24">
           <p id="appendix-C-1.24.1"><a href="#tab-tag-values" class="internal xref">Values for Tags</a><a href="#appendix-C-1.24.1" class="pilcrow">¶</a></p>
 </dd>

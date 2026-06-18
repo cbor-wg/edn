@@ -159,7 +159,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
      4.1.  Handling unknown application-extension identifiers  . . .  40
      4.2.  Handling information deliberately elided from a CDN
            document  . . . . . . . . . . . . . . . . . . . . . . . .  41
-   5.  ABNF Definitions  . . . . . . . . . . . . . . . . . . . . . .  42
+   5.  ABNF Definitions  . . . . . . . . . . . . . . . . . . . . . .  43
      5.1.  Overall ABNF Definition for Concise Diagnostic
            Notation  . . . . . . . . . . . . . . . . . . . . . . . .  43
 
@@ -174,34 +174,34 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
        5.2.1.  h: ABNF Definition of Hexadecimal representation of a
                byte string . . . . . . . . . . . . . . . . . . . . .  51
        5.2.2.  b64: ABNF Definition of Base64 representation of a byte
-               string  . . . . . . . . . . . . . . . . . . . . . . .  51
+               string  . . . . . . . . . . . . . . . . . . . . . . .  52
        5.2.3.  dt: ABNF Definition of RFC 3339 Representation of a
                Date/Time . . . . . . . . . . . . . . . . . . . . . .  52
        5.2.4.  ip: ABNF Definition of Textual Representation of an IP
                Address . . . . . . . . . . . . . . . . . . . . . . .  53
        5.2.5.  cri: ABNF Definition of URI Representation of a
-               CRI . . . . . . . . . . . . . . . . . . . . . . . . .  53
+               CRI . . . . . . . . . . . . . . . . . . . . . . . . .  54
      5.3.  ABNF Definitions for Integrated Extension Parsers . . . .  56
-       5.3.1.  h'': ABNF Definition of Integrated Parser . . . . . .  57
+       5.3.1.  h'': ABNF Definition of Integrated Parser . . . . . .  58
        5.3.2.  b64'': ABNF Definition of Integrated Parser . . . . .  58
-       5.3.3.  h``: ABNF Definition of Integrated Parser . . . . . .  58
-       5.3.4.  b64``: ABNF Definition of Integrated Parser . . . . .  58
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  59
+       5.3.3.  h``: ABNF Definition of Integrated Parser . . . . . .  59
+       5.3.4.  b64``: ABNF Definition of Integrated Parser . . . . .  59
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  60
      6.1.  Concise Diagnostic Notation Application-extension
-           Identifiers Registry  . . . . . . . . . . . . . . . . . .  59
-     6.2.  Encoding Indicators . . . . . . . . . . . . . . . . . . .  62
-     6.3.  Media Type  . . . . . . . . . . . . . . . . . . . . . . .  63
-     6.4.  Content-Format  . . . . . . . . . . . . . . . . . . . . .  65
-     6.5.  Tags  . . . . . . . . . . . . . . . . . . . . . . . . . .  65
-   7.  Security considerations . . . . . . . . . . . . . . . . . . .  66
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  66
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  66
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .  69
-   Appendix A.  CDN and CDDL . . . . . . . . . . . . . . . . . . . .  71
-   List of Figures . . . . . . . . . . . . . . . . . . . . . . . . .  72
-   List of Tables  . . . . . . . . . . . . . . . . . . . . . . . . .  73
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  73
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  73
+           Identifiers Registry  . . . . . . . . . . . . . . . . . .  60
+     6.2.  Encoding Indicators . . . . . . . . . . . . . . . . . . .  63
+     6.3.  Media Type  . . . . . . . . . . . . . . . . . . . . . . .  64
+     6.4.  Content-Format  . . . . . . . . . . . . . . . . . . . . .  66
+     6.5.  Tags  . . . . . . . . . . . . . . . . . . . . . . . . . .  66
+   7.  Security considerations . . . . . . . . . . . . . . . . . . .  67
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  67
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  67
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .  70
+   Appendix A.  CDN and CDDL . . . . . . . . . . . . . . . . . . . .  72
+   List of Figures . . . . . . . . . . . . . . . . . . . . . . . . .  73
+   List of Tables  . . . . . . . . . . . . . . . . . . . . . . . . .  74
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  74
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  74
 
 1.  Introduction
 
@@ -648,7 +648,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    (Section 2.5).  The string-based forms use their string literal as a
    shorthand form for a sequence literal representing a sequence with
    exactly that one text string data item, e.g., b64`Zm9v` is a
-   shorthand for b64<<"Zm9v">> or b64<<`Zm9v`>>.
+   shorthand for b64<<"Zm9v">> or b64<<`Zm9v`>> (this specific example
+   obviously depends on Zm9v being allowed and meaning the same within
+   the different forms of string literals used in the example).
 
       |  This notation is generalized from Section 8 of RFC 8949
       |  [STD94], which provides for notating byte strings in a number
@@ -662,8 +664,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
       |  unallocated.  The present specification allows registering
       |  additional names for this namespace, which it calls
       |  _application-extension identifiers_.
-
-
 
 
 
@@ -700,15 +700,17 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
    When the prefix is used immediately in front of a single-quoted or a
    raw string, the input takes the form of a single text string CBOR
-   data item.  When used immediately in front of a sequence literal, the
-   input is a CBOR sequence of elements of the sequence literal as
-   input.  (For a single parameter, this is equivalent to receiving a
-   single CBOR data item as the argument.)  The application extension
-   can provide behavior that depends on the number of items supplied as
-   input to it and their data types; it cannot distinguish between its
-   prefix being used with a single-quoted string, a raw string, or a
-   CBOR sequence composed of a single text string data item (as
-   illustrated for instance in Tables 4, 5, and 6).
+   data item (this is useful only if the application extension is
+   designed to receive a text string as input).  When used immediately
+   in front of a sequence literal, the input is a CBOR sequence of
+   elements of the sequence literal as input.  (For a single parameter,
+   this is equivalent to receiving a single CBOR data item as the
+   argument.)  The application extension can provide behavior that
+   depends on the number of items supplied as input to it and their data
+   types; it cannot distinguish between its prefix being used with a
+   single-quoted string, a raw string, or a CBOR sequence composed of a
+   single text string data item (as illustrated for instance in Tables
+   4, 5, and 6).
 
    This specification defines a number of generally applicable
    application-oriented extensions (Section 3), both to motivate making
@@ -719,8 +721,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    the term "application-oriented extensions" for the mechanism
    discussed in this section even if it is used to describe a part of
    base CDN.)
-
-
 
 
 
@@ -1187,10 +1187,11 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
    (UTF-8) text strings can be directly represented (unprefixed) in CDN
    either as double-quoted (Section 2.5.2) or as raw strings
-   (Section 2.5.4), while byte strings can be represented as single-
-   quoted strings (Section 2.5.3).  The latter is useful for byte
-   strings carrying bytes that can be meaningfully notated as UTF-8
-   text.
+   (Section 2.5.4).  (Text strings using either kind of literal are
+   indistinguishable after decoding the specific literal syntax.)  Byte
+   strings can be directly represented as single-quoted strings
+   (Section 2.5.3).  The latter is useful for byte strings carrying
+   bytes that can be meaningfully notated as UTF-8 text.
 
    Many strings are best notated as extension literals, which may
    provide detailed access to the bits within those bytes (see
@@ -1223,7 +1224,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    platform presentation of newlines, any carriage return characters
    (U+000D) that may be present in the CDN string literal are not copied
    into the resulting string (see Section 1.3.5).
-
 
 
 
@@ -2130,22 +2130,27 @@ Bormann                 Expires 20 December 2026               [Page 38]
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
-   Example (tool used: edn-abnf -afloat -e):
+   Table 7 shows a number of examples:
 
-   🔧 "[float'fe00', float'fe00'_2, float'47110815']" -tpretty ➔
-   83             # array(3)
-      F9 FE00     # primitive(65024)
-      FA FFC00000 # primitive(4290772992)
-      FA 47110815 # primitive(1192298517)
+            +=================+=============+================+
+            | CDN             | hex CBOR    | preferred CDN  |
+            +=================+=============+================+
+            | float'fe00'     | F9 FE00     |                |
+            +-----------------+-------------+----------------+
+            | float'ffc00000' | F9 FE00     |                |
+            +-----------------+-------------+----------------+
+            | float'fe00'_2   | FA FFC00000 |                |
+            +-----------------+-------------+----------------+
+            | float'47110815' | FA 47110815 | 0x1.22102ap+15 |
+            |                 |             | 37128.08203125 |
+            +-----------------+-------------+----------------+
 
-   🔧 "[float'fe00', float'fe00'_2, float'47110815', 0x1.22102ap+15]" ➔
-   [float'fe00', float'fe00'_2, 37128.08203125, 37128.08203125]
+               Table 7: Examples for use of float Extension
 
    The purpose of this application extension is to close a gap in CDN's
-   [IEEE754] binary64 support: Without this (or a similar) extension
-   there is no way to represent NaN values different from the one called
-   out at the end of Section 4.1 of RFC 8949 [STD94]: "(for many
-   applications, the single NaN encoding 0xf97e00 will suffice)".  For
+   [IEEE754] binary64 support: Without this or a similar extension,
+   there is no way to represent NaN values other than the NaN
+   represented as 0xf97e00 (see Section 4.1 of RFC 8949 [STD94]).  For
    finite floating point numbers, the decimal or hex floating point
    representations are preferred.
 
@@ -2166,14 +2171,9 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
       possibly just parts of a lengthy string by _elisions_
       (Section 4.2).
 
-      |  Implementation note: Typically, the ultimate applications will
-      |  fail if they encounter tags unknown to them, which the ones
-      |  defined in this section likely are.  Where chains of tools are
-      |  involved in processing CDN, it may be useful to fail earlier
-      |  than at the ultimate receiver in the chain unless specific
-      |  processing options (e.g., command line flags) are given that
-      |  indicate which of these CDN-related tags are expected at this
-      |  stage in the chain.
+
+
+
 
 
 
@@ -2185,6 +2185,15 @@ Bormann                 Expires 20 December 2026               [Page 39]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
+
+      |  Implementation note: Typically, the ultimate applications will
+      |  fail if they encounter tags unknown to them, which the ones
+      |  defined in this section likely are.  Where chains of tools are
+      |  involved in processing CDN, it may be useful to fail earlier
+      |  than at the ultimate receiver in the chain unless specific
+      |  processing options (e.g., command line flags) are given that
+      |  indicate which of these CDN-related tags are expected at this
+      |  stage in the chain.
 
 4.1.  Handling unknown application-extension identifiers
 
@@ -2225,15 +2234,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    // RFC-Editor: This document uses the CPA (code point allocation)
    // convention described in [I-D.bormann-cbor-draft-numbers].  For
    // each usage of the term "CPA", please remove the prefix "CPA" from
-   // the indicated value and replace the residue with the value
-   // assigned by IANA; perform an analogous substitution for all other
-   // occurrences of the prefix "CPA" in the document.  Finally, please
-   // remove this note.
-
-
-
-
-
 
 
 
@@ -2241,6 +2241,11 @@ Bormann                 Expires 20 December 2026               [Page 40]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
+
+   // the indicated value and replace the residue with the value
+   // assigned by IANA; perform an analogous substitution for all other
+   // occurrences of the prefix "CPA" in the document.  Finally, please
+   // remove this note.
 
 4.2.  Handling information deliberately elided from a CDN document
 
@@ -2286,17 +2291,15 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    does not allow multiple key/value pairs with an ellipsis as a key:
    the CBOR data item would not be valid.)
 
-   Subtree elisions can be represented in a CBOR data item by using
-   /CPA/888(null) as the placeholder CBOR data item:
-
-
-
 
 
 Bormann                 Expires 20 December 2026               [Page 41]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
+
+   Subtree elisions can be represented in a CBOR data item by using
+   /CPA/888(null) as the placeholder CBOR data item:
 
    [1, 2, 888(null), 3]
    { "a": 1,
@@ -2340,11 +2343,8 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    validation steps may then simply fail instead of being informed about
    the elisions.
 
-5.  ABNF Definitions
 
-   This section collects grammars in ABNF form ([STD68] as extended in
-   [RFC7405]) that serve to define the syntax of CDN and some
-   application-oriented literals.
+
 
 
 
@@ -2353,6 +2353,12 @@ Bormann                 Expires 20 December 2026               [Page 42]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
+
+5.  ABNF Definitions
+
+   This section collects grammars in ABNF form ([STD68] as extended in
+   [RFC7405]) that serve to define the syntax of CDN and some
+   application-oriented literals.
 
       |  Implementation note: The ABNF definitions in this section are
       |  intended to be useful in a Parsing Expression Grammar (PEG)
@@ -2396,12 +2402,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
    number          = (hexfloat / hexint / octint / binint
                       / decnumber / nonfin) spec
-   sign            = "+" / "-"
-   decnumber       = [sign] (1*DIGIT ["." *DIGIT] / "." 1*DIGIT)
-                            ["e" [sign] 1*DIGIT]
-   hexfloat        = [sign] "0x" (1*HEXDIG ["." *HEXDIG] / "." 1*HEXDIG)
-                            "p" [sign] 1*DIGIT
-   hexint          = [sign] "0x" 1*HEXDIG
 
 
 
@@ -2410,6 +2410,12 @@ Bormann                 Expires 20 December 2026               [Page 43]
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
+   sign            = "+" / "-"
+   decnumber       = [sign] (1*DIGIT ["." *DIGIT] / "." 1*DIGIT)
+                            ["e" [sign] 1*DIGIT]
+   hexfloat        = [sign] "0x" (1*HEXDIG ["." *HEXDIG] / "." 1*HEXDIG)
+                            "p" [sign] 1*DIGIT
+   hexint          = [sign] "0x" 1*HEXDIG
    octint          = [sign] "0o" 1*ODIGIT
    binint          = [sign] "0b" 1*BDIGIT
    nonfin          = %s"Infinity"
@@ -2452,12 +2458,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    sqstr           = SQUOTE *single-quoted SQUOTE
    bstr            = app-string / sqstr / app-rstring / rawstring
                    / app-sequence / embedded
-                     ; note: rawstring is text; app-... can be any type
-   tstr            = DQUOTE *double-quoted DQUOTE
-   embedded        = "<<" seq ">>"
-
-   array           = "[" (specms S item *(MSC item) SOC / spec S) "]"
-   map             = "{" (specms S keyp *(MSC keyp) SOC / spec S) "}"
 
 
 
@@ -2466,6 +2466,12 @@ Bormann                 Expires 20 December 2026               [Page 44]
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
+                     ; note: rawstring is text; app-... can be any type
+   tstr            = DQUOTE *double-quoted DQUOTE
+   embedded        = "<<" seq ">>"
+
+   array           = "[" (specms S item *(MSC item) SOC / spec S) "]"
+   map             = "{" (specms S keyp *(MSC keyp) SOC / spec S) "}"
    keyp            = item S ":" S item
 
    ; We allow %x09 HT in prose, but not in string literals
@@ -2508,12 +2514,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
                    / %s"f" ; FF form feed U+000C
                    / %s"n" ; LF line feed U+000A
                    / %s"r" ; CR carriage return U+000D
-                   / %s"t" ; HT horizontal tab U+0009
-                   / "\"   ; \ backslash (reverse solidus) U+005C
-
-   escapable-d     = escapable1
-                   / DQUOTE
-                   / "/"   ; / slash (solidus) U+002F (JSON!)
 
 
 
@@ -2522,6 +2522,12 @@ Bormann                 Expires 20 December 2026               [Page 45]
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
+                   / %s"t" ; HT horizontal tab U+0009
+                   / "\"   ; \ backslash (reverse solidus) U+005C
+
+   escapable-d     = escapable1
+                   / DQUOTE
+                   / "/"   ; / slash (solidus) U+002F (JSON!)
                    / (%s"u" hexchar) ;  uXXXX      U+XXXX
 
    escapable-s     = escapable1
@@ -2564,12 +2570,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
                         ; omit 0x27 '
                    / %x28-5B
                         ; omit 0x5C \
-                   / %x5D-7F
-                   / NONASCII
-
-   newline         = [%x0D] %x0A
-   DQUOTE          = %x22    ; " double quote
-   SQUOTE          = "'"     ; ' single quote
 
 
 
@@ -2578,6 +2578,12 @@ Bormann                 Expires 20 December 2026               [Page 46]
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
+                   / %x5D-7F
+                   / NONASCII
+
+   newline         = [%x0D] %x0A
+   DQUOTE          = %x22    ; " double quote
+   SQUOTE          = "'"     ; ' single quote
    DIGIT           = %x30-39 ; 0-9
    DIGIT1          = %x31-39 ; 1-9
    ODIGIT          = %x30-37 ; 0-7
@@ -2620,12 +2626,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    3.  decnumber stands for an integer in the usual decimal notation,
        unless at least one of the optional parts starting with "." and
        "e" are present, in which case it stands for a floating point
-       value in the usual decimal notation.  Note that the grammar
-       allows 3. for 3.0 and .3 for 0.3 (also for hexadecimal floating
-       point below); implementers are advised that some platform numeric
-       parsers accept only a subset of the floating point syntax in this
-       document and may require some preprocessing to use here.
-
 
 
 
@@ -2633,6 +2633,12 @@ Bormann                 Expires 20 December 2026               [Page 47]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
+
+       value in the usual decimal notation.  Note that the grammar
+       allows 3. for 3.0 and .3 for 0.3 (also for hexadecimal floating
+       point below); implementers are advised that some platform numeric
+       parsers accept only a subset of the floating point syntax in this
+       document and may require some preprocessing to use here.
 
    4.  hexint, octint, and binint stand for an integer in the usual base
        16/hexadecimal ("0x"), base 8/octal ("0o"), or base 2/binary
@@ -2676,12 +2682,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    7.  The ABNF grammar for raw strings is lenient; a parser needs to
        implement the ABNF comments on alikerawdelim and shortrawdelim as
        well.  shortrawdelim only matches sequences of backquotes that
-       are shorter than startrawdelim.  alikerawdelim only matches
-       sequences of backquotes that are exactly as long as
-       startrawdelim.
-
-     |  In a PEG parser that implements predicates, these matching
-     |  rules can for instance be implemented as follows:
 
 
 
@@ -2690,6 +2690,12 @@ Bormann                 Expires 20 December 2026               [Page 48]
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
+       are shorter than startrawdelim.  alikerawdelim only matches
+       sequences of backquotes that are exactly as long as
+       startrawdelim.
+
+     |  In a PEG parser that implements predicates, these matching
+     |  rules can for instance be implemented as follows:
      |  
      |   startrawdelim = rawdelim&{|(rd)|@rdlen = rd.text_value.length}
      |   shortrawdelim = rawdelim&{|(rd)|rd.text_value.length < @rdlen}
@@ -2706,7 +2712,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    integrate ABNF rules defined in Figure 1, which are not always
    repeated here.
 
-   Table 7 summarizes the app-prefix values defined in this document.
+   Table 8 summarizes the app-prefix values defined in this document.
 
        +============+===========================+=================+
        | app-prefix | content of single-quoted  | result type     |
@@ -2732,12 +2738,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
        |            |                           | array of length |
        |            |                           | and byte string |
        +------------+---------------------------+-----------------+
-       | IP         | "                         | Tag 54 (IPv6)   |
-       |            |                           | or 52 (IPv4) on |
-       |            |                           | the above       |
-       +------------+---------------------------+-----------------+
-       | hash       | string (usually used with | byte string     |
-       |            | sequences)                |                 |
 
 
 
@@ -2746,6 +2746,12 @@ Bormann                 Expires 20 December 2026               [Page 49]
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
+       | IP         | "                         | Tag 54 (IPv6)   |
+       |            |                           | or 52 (IPv4) on |
+       |            |                           | the above       |
+       +------------+---------------------------+-----------------+
+       | hash       | string (usually used with | byte string     |
+       |            | sequences)                |                 |
        +------------+---------------------------+-----------------+
        | HASH       | (not used)                |                 |
        +------------+---------------------------+-----------------+
@@ -2772,7 +2778,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
        | FLOAT      | (not used)                |                 |
        +------------+---------------------------+-----------------+
 
-           Table 7: App-prefix Values Defined in this Document
+           Table 8: App-prefix Values Defined in this Document
 
    Note that implementation platforms may already provide
    implementations of grammars used in application-extensions, such as
@@ -2782,6 +2788,19 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
    For convenience, the common definitions in Figure 2 are not repeated
    in the below ABNF grammars.
+
+
+
+
+
+
+
+
+
+Bormann                 Expires 20 December 2026               [Page 50]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
 
    ALPHA           = %x41-5a / %x61-7a
    DIGIT           = %x30-39 ; 0-9
@@ -2793,14 +2812,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    NONASCII        = %x80-D7FF / %xE000-10FFFF
 
          Figure 2: Common Rules Used in app-extension ABNF grammars
-
-
-
-
-Bormann                 Expires 20 December 2026               [Page 50]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
 
 5.2.1.  h: ABNF Definition of Hexadecimal representation of a byte
         string
@@ -2838,6 +2849,15 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
       |  use; \z stands for the end of the string and is notated $ in
       |  some regexp dialects.
       |  
+
+
+
+
+Bormann                 Expires 20 December 2026               [Page 51]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
+
       |       \s|
       |       /\*(?:[^*]*\*+)(?:[^/*][^*]*\*+)*/|
       |       /[^/*][^/]*/|
@@ -2847,16 +2867,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
    The syntax of the content of byte strings represented in base64 is
    described by the ABNF in Figure 4.
-
-
-
-
-
-
-Bormann                 Expires 20 December 2026               [Page 51]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
 
    This syntax allows both the classic (Section 4 of [RFC4648]) and the
    URL-safe (Section 5 of [RFC4648]) alphabet to be used.  It
@@ -2878,6 +2888,31 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    The syntax of the content of dt literals can be described by the ABNF
    for date-time in Figure 5.  This is derived from [RFC3339] as
    summarized in Section 3 of [RFC9165].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bormann                 Expires 20 December 2026               [Page 52]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
 
    app-string-dt   = date-time
 
@@ -2902,23 +2937,38 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
      Figure 5: ABNF Definition of RFC3339 Representation of a Date/Time
 
-
-
-
-
-
-
-
-Bormann                 Expires 20 December 2026               [Page 52]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
-
 5.2.4.  ip: ABNF Definition of Textual Representation of an IP Address
 
    The syntax of the content of ip literals can be described by the ABNF
    for IPv4address and IPv6address in Section 3.2.2 of [RFC3986], as
    included in slightly updated form in Figure 6.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bormann                 Expires 20 December 2026               [Page 53]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
 
    app-string-ip = IPaddress ["/" uint]
 
@@ -2957,19 +3007,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    identifier "cri" will make use of platform-provided URI
    implementations, which will include a URI parser.
 
-
-
-
-
-
-
-
-
-Bormann                 Expires 20 December 2026               [Page 53]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
-
    In case such a URI parser is not available or inconvenient to
    integrate, a grammar of the content of cri literals is provided by
    the ABNF for URI-reference in Section 4.1 of RFC 3986 [RFC3986] with
@@ -2977,6 +3014,17 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    reproduced in Figure 7.  If the content is not ASCII only (i.e., for
    IRIs), first apply Section 3.1 of [RFC3987] and apply this grammar to
    the result.
+
+
+
+
+
+
+
+Bormann                 Expires 20 December 2026               [Page 54]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
 
    app-string-cri = URI-reference
    ; ABNF from RFC 3986:
@@ -3018,14 +3066,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
                  / [ h16               ] "::" 4( h16 ":" ) ls32
                  / [ h16 *1( ":" h16 ) ] "::" 3( h16 ":" ) ls32
                  / [ h16 *2( ":" h16 ) ] "::" 2( h16 ":" ) ls32
-
-
-
-Bormann                 Expires 20 December 2026               [Page 54]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
-
                  / [ h16 *3( ":" h16 ) ] "::"    h16 ":"   ls32
                  / [ h16 *4( ":" h16 ) ] "::"              ls32
                  / [ h16 *5( ":" h16 ) ] "::"              h16
@@ -3034,6 +3074,14 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    h16           = 1*4HEXDIG
    ls32          = ( h16 ":" h16 ) / IPv4address
    IPv4address   = dec-octet "." dec-octet "." dec-octet "." dec-octet
+
+
+
+Bormann                 Expires 20 December 2026               [Page 55]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
+
    dec-octet     = "25" %x30-35         ; 250-255
                  / "2" %x30-34 DIGIT    ; 200-249
                  / "1" 2DIGIT           ; 100-199
@@ -3075,19 +3123,20 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
           Figure 7: ABNF Definition of URI Representation of a CRI
 
-
-
-Bormann                 Expires 20 December 2026               [Page 55]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
-
 5.3.  ABNF Definitions for Integrated Extension Parsers
 
    For some applications of CDN, it is an optimization to integrate
    parsers for the content of some prefixed string literals into the
    main parser, handling both the string literal syntax (e.g., escapes
    such as \' and \\) and the syntax of the extension content in one go.
+
+
+
+
+Bormann                 Expires 20 December 2026               [Page 56]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
 
    For application-extensions that only use printable ASCII characters
    (from U+0020 to U+007E) minus single-quote ' and backslash \, the
@@ -3131,19 +3180,19 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    ; 00xx - ASCII + 007F
    TWOHEX1  = ("8"/"9" / HEXDIGA) HEXDIG / "7F"
 
-
-
-Bormann                 Expires 20 December 2026               [Page 56]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
-
      Figure 9: ABNF Definitions Useful for Integrated Extension Parsers
 
    Similarly, for integrated parsers for extension literals built from
    raw strings, the ABNF definitions in Figure 10 can be useful.
    alikerawdelim only matches sequences of backquotes that are exactly
    as long as a previous startrawdelim.
+
+
+
+Bormann                 Expires 20 December 2026               [Page 57]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
 
    r-non-lf = %x0D / %x20-5f / %x61-7f / NONASCII / shortrawdelim
 
@@ -3186,19 +3235,20 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
             Figure 11: ABNF Definition for Integrated Hex Parser
 
-
-
-
-Bormann                 Expires 20 December 2026               [Page 57]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
-
 5.3.2.  b64'': ABNF Definition of Integrated Parser
 
    With glue ABNF similar to that in Figure 8 and common definitions in
    Figures 2 and 9, ABNF such as that shown in Figure 12 can be used as
    an integrated parser for b64 prefixed single-quote strings.
+
+
+
+
+
+Bormann                 Expires 20 December 2026               [Page 58]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
 
    sq-app-string-b64 = %s"b64'" s-app-string-b64 "'"
    s-app-string-b64  = b64-S *(4(b64dig b64-S))
@@ -3240,16 +3290,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    such as that shown in Figure 14 can be used as an integrated parser
    for b64 prefixed raw strings.
 
-
-
-
-
-
-Bormann                 Expires 20 December 2026               [Page 58]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
-
    raw-app-string-b64 = %s"b64" startrawdelim r-app-string-b64
    r-app-string-b64  = rb64-S *(4(b64dig rb64-S))
                      [b64dig rb64-S b64dig rb64-S
@@ -3257,6 +3297,14 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
                      ["#" *r-non-lf] alikerawdelim
    rb64-S           = *lblank *(rb64-comment *lblank)
    rb64-comment     = "#" *r-non-lf %x0A
+
+
+
+
+Bormann                 Expires 20 December 2026               [Page 59]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
 
      Figure 14: ABNF Definition for Integrated Raw String Base64 Parser
 
@@ -3299,13 +3347,6 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    Description:
       a brief description
 
-
-
-Bormann                 Expires 20 December 2026               [Page 59]
-
-Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
-
-
    Change Controller:
       (see Section 2.3 of RFC 8126 [BCP26])
 
@@ -3313,7 +3354,15 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
       a reference document that provides a description of the
       application-extension identifier
 
-   The initial content of the registry is shown in Table 8; all initial
+
+
+
+Bormann                 Expires 20 December 2026               [Page 60]
+
+Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
+
+
+   The initial content of the registry is shown in Table 9; all initial
    entries have the Change Controller "IETF".
 
 
@@ -3357,7 +3406,14 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 
-Bormann                 Expires 20 December 2026               [Page 60]
+
+
+
+
+
+
+
+Bormann                 Expires 20 December 2026               [Page 61]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3407,13 +3463,13 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
      |                       | Value          |                      |
      +-----------------------+----------------+----------------------+
 
-        Table 8: Initial Content of Application-extension Identifier
+        Table 9: Initial Content of Application-extension Identifier
                                   Registry
 
 
 
 
-Bormann                 Expires 20 December 2026               [Page 61]
+Bormann                 Expires 20 December 2026               [Page 62]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3455,7 +3511,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
       a reference document that provides a description of the
       application-extension identifier
 
-   The initial content of the registry is shown in Table 9; all initial
+   The initial content of the registry is shown in Table 10; all initial
    entries have the Change Controller "IETF".
 
 
@@ -3469,7 +3525,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 
-Bormann                 Expires 20 December 2026               [Page 62]
+Bormann                 Expires 20 December 2026               [Page 63]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3507,7 +3563,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
           |                    |                   | RFC-XXXX  |
           +--------------------+-------------------+-----------+
 
-              Table 9: Initial Content of Encoding Indicator
+             Table 10: Initial Content of Encoding Indicator
                                  Registry
 
       |  As the "Reference" column reflects, all the encoding indicators
@@ -3525,7 +3581,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 
-Bormann                 Expires 20 December 2026               [Page 63]
+Bormann                 Expires 20 December 2026               [Page 64]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3536,7 +3592,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
             | cdn  | application/cdn | RFC-XXXX, Section 6.3 |
             +------+-----------------+-----------------------+
 
-                 Table 10: New Media Type application/cdn
+                 Table 11: New Media Type application/cdn
 
    Type name:  application
    Subtype name:  cdn
@@ -3581,7 +3637,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 
-Bormann                 Expires 20 December 2026               [Page 64]
+Bormann                 Expires 20 December 2026               [Page 65]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3599,7 +3655,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
           | application/cdn | -              | TBD1 | RFC-XXXX  |
           +-----------------+----------------+------+-----------+
 
-              Table 11: New Content-Format for application/cdn
+              Table 12: New Content-Format for application/cdn
 
    TBD1 is to be assigned from the space 256..9999, according to the
    procedure "IETF Review or IESG Approval", preferably a number less
@@ -3617,7 +3673,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    // remove this note.
 
    In the "CBOR Tags" registry [IANA.cbor-tags], IANA is requested to
-   assign the tags in Table 12 from the "specification required" space
+   assign the tags in Table 13 from the "specification required" space
    (suggested assignments: 888 and 999), with the present document as
    the specification reference.
 
@@ -3632,12 +3688,12 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
    |        |           | Unresolved Application-Extension |           |
    +--------+-----------+----------------------------------+-----------+
 
-                         Table 12: Values for Tags
+                         Table 13: Values for Tags
 
 
 
 
-Bormann                 Expires 20 December 2026               [Page 65]
+Bormann                 Expires 20 December 2026               [Page 66]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3693,7 +3749,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 
-Bormann                 Expires 20 December 2026               [Page 66]
+Bormann                 Expires 20 December 2026               [Page 67]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3749,7 +3805,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 
-Bormann                 Expires 20 December 2026               [Page 67]
+Bormann                 Expires 20 December 2026               [Page 68]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3805,7 +3861,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 
-Bormann                 Expires 20 December 2026               [Page 68]
+Bormann                 Expires 20 December 2026               [Page 69]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3861,7 +3917,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 
-Bormann                 Expires 20 December 2026               [Page 69]
+Bormann                 Expires 20 December 2026               [Page 70]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3917,7 +3973,7 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
 
 
-Bormann                 Expires 20 December 2026               [Page 70]
+Bormann                 Expires 20 December 2026               [Page 71]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -3973,7 +4029,7 @@ Appendix A.  CDN and CDDL
 
 
 
-Bormann                 Expires 20 December 2026               [Page 71]
+Bormann                 Expires 20 December 2026               [Page 72]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -4029,7 +4085,7 @@ List of Figures
 
 
 
-Bormann                 Expires 20 December 2026               [Page 72]
+Bormann                 Expires 20 December 2026               [Page 73]
 
 Internet-Draft      Concise Diagnostic Notation (CDN)          June 2026
 
@@ -4054,13 +4110,13 @@ List of Tables
    Table 4:   dt and DT literals vs. plain CDN
    Table 5:   ip and IP literals vs. plain CDN
    Table 6:   hash literals vs. plain CDN
-   Table 7:   App-prefix Values Defined in this Document
-   Table 8:   Initial Content of Application-extension Identifier
+   Table 8:   App-prefix Values Defined in this Document
+   Table 9:   Initial Content of Application-extension Identifier
               Registry
-   Table 9:   Initial Content of Encoding Indicator Registry
-   Table 10:  New Media Type application/cdn
-   Table 11:  New Content-Format for application/cdn
-   Table 12:  Values for Tags
+   Table 10:  Initial Content of Encoding Indicator Registry
+   Table 11:  New Media Type application/cdn
+   Table 12:  New Content-Format for application/cdn
+   Table 13:  Values for Tags
 
 Acknowledgements
 
@@ -4085,4 +4141,4 @@ Author's Address
 
 
 
-Bormann                 Expires 20 December 2026               [Page 73]
+Bormann                 Expires 20 December 2026               [Page 74]
