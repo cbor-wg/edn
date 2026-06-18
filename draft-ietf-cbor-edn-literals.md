@@ -522,7 +522,9 @@ literal ({{embedded}}) or a single-quoted or raw string literal ({{strings}}).
 The string-based forms use their string literal as a shorthand
 form for a sequence literal representing a sequence with exactly that
 one text string data item, e.g., ``b64`Zm9v` `` is a shorthand for
-`b64<<"Zm9v">>` or ``b64<<`Zm9v`>>``.
+`b64<<"Zm9v">>` or ``b64<<`Zm9v`>>`` (this specific example obviously depends on
+`Zm9v` being allowed and meaning the same within the different forms of
+string literals used in the example).
 
 {:aside}
 > This notation is generalized from
@@ -565,7 +567,8 @@ extension takes.
 
 When the prefix is used immediately in front of a single-quoted or a raw
 string, the input takes the form of a single text string CBOR data
-item.
+item (this is useful only if the application extension is designed to
+receive a text string as input).
 When used immediately in front of a sequence literal, the input is a
 CBOR sequence of elements of the sequence literal as input.
 (For a single parameter, this is equivalent to receiving a single CBOR
@@ -939,8 +942,10 @@ the string constitute UTF-8 {{-utf8}} text, major type 3), and byte strings
 string, major type 2).
 
 (UTF-8) text strings can be directly represented (unprefixed) in CDN either as double-quoted ({{dq-lit}})
-or as raw strings ({{raw-lit}}), while byte strings can be represented as
-single-quoted strings ({{sq-lit}}).
+or as raw strings ({{raw-lit}}).
+(Text strings using either kind of literal are indistinguishable after
+decoding the specific literal syntax.)
+Byte strings can be directly represented as single-quoted strings ({{sq-lit}}).
 The latter is useful for byte strings carrying
 bytes that can be meaningfully notated as UTF-8 text.
 
@@ -1735,26 +1740,20 @@ Byte strings of a different length than 2, 4, or 8 raise an error.
 Note that the interpretation as an encoded data item does not create
 or imply an encoding indicator; that can be added separately.
 
-Example (tool used: `edn-abnf -afloat -e`):
+{{tab-float}} shows a number of examples:
 
-~~~
-🔧 "[float'fe00', float'fe00'_2, float'47110815']" -tpretty ➔
-83             # array(3)
-   F9 FE00     # primitive(65024)
-   FA FFC00000 # primitive(4290772992)
-   FA 47110815 # primitive(1192298517)
-
-🔧 "[float'fe00', float'fe00'_2, float'47110815', 0x1.22102ap+15]" ➔
-[float'fe00', float'fe00'_2, 37128.08203125, 37128.08203125]
-~~~
-{: post="fold"}
+| CDN             | hex CBOR    | preferred CDN                 |
+| float'fe00'     | F9 FE00     |                               |
+| float'ffc00000' | F9 FE00     |                               |
+| float'fe00'_2   | FA FFC00000 |                               |
+| float'47110815' | FA 47110815 | 0x1.22102ap+15<br>37128.08203125 |
+{: #tab-float title="Examples for use of float Extension"}
 
 The purpose of this application extension is to close a gap in CDN's
 {{IEEE754}} binary64 support:
-Without this (or a similar) extension there is no way to represent NaN
-values different from the one called out at the end of {{Section 4.1 of
-RFC8949@-cbor}}: "(for many applications, the single NaN encoding
-0xf97e00 will suffice)".
+Without this or a similar extension, there is no way to represent NaN
+values other than the NaN represented as 0xf97e00 (see {{Section 4.1 of
+RFC8949@-cbor}}).
 For finite floating point numbers, the decimal or hex floating point
 representations are preferred.
 
