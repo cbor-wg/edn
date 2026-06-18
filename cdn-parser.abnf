@@ -44,17 +44,16 @@ app-string      = app-prefix sqstr
 app-sequence    = app-prefix "<<" seq ">>"
 app-rstring     = app-prefix rawstring
 rawstring       = startrawdelim
-                  [newline] ; swallow up to one leading newline
-                  rawcontent
-                  matchrawdelim
+                  raw-inner
+                  alikerawdelim
 rawdelim        = 1*"`"
 startrawdelim   = rawdelim
                   ; width (number of backquotes) distinguishes
-                  ; between following matchrawdelim and shortrawdelim
-matchrawdelim   = rawdelim ; width >= previous startrawdelim
+                  ; between following alikerawdelim and shortrawdelim
+alikerawdelim   = rawdelim ; width == previous startrawdelim
 shortrawdelim   = rawdelim ; width < previous startrawdelim
 rawchars        = 1*(%x0a/%x0d / %x20-5f / %x61-7e / NONASCII)
-rawcontent      = 1*(rawchars / shortrawdelim)
+raw-inner       = 1*(rawchars / shortrawdelim)
 
 sqstr           = SQUOTE *single-quoted SQUOTE
 bstr            = app-string / sqstr / app-rstring / rawstring
