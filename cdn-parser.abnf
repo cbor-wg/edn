@@ -1,15 +1,12 @@
 seq             = S [item *(MSC item) SOC]
 one-item        = S item S
-item            = map / array / tagged
-                / number / simple
-                / string / streamstring
+item            = map / array / tagged ; spec inside
+                / (number / string / prefixed) spec
+                / simple / ellipsis ; no spec
+                / streamstring ; deprecated (spec inside)
 
-string1         = (tstr / bstr) spec
-string          = string1 / ellipsis
-ellipsis        = 3*"." ; "..." or more dots
-
-number          = (hexfloat / hexint / octint / binint
-                   / decnumber / nonfin) spec
+number          = hexfloat / hexint / octint / binint
+                / decnumber / nonfin
 sign            = "+" / "-"
 decnumber       = [sign] (1*DIGIT ["." *DIGIT] / "." 1*DIGIT)
                          ["e" [sign] 1*DIGIT]
@@ -21,6 +18,11 @@ binint          = [sign] "0b" 1*BDIGIT
 nonfin          = %s"Infinity"
                 / %s"-Infinity"
                 / %s"NaN"
+
+string          = dqstr / rawstring / sqstr / embedded
+
+ellipsis        = 3*"." ; "..." or more dots
+
 simple          = %s"false"
                 / %s"true"
                 / %s"null"
@@ -38,11 +40,11 @@ simple-number   = "25" %x30-35         ; 250-255
 uint            = "0" / DIGIT1 *DIGIT
 tagged          = uint spec "(" S item S ")"
 
-app-prefix      = lcalpha *lcldh ; including h and b64
-                / ucalpha *ucldh ; tagged variant, if defined
-app-string      = app-prefix sqstr
-app-sequence    = app-prefix "<<" seq ">>"
-app-rstring     = app-prefix rawstring
+prefix          = lcalpha *lcldh
+                / ucalpha *ucldh
+
+prefixed        = prefix (sqstr / rawstring / embedded)
+
 rawstring       = startrawdelim
                   raw-inner
                   alikerawdelim
@@ -55,11 +57,8 @@ shortrawdelim   = rawdelim ; width < previous startrawdelim
 rawchars        = 1*(%x0a/%x0d / %x20-5f / %x61-7e / NONASCII)
 raw-inner       = 1*(rawchars / shortrawdelim)
 
+dqstr           = DQUOTE *double-quoted DQUOTE
 sqstr           = SQUOTE *single-quoted SQUOTE
-bstr            = app-string / sqstr / app-rstring / rawstring
-                / app-sequence / embedded
-                  ; note: rawstring is text; app-... can be any type
-tstr            = DQUOTE *double-quoted DQUOTE
 embedded        = "<<" seq ">>"
 
 array           = "[" (specms S item *(MSC item) SOC / spec S) "]"
@@ -88,8 +87,6 @@ MSC             = ("," S) / (MS ["," S])
 ; optional comma and/or space
 SOC             = S ["," S]
 
-; check semantically that strings are either all text or all bytes
-; note that there must be at least one string to distinguish
 streamstring    = "(_" MS string *(MSC string) SOC ")"
 spec            = ["_" *wordchar]
 specms          = ["_" *wordchar MS]
