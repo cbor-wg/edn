@@ -54,7 +54,7 @@ startrawdelim   = rawdelim
                   ; between following alikerawdelim and shortrawdelim
 alikerawdelim   = rawdelim ; width == previous startrawdelim
 shortrawdelim   = rawdelim ; width < previous startrawdelim
-rawchars        = 1*(%x0a/%x0d / %x20-5f / %x61-7e / NONASCII)
+rawchars        = 1*(%x0a / %x0d / %x20-5f / %x61-7e / NONASCII)
 raw-inner       = 1*(rawchars / shortrawdelim)
 
 dqstr           = DQUOTE *double-quoted DQUOTE
