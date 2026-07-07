@@ -402,40 +402,11 @@ as embedded CBOR or `b64''` in the appropriate places.
 
 ### Evolution {#evolution}
 
-Diagnostic notation is often used in interchange
-situations where backward compatibility is much less of a concern than
-in the kinds of interchanges enabled by binary CBOR.
-This meant that extensions to diagnostic notation could be introduced
-relatively freely in {{Appendix G of -cddl}} and in {{Section 4.2 of
--seq}}.
-There was little point in not using these extensions for instance in the examples
-contained in specifications.
-With the landscape of CBOR related tools becoming more populated,
-this kind of evolution is now less desirable.
+Diagnostic notation was initially designed for interchange situations where backward compatibility was considered less critical than in binary CBOR interchanges. This allowed for quite freely making extensions in {{Appendix G of -cddl}} and {{Section 4.2 of -seq}}. However, with increased interchange between CBOR-related tools, this unrestricted evolution is less desirable.
 
-For the CBOR representation format, {{Section 7.1 of RFC8949@-cbor}}
-introduced a limited number of specific _extension points_, in
-particular the concept of _tags_, to enable the introduction of new
-constructs such as data types without a need to update the base
-specification.
+The present specification supports a more controlled path of evolving CDN through two well-defined extension points: one general ({{app-lit}}) and one specific to diagnostic processing of encoding variants ({{encoding-indicators}}).
 
-The present specification follows suit by adding extension points to
-CDN, one very general one ({{app-lit}}) and one specific to diagnostic
-processing of encoding variants ({{encoding-indicators}}).
-
-From the relatively unconstrained way extensions were added in
-{{-cddl}}, the present specification also derives taking the liberty to
-make two changes to these extensions that are not entirely backwards
-compatible.
-{{comment-discussion}} and {{concat-removed}} have more details.
-Also, some syntax that has been part of the original diagnostic
-notation has been deprecated ({{ei-string}}) and replaced ({{ilxs}}).
-Changes of this kind would be unacceptable for the binary CBOR format
-itself, but can be OK just once now, considering the more permissive
-conditions under which the features that will suffer these changes
-were originally introduced.
-With CDN now featuring the new extension points, a need for this kind
-of changes should arise much less.
+The present specification makes two changes to the {{-cddl}} extensions that are not entirely backward compatible. These changes are detailed in {{comment-discussion}} and {{concat-removed}}. Some syntax from the original diagnostic notation is being deprecated ({{ei-string}}) and replaced ({{ilxs}}). These changes are deemed acceptable now because the updated features were originally introduced under more permissive conditions. With CDN now more rigidly defined and focusing evolution on the new extension points, such changes are no longer foreseen.
 
 ### Character Repertoire of Source {#repertoire}
 
