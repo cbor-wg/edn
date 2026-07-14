@@ -2434,12 +2434,12 @@ For application-extensions that only use printable ASCII characters
 (from U+0020 to U+007E) minus single-quote `'` and backslash `\`, the ABNF
 such as that given in {{app-grammars}} can be directly used as an
 integrated parser, after adding some glue ABNF.
-For instance, for app-string-dt, add an alternative to `bstr` that
+For instance, for app-string-dt, add an alternative to `prefixed` that
 points to a rule for prefixed single-quoted string literals ({{abnf-grammar-sq-glue}}).
 
 ~~~ abnf
-bstr            = sq-app-string-dt /
-                  app-string / sqstr / app-sequence / embedded
+prefixed        = sq-app-string-dt /
+                  prefix (sqstr / rawstring / embedded)
 sq-app-string-dt = (%s"dt'"/%s"DT'") app-string-dt "'"
 ~~~
 {: #abnf-grammar-sq-glue sourcecode-name="cdn-glue.abnf"
