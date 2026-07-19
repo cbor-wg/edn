@@ -192,10 +192,10 @@ one for adding application-oriented "prefixed" literal forms.
 It uses these registries to add encoding indicators for a more
 complete coverage of encoding variation,
 and to add prefixed literal forms that enhance CDN with text
-representations of epoch-based date/times, of IP addresses
-and prefixes {{-iptag}}, and of Concise Resource Identifiers (CRI
-{{-cri}}), as well as a prefixed literal that
-represents cryptographic hash values computed from byte strings.
+representations of various kinds of data items.
+Among others, these include epoch-based date/times, IP addresses
+and prefixes {{-iptag}}, and Concise Resource Identifiers (CRI
+{{-cri}}), as well cryptographic hash values computed from byte strings.
 
 In addition, this document registers a media type identifier
 and a content-format for CDN.  This does not
@@ -237,13 +237,13 @@ and learning complexity.
 
 {{diagnostic-notation}} of this document 
 defines CDN.
-After introductory material, {{app-ext}}
+After introductory material, {{app-lit}} further
 illustrates the concept of prefixed literals by
 defining a number of them in app-extensions.
 {{encoding-indicators}} describes syntax that can be interpreted by a
 diagnostic implementation to take note/take control of which of
 possibly several encoding variants is in use for a data item; this
-syntax always includes an underscore ("`_`") and therefore visually
+syntax always includes an underscore ("`_`") and therefore is visually
 easy to ignore.
 {{cdn-tags}} defines mechanisms
 for dealing with unknown prefixes as well as
@@ -361,7 +361,7 @@ or even deviating from the basic
 configuration in some systematic way, can further assist in comparing
 test data.
 Information obtained from a CDDL model can help in choosing
-prefix literals or specific string representations such
+prefixed literals or specific string representations such
 as embedded CBOR or `b64''` in the appropriate places.
 
 ### Evolution {#evolution}
@@ -370,7 +370,7 @@ Diagnostic notation was initially designed for interchange situations where back
 
 The present specification supports a more controlled path of evolving CDN through two well-defined extension points: one general ({{app-lit}}) and one specific to diagnostic processing of encoding variants ({{encoding-indicators}}).
 
-The present specification makes two changes to the {{-cddl}} extensions that are not entirely backward compatible. These changes are detailed in {{comment-discussion}} and {{concat-removed}}. Some syntax from the original diagnostic notation is being deprecated ({{ei-string}}) and replaced ({{ilxs}}). These changes are deemed acceptable now because the updated features were originally introduced under more permissive conditions. With CDN now more rigidly defined and focusing evolution on the new extension points, such changes are no longer foreseen.
+The present specification makes two changes to the {{-cddl}} extensions that are not entirely backward compatible. These changes are detailed in {{comment-discussion}} and in <!--concat-removed--> the aside at the end of {{strings}}. Some syntax from the original diagnostic notation is being deprecated ({{ei-string}}) and replaced ({{ilxs}}). These changes are deemed acceptable now because the updated features were originally introduced under more permissive conditions. With CDN now more rigidly defined and focusing evolution on the new extension points, such changes are no longer foreseen.
 
 ### Character Repertoire of Source {#repertoire}
 
@@ -449,6 +449,18 @@ strings, arrays, and maps (maps are called objects in JSON; the
 diagnostic notation extends JSON here by allowing any data item in the
 map key position).
 
+<!-- ## Prefixed Literals {#app-lit} -->
+
+CDN provides _literals_ that represent CBOR data items textually.
+Many of the forms of literals provided are predefined by this
+document, but it also defines an extension point that enables defining
+additional _application-oriented extension literals_.
+These are also known as _prefixed literals_, as they start
+with a _prefix_ that identifies the application-oriented extension and
+possibly a specific variant of that.
+{{app-lit}} discusses these in more details and defines a number of
+app-extensions that are included with this specification.
+
 As CDN is used for truly diagnostic purposes, its implementations MAY
 support generation and possibly ingestion of CDN for CBOR data items
 that are well-formed but not valid.
@@ -472,84 +484,6 @@ Any additional detailed syntax discussion needed has been deferred to
 
 Additional information about implementation and use of CDN is
 continuously being collected by the community in {{CDN-WIKI}}.
-
-## Prefixed Literals {#app-lit}
-
-CDN provides _literals_ that represent CBOR data items textually.
-Many of the forms of literals provided are predefined by this
-document, but it also defines an extension point that enables defining additional
-_application-oriented extension literals_.
-These are also known as _prefixed literals_, as they start with a _prefix_ that identifies the
-application-oriented extension and possibly a specific variant of that, immediately followed by a sequence
-literal ({{embedded}}) or a single-quoted or raw string literal ({{strings}}).
-The string-based forms use their string literal as a shorthand
-form for a sequence literal representing a sequence with exactly that
-one text string data item, e.g., ``b64`Zm9v` `` is a shorthand for
-`b64<<"Zm9v">>` or ``b64<<`Zm9v`>>``.
-
-{:aside}
-> This notation is generalized from
-{{Section 8 of RFC8949@-cbor}}, which provides for notating byte
-strings in a number of {{-base}} base encodings, where the encoded text
-is enclosed in single quotes, prefixed by a prefix (»h« for
-base16, »b32« for base32, »h32« for base32hex, »b64« for base64 or
-base64url).
->
-> This syntax can be thought to establish a name space, with the names
-"h", "b32", "h32", and "b64" taken, but other names being unallocated.
-The present specification allows registering additional names for this namespace,
-which it calls *app-extension identifiers*.
-
-More precisely, an *app-extension identifier* is a registered name consisting of a
-lowercase ASCII letter (`[a-z]`) and zero or more additional ASCII
-characters that are either lowercase letters, digits, or hyphens (`[a-z0-9-]`).
-»false«, »true«, »null«, and »undefined« cannot be used as such
-identifiers and are reserved.
-
-app-extension identifiers are registered in the "App-Extension Identifiers" registry
-({{appext-iana}}).
-
-An app-extension (such as `dt`) MAY also define the meaning of
-one additional prefix derived from its app-extension identifier by
-replacing each lowercase character by its uppercase counterpart (such
-as `DT`).
-As a convention, using the all-uppercase variant implies making use of
-a CBOR tag appropriate for this app-extension (such
-as tag number 1 for `DT`, where in contrast the prefix `dt` stands for
-the unwrapped tag content).
-
-In summary, an app-extension identifier gives rise to one or two
-prefixes, one that is lexically identical to the
-identifier (i.e., all lowercase), and potentially another one that is an
-all-uppercase variation of it.
-In addition to specifying which of these two variations exhibits which
-specific semantics, the app-extension specifies what input the
-extension takes.
-
-When the prefix is used immediately in front of a single-quoted or a raw
-string, the input takes the form of a single text string CBOR data
-item.
-When used immediately in front of a sequence literal, the input is a
-CBOR sequence of elements of the sequence literal as input.
-(For a single parameter, this is equivalent to receiving a single CBOR
-data item as the argument.)
-The app-extension can provide behavior that depends on the
-number of items supplied as input to it and their data types; it
-cannot distinguish between its prefix being used with a single-quoted
-string, a raw string, or a CBOR sequence composed of a single text
-string data item (as illustrated for instance in Tables {{<tab-equiv-dt}},
-{{<tab-equiv-ip}}, and {{<tab-equiv-hash}}).
-
-This specification defines a number of generally applicable
-app-extensions ({{app-ext}}), both to motivate
-making these extensions generally available, and to illustrate the
-concept.
-
-Of these, the app-extensions `h`, `b64`, `t1`, `b1`, `dt` and `ip` are
-mandatory to implement.
-(As mentioned, for simplicity we use the term "app-extensions" for the
-mechanism discussed in this section even if it is
-used to describe a part of base CDN.)
 
 ## Comments {#comments}
 
@@ -682,6 +616,8 @@ In addition to JSON's decimal number literals, CDN provides hexadecimal, octal,
 and binary number literals in the usual C-language notation (`0x`, `0o` prefix only, and `0b`,
 respectively).
 
+CBOR distinguishes two basic kinds of numbers: integers and floating
+point values.
 Numbers composed only of digits (of the respective base) are
 interpreted as CBOR integers (major type 0/1, or where the number
 cannot be represented in this way, major type 6 with tag 2/3).
@@ -693,9 +629,9 @@ Similarly,
 `-1` and `-0001` both designate the same negative integer minus one.
 
 Using a decimal point (`.`) and/or an exponent (`e` for decimal, `p`
-for hexadecimal) turns the number into a floating point number (major
-type 7) instead, irrespective of whether it is an integral number
-mathematically.
+for hexadecimal) turns the number into a floating point number (part
+of major type 7) instead, irrespective of whether it is an integral
+number mathematically.
 Note that, in floating point numbers, `0.0` is not the same number as
 `-0.0`, even if they are mathematically equal.
 
@@ -724,9 +660,8 @@ significand except for a set quiet bit; this is represented as
 
 <aside markdown="1">
 
-{{tab-float-encoding}} shows how the floating point numbers 1.1, 1.5
-and how
-these three values are encoded in preferred serialization and when
+{{tab-float-encoding}} shows how the floating point numbers 1.1 and 1.5
+as well as these three non-finite values are encoded, both in preferred serialization ({{Section 4.1 of RFC8949@-cbor}}) and when
 encoding indicators (please see {{encoding-indicators}}) are given.
 
 <!-- $ edn-abnf -e '1.5, 1.5_1, 1.5_2, 1.5_3' -tcbor | cborseq2pretty.rb
@@ -754,7 +689,8 @@ point values" }
 
 </aside>
 
-See {{decnumber}} for additional details of the CDN number syntax.
+<!--decnumber-->
+See items {{<decnumber}} to {{<intnumber}} in the bullet list at the end of {{grammar}} for additional details of the CDN number syntax.
 
 (Note that literals for further number formats, e.g., for representing
 rational numbers as fractions, or for other NaN values than the one called `NaN`, can
@@ -860,16 +796,17 @@ prefixed by what looks like an app-extension prefix (see
 In a prefixed string literal, the text content of the single-quoted
 string literal is not used directly as a byte string, but is further
 processed in a way that is defined by the meaning given to the prefix.
-Depending on the prefix, the result of that processing can, but need
-not be, a byte string value.
+Depending on the prefix, the result of that processing can, but often
+is not, a byte string value.
 
 Prefixed string literals (whether single-quoted after the
-prefix or a raw string ({{raw-lit}})) are used both for base-encoded byte string literals (see {{encoded-byte-strings}}) and for
-prefixed literals (see {{app-lit}}, called app-string).
+prefix or a raw string ({{raw-lit}})) are used for
+prefixed literals (see {{app-lit}}, such as base-encoded byte string literals (see {{encoded-byte-strings}}).
+<!-- XXX -->
 (Additional kinds of base-encoded string literals can be defined as
 prefixed literals by registering their prefixes;
 there is no fundamental difference between the original two predefined
-base-encoded string literal prefixes (`h`, `b64`) and any such potential
+base-encoded string literal prefixes ({{encoded-byte-strings}}: `h`, `b64`) and any such potential
 future extension literal prefixes; for simplicity of expression, both
 cases are referred to as "prefixed literals".)
 
@@ -906,7 +843,7 @@ An example for a raw string that contains a double backquote and
 therefore is notated starting and ending with a triple backquote:
 
 ~~~ cbor-diag
-```To emulate typographic quotes, sometimes duplicate backward and
+```To emulate typographic quotes, sometimes double backward and
 forward single quotes are used, as in ``text.''
 ```
 ~~~
@@ -965,73 +902,6 @@ additional rules work; more complex examples would be necessary to
 provide additional motivation why this is a good way to handle the
 various cases.)
 
-### Base-Encoded Byte String Literals {#encoded-byte-strings}
-
-[^move2]
-
-[^move2]: This section will move to new subsections of Section 3.
-
-Besides the unprefixed byte string literals that are analogous to JSON text
-string literals, CDN provides prefixed literals that can represent
-byte strings by base-encoding them, typically notated as prefixed
-string literals.
-The app-extension identifier selects one of the base encodings
-{{-base}}, without padding.
-Most often, the base encoding is
-enclosed in a single-quoted or raw string literal, prefixed by »h« for base16 or
-»b64« for base64 or base64url (the actual encodings of the latter two
-have the same meaning where they overlap, so the string remains unambiguous).
-For example, the byte string consisting of the four bytes `12 34 56 78`
-(given in hexadecimal here) could be written `h'12345678'` or
-`b64'EjRWeA'` when using single-quoted string literals, or
-``h`12345678` `` or ``b64`EjRWeA` `` when using raw string literals.
-
-{:aside}
->
-(Note that {{Section 8 of RFC8949@-cbor}} also mentions »b32« for
-base32 and »h32« for base32hex.
-This has not been implemented widely
-and therefore is not directly included in this specification.
-These and further byte string formats now can easily be added back as
-prefixed literals.)
-
-Examples often benefit from some blank space (spaces, line breaks) in
-byte strings literals.
-In certain CDN prefixed byte string literals, blank space is ignored; for
-instance, the following are equivalent:
-
-~~~~ cbor-diag
-   h'48656c6c6f20776f726c64'
-   h'48 65 6c 6c 6f 20 77 6f 72 6c 64'
-   h'4 86 56c 6c6f
-     20776 f726c64'
-~~~~
-
-The internal syntax of prefixed single-quote literals such
-as `h''` and `b64''` might also allow comments as blank space (see {{comments}}).
-
-~~~~ cbor-diag
-   h'68656c6c6f20776f726c64'
-   h'68 65 6c /doubled l!/ 6c 6f # hello
-     20 /space/
-     77 6f 72 6c 64' /world/
-~~~~
-
-Slash characters are part of the base64 classic alphabet (see
-Table 1 in {{Section 4 of RFC4648}}), and they therefore need to be in the
-`b64''` set of characters that contribute to the byte string.
-Therefore, only end-of-line comments starting with `#` are available inside
-b64 byte string literals.
-
-~~~~ cbor-diag
-   b64'/base64 not a comment/ but one follows # comment'
-   h'FDB6AC 7BAE27A2D69CA2699E9EDFDBBADA2779FA25 968C2C'
-~~~~
-
-These two byte string literals stand for the same byte string; the
-deliberately confusing base64 content starts with
-`b64'/bas'` which is the same as h'FDB6AC' and ends with b64'lows'
-which is the same as `h'968C2C'`.
 
 
 ### CBOR Sequence Literals {#embedded}
@@ -1076,12 +946,12 @@ For instance, each pair of columns in the following are equivalent:
    <<"hello"_0, null>>  h'7805 68656c6c6f f6'
 ~~~~
 
-For prefixed sequence literals, the processing of encoding indicators
-on the arguments can be defined by the app-extension being
+For prefixed sequence literals, the processing of arguments that use
+specific encoding variants can be defined by the app-extension being
 used.
 See {{ilxs}} for an example of where this is done.
 Encoding indicators on the arguments are ignored if the app-extension
-does not define their handling.
+does not define special handling of encoding variants.
 
 ### Validity of Text Strings {#text-validity}
 
@@ -1198,7 +1068,7 @@ in this CDN that is not representing a valid CBOR data item:
 
 A tag is
 written as a decimal unsigned integer (no leading zeros except for the
-actual number zero, i.e., `0|[1-9][0-9]*`) for the tag number, followed by the tag content
+actual tag number zero, i.e., `0|[1-9][0-9]*`) for the tag number, followed by the tag content
 in parentheses; for instance, a date in the format specified by RFC 3339
 (ISO 8601) could be
 notated as:
@@ -1206,7 +1076,7 @@ notated as:
 {: indent='5'}
 0("2013-03-21T20:04:00Z")
 
-or the equivalent epoch-based time as the following:
+or the equivalent epoch-based time:
 
 {: indent='5'}
 1(1363896240)
@@ -1239,15 +1109,156 @@ indicates major type 7, value 42, and »`simple(20)`« indicates
 
 
 
-Prefixed Literals {#app-ext}
+Prefixed Literals {#app-lit}
 =======================================
 
-This document extends the syntax used in diagnostic notation to also
-enable app-extensions ({{app-lit}}).
-This section defines a number of app-extensions.
+After a short overview of prefixed literals in general, this
+section defines a number of app-extensions included with this
+specification.
+
+Prefixed literals start with a _prefix_ that identifies the
+app-extension and possibly a specific variant of
+that, immediately followed by a sequence literal ({{embedded}}) or a
+single-quoted or raw string literal ({{strings}}).
+
+The string-based forms use their string literal as a shorthand form
+for a sequence literal representing a sequence with exactly that one
+text string data item, e.g., ``b64`Zm9v` `` is a shorthand for
+`b64<<"Zm9v">>` or ``b64<<`Zm9v`>>`` (this specific example obviously
+depends on `Zm9v` being allowed and meaning the same within the
+different forms of string literals used in the example).
+
+{:aside}
+> This notation is generalized from
+{{Section 8 of RFC8949@-cbor}}, which provides for notating byte
+strings in a number of {{-base}} base encodings, where the encoded text
+is enclosed in single quotes, prefixed by a prefix (»h« for
+base16, »b32« for base32, »h32« for base32hex, »b64« for base64 or
+base64url).
+>
+> This syntax can be thought to establish a name space, with the names
+"h", "b32", "h32", and "b64" taken, but other names being unallocated.
+The present specification allows registering additional names for this namespace,
+which it calls *app-extension identifiers*.
+
+More precisely, an *app-extension identifier* is a registered name consisting of a
+lowercase ASCII letter (`[a-z]`) and zero or more additional ASCII
+characters that are either lowercase letters, digits, or hyphens (`[a-z0-9-]`).
+»false«, »true«, »null«, and »undefined« cannot be used as such
+identifiers and are reserved.
+
+app-extension identifiers are registered in the "App-Extension Identifiers" registry
+({{appext-iana}}).
+
+An app-extension (such as `dt`) MAY also define the meaning of
+one additional prefix derived from its app-extension identifier by
+replacing each lowercase character by its uppercase counterpart (such
+as `DT`).
+As a convention, using the all-uppercase variant implies making use of
+a CBOR tag appropriate for this app-extension (such
+as tag number 1 for `DT`, where in contrast the prefix `dt` stands for
+the unwrapped tag content).
+
+In summary, an app-extension identifier gives rise to one or two
+prefixes, one that is lexically identical to the
+identifier (i.e., all lowercase), and potentially another one that is an
+all-uppercase variation of it.
+In addition to specifying which of these two variations exhibits which
+specific semantics, the app-extension specifies what input the
+extension takes.
+
+When the prefix is used immediately in front of a single-quoted or a raw
+string, the input takes the form of a single text string CBOR data
+item (this is useful only if the app-extension is designed to
+receive a text string as input).
+When used immediately in front of a sequence literal, the input is a
+CBOR sequence of elements of the sequence literal as input.
+(For a single parameter, this is equivalent to receiving a single CBOR
+data item as the argument.)
+The app-extension can provide behavior that depends on the
+number of items supplied as input to it and their data types; it
+cannot distinguish between its prefix being used with a single-quoted
+string, a raw string, or a CBOR sequence composed of a single text
+string data item (as illustrated for instance in Tables {{<tab-equiv-dt}},
+{{<tab-equiv-ip}}, and {{<tab-equiv-hash}}).
+
+This specification defines a number of generally applicable
+app-extensions ({{app-lit}}), both to motivate
+making these extensions generally available, and to illustrate the
+concept.
+
+Of these, the app-extensions `h`, `b64`, `t1`, `b1`, `dt` and `ip` are
+mandatory to implement.
+(As mentioned, for simplicity we use the term "app-extensions" for the
+mechanism discussed in this section even if it is
+used to describe a part of base CDN.)
+
+## Base-Encoded Byte String Literals: h and b64 {#encoded-byte-strings}
+
+Besides the unprefixed byte string literals that are analogous to JSON text
+string literals, CDN provides prefixed literals that can represent
+byte strings by base-encoding them, typically notated as prefixed
+string literals.
+The app-extension identifier selects one of the base encodings
+{{-base}}, without padding.
+Most often, the base encoding is
+enclosed in a single-quoted or raw string literal, prefixed by »h« for base16 or
+»b64« for base64 or base64url (the actual encodings of the latter two
+have the same meaning where they overlap, so the string remains unambiguous).
+For example, the byte string consisting of the four bytes `12 34 56 78`
+(given in hexadecimal here) could be written `h'12345678'` or
+`b64'EjRWeA'` when using single-quoted string literals, or
+``h`12345678` `` or ``b64`EjRWeA` `` when using raw string literals.
+
+{:aside}
+>
+(Note that {{Section 8 of RFC8949@-cbor}} also mentions »b32« for
+base32 and »h32« for base32hex.
+This has not been implemented widely
+and therefore is not directly included in this specification.
+These and further byte string formats now can easily be added back as
+prefixed literals.)
+
+Examples often benefit from some blank space (spaces, line breaks) in
+byte string literals.
+In the base-encoded byte string literals, blank space is ignored in
+the input; for instance, the following are equivalent:
+
+~~~~ cbor-diag
+   h'48656c6c6f20776f726c64'
+   h'48 65 6c 6c 6f 20 77 6f 72 6c 64'
+   h'4 86 56c 6c6f
+     20776 f726c64'
+~~~~
+
+The internal syntax of prefixed single-quote literals such
+as `h''` and `b64''` also allow comments as blank space (see {{comments}}).
+
+~~~~ cbor-diag
+   h'68656c6c6f20776f726c64'
+   h'68 65 6c /doubled l!/ 6c 6f # hello
+     20 /space/
+     77 6f 72 6c 64' /world/
+~~~~
+
+Slash characters are part of the base64 classic alphabet (see
+Table 1 in {{Section 4 of RFC4648}}), and they therefore need to be in the
+`b64''` set of characters that contribute to the byte string.
+Therefore, only end-of-line comments starting with `#` are available inside
+b64 byte string literals.
+
+~~~~ cbor-diag
+   b64'/base64 not a comment/ but one follows # comment'
+   h'FDB6AC 7BAE27A2D69CA2699E9EDFDBBADA2779FA25 968C2C'
+~~~~
+
+These two byte string literals stand for the same byte string; the
+deliberately confusing base64 content starts with
+`b64'/bas'` which is the same as h'FDB6AC' and ends with b64'lows'
+which is the same as `h'968C2C'`.
 
 
-Date and Time: The "dt" Extension {#dt}
+Date and Time: dt {#dt}
 ------------------
 
 The app-extension identifier "dt" is used to notate a
@@ -1284,7 +1295,7 @@ equivalent notation not using a prefixed literal.
 See {{dt-grammar}} for an ABNF definition for the text string input of `dt` literals.
 
 
-IP Addresses and Related Structures: The "ip" Extension {#ip}
+IP Addresses and Related Structures: ip {#ip}
 ------------------
 
 The app-extension identifier "ip" is used to notate an IP
@@ -1337,7 +1348,7 @@ equivalent notation not using a prefixed literal.
 See {{ip-grammar}} for an ABNF definition for the content of `ip` literals.
 
 
-Cryptographic Hash Values: The "hash" Extension {#hash}
+Cryptographic Hash Values: hash {#hash}
 --------------------
 
 The app-extension identifier "hash" is used to notate the
@@ -1368,7 +1379,7 @@ identifier "hash".
 | `hash<<'foo', "SHA-512">>` | h'F7FBBA6E0636F890E56FBBF3283E524C<br>6FA3204AE298382D624741D0DC663832<br>6E282C41BE5E4254D8820772C5518A2C<br>5A8C0C7F7EDA19594A7EB539453E1ED7' |
 {: #tab-equiv-hash title="hash literals vs. plain CDN"}
 
-String Concatenation: The "b1" and "t1" Extensions {#t1b1}
+String Concatenation: b1 and t1 {#t1b1}
 --------------------
 
 [^t1b1name]
@@ -1440,7 +1451,7 @@ following rules:
 * If there is no ellipsis in the concatenated list, the result of
   processing the list will always be a single string data item.
 
-Creating Indefinite-length Encoded Strings: The "ilbs" and "ilts" Extensions {#ilxs}
+Creating Indefinite-length Encoded Strings: ilbs and ilts {#ilxs}
 ----------------------------------------------------------------------------
 
 The `ilbs` and `ilts` app-extensions are semantically
@@ -1500,7 +1511,7 @@ is equivalent to
 See {{cri-grammar}} for an ABNF definition for the content of `cri` literals.
 
 
-## The "float" Extension
+## Floating-Point Values: float
 
 <!-- IEEE754-oriented literals for more floating point values -->
 
@@ -1996,33 +2007,34 @@ The following additional items should help in the interpretation:
   5.13.4 of {{Cplusplus}}; floating-suffix/floating-point-suffix from
   the latter two is not used here).
 
-5. For `hexint`, `octint`, `binint`, and when `decnumber` stands for an integer, the
-  corresponding CBOR data item is represented using major type 0 or 1
-  if possible, or using tag 2 or 3 if not.
-  In the latter case, this specification does not define any encoding
-  indicators that apply.
-  If fine control over encoding is desired, this can be expressed by
-  being explicit about the representation as a tag:
-  E.g., `987654321098765432310`, which is equivalent to `2(h'35 8a 75
-  04 38 f3 80 f5 f6')` in its Preferred Serialization, might be
-  written as `2_3(h'00 00 00 35 8a 75 04 38 f3 80 f5 f6'_1)` if
-  leading zeros need to be added during serialization to obtain
-  specific sizes for tag head, byte string head, and the overall byte
-  string.
+5. {: #intnumber}
+   For `hexint`, `octint`, `binint`, and when `decnumber` stands for an integer, the
+   corresponding CBOR data item is represented using major type 0 or 1
+   if possible, or using tag 2 or 3 if not.
+   In the latter case, this specification does not define any encoding
+   indicators that apply.
+   If fine control over encoding is desired, this can be expressed by
+   being explicit about the representation as a tag:
+   E.g., `987654321098765432310`, which is equivalent to `2(h'35 8a 75
+   04 38 f3 80 f5 f6')` in its Preferred Serialization, might be
+   written as `2_3(h'00 00 00 35 8a 75 04 38 f3 80 f5 f6'_1)` if
+   leading zeros need to be added during serialization to obtain
+   specific sizes for tag head, byte string head, and the overall byte
+   string.
 
-   When `decnumber` stands for a floating point value, and for
-   `hexfloat` and `nonfin`, a floating point data item with major
-   type 7 is used; diagnostic implementations employ Preferred
-   Serialization unless the item was modified by an
-   encoding indicator, which then needs to be `_1`, `_2`, or `_3`.
-   For this, the number range needs to fit into an {{IEEE754}} binary64 (or the size
-   corresponding to the encoding indicator), and the precision will be
-   adjusted to binary64 before further applying Preferred Serialization
-   (or to the size corresponding to the encoding indicator).
-   Tag 4/5 representations are not generated in these cases.
-   Future app-prefixes could be defined to allow more control for
-   obtaining a tag 4/5 representation directly from a hex or decimal
-   floating point literal.
+    When `decnumber` stands for a floating point value, and for
+    `hexfloat` and `nonfin`, a floating point data item with major
+    type 7 is used; diagnostic implementations employ Preferred
+    Serialization unless the item was modified by an
+    encoding indicator, which then needs to be `_1`, `_2`, or `_3`.
+    For this, the number range needs to fit into an {{IEEE754}} binary64 (or the size
+    corresponding to the encoding indicator), and the precision will be
+    adjusted to binary64 before further applying Preferred Serialization
+    (or to the size corresponding to the encoding indicator).
+    Tag 4/5 representations are not generated in these cases.
+    Future app-prefixes could be defined to allow more control for
+    obtaining a tag 4/5 representation directly from a hex or decimal
+    floating point literal.
 
 6. {: #spec} `spec` stands for an encoding indicator.
   See {{encoding-indicators}} for details.
