@@ -50,9 +50,6 @@
 {:unnumbered}
 
 {:compact hangindent="11"}
-{{tab-ei}}:
-: {{<<tab-ei}}
-
 {{tab-numbers}}:
 : {{<<tab-numbers}}
 
@@ -67,6 +64,12 @@
 
 {{tab-equiv-hash}}:
 : {{<<tab-equiv-hash}}
+
+{{tab-float}}:
+: {{<<tab-float}}
+
+{{tab-ei}}:
+: {{<<tab-ei}}
 
 {{tab-prefixes}}:
 : {{<<tab-prefixes}}
