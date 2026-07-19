@@ -151,7 +151,7 @@ The Concise Binary Object Representation (CBOR) (RFC8949) {{STD94}}
 In addition to the binary interchange format, the original CBOR specification
     described a text-based "diagnostic notation" ({{Section 6 of
     RFC7049}}, now {{Section 8 of RFC8949@-cbor}}), in
-    order to be able to converse about CBOR data items without having
+    order to facilitate conversation about CBOR data items without having
     to resort to binary data.
 {{Appendix G of -cddl}} extended this into what also became known as
 Extended Diagnostic Notation (EDN), often including {{Section 4.2 of
@@ -166,12 +166,13 @@ The interchange format created by standardizing CDN is not intended to
 compete with the actual binary interchange format CBOR, but enables
 the use of a shared diagnostic notation in tools for and in documents
 about CBOR.
-Still, between tools for CBOR development and diagnosis, document
+However, between tools for CBOR development and diagnosis, document
 generation systems, continuous integration (CI)
 environments, configuration files, and user interfaces for viewing and
-editing for all these, CDN is often "interchanged" and therefore
-merits a specification that facilitates interoperability within this
-domain as well as reliable translation to and from CBOR.
+editing for all these, CDN is often "interchanged".
+Therefore, CDN deserves a specification that facilitates
+interoperability within this domain and reliable translation to and
+from CBOR.
 CDN is not designed or intended for general-purpose use in protocol
 elements exchanged between systems engaged in processes outside those
 listed here.
@@ -187,13 +188,13 @@ in specifications that use CDN.
 It also specifies two registry-based extension points for the
 diagnostic notation:
 one for additional encoding indicators, and
-one for adding application-oriented literal forms.
+one for adding application-oriented "prefixed" literal forms.
 It uses these registries to add encoding indicators for a more
 complete coverage of encoding variation,
-and to add application-oriented literal forms that enhance CDN with text
+and to add prefixed literal forms that enhance CDN with text
 representations of epoch-based date/times, of IP addresses
 and prefixes {{-iptag}}, and of Concise Resource Identifiers (CRI
-{{-cri}}), as well as an application-oriented literal that
+{{-cri}}), as well as a prefixed literal that
 represents cryptographic hash values computed from byte strings.
 
 In addition, this document registers a media type identifier
@@ -234,27 +235,16 @@ and learning complexity.
 
 ## Structure of This Document
 
-{{diagnostic-notation}} of this document has been built from {{Section 8
-of RFC8949@-cbor}} and {{Section G of RFC8610}}.
-The latter provided a number of useful extensions to the initial
-diagnostic notation that was originally defined in {{Section 6 of -old-cbor}}.
-{{Section 8 of RFC8949@-cbor}} and {{Section G of RFC8610}} have
-collectively been called "Extended Diagnostic Notation" (EDN),
-now simplified as "Concise Diagnostic Notation" (CDN) giving
-the present document its name.
-
+{{diagnostic-notation}} of this document 
+defines CDN.
 After introductory material, {{app-ext}}
-illustrates the concept of application-oriented extension literals by
-defining a number of application-extensions.
+illustrates the concept of prefixed literals by
+defining a number of them in application-extensions.
 {{cdn-tags}} defines mechanisms
-for dealing with unknown application-oriented literals and
+for dealing with unknown prefixes as well as
 deliberately elided information.
-{{grammars}} gives the formal syntax of CDN in ABNF, with
-explanations for some features of and additions to this syntax, as an
-overall grammar ({{grammar}}) and specific grammars for the content of
-app-string and byte-string literals ({{app-grammars}}).
-This is followed by the conventional sections
-for
+{{grammars}} gives the formal syntax of CDN in ABNF.
+This is followed by the conventional sections for
 {{<<sec-iana}} ({{<sec-iana}}),
 {{<<seccons}} ({{<seccons}}),
 and References ({{<sec-normative-references}}, {{<sec-informative-references}}).
@@ -263,22 +253,7 @@ An informational comparison of CDN with CDDL follows in
 
 ## Terminology and Conventions {#terminology}
 
-{{Section 8 of RFC8949@-cbor}} defines the original CBOR diagnostic notation,
-and {{Appendix G of -cddl}} supplies a number of extensions to the
-diagnostic notation that form the basis for what is now the Concise Diagnostic Notation
-(CDN).
-The diagnostic notation extensions include popular features such as
-embedded CBOR (encoded CBOR data items in byte strings) and comments.
-A simple diagnostic notation extension that enables representing CBOR
-sequences was added in {{Section 4.2 of -seq}}.
-As at
-least some elements of the extended form are now near-universally
-used, the terms "diagnostic notation" and "extended diagnostic
-notation" have become synonyms in the context of CBOR, with "concise
-diagnostic notation" (CDN) now the preferred synonym, hinting at
-knowledge of this updated specification.
-
-In a similar vein, the term "ABNF" in this document refers to the
+The term "ABNF" in this document refers to the
 language defined in {{-abnf}} as extended in {{-abnfcs}}, where the
 "characters" of {{Section 2.3 of RFC5234@-abnf}} are Unicode scalar
 values.
