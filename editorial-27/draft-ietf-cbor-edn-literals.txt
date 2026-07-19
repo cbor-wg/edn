@@ -3991,13 +3991,14 @@ Internet-Draft      Concise Diagnostic Notation (CDN)          July 2026
 
 List of Tables
 
-   Table 7:   Examples of Definite Length Encoding Indicators for
-              Different Data Items
    Table 1:   Example Sets of Equivalent Notations for Some Numbers
    Table 2:   Encoding indicators on floating point values
    Table 3:   dt and DT literals vs. plain CDN
    Table 4:   ip and IP literals vs. plain CDN
    Table 5:   hash literals vs. plain CDN
+   Table 6:   Examples for use of float Extension
+   Table 7:   Examples of Definite Length Encoding Indicators for
+              Different Data Items
    Table 8:   App-prefix Values Defined in this Document
    Table 9:   Initial Content of app-extension Identifier Registry
    Table 10:  Initial Content of Encoding Indicator Registry
@@ -4022,7 +4023,6 @@ Author's Address
    Germany
    Phone: +49-421-218-63921
    Email: cabo@tzi.org
-
 
 
 
