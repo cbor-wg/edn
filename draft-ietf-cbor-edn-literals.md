@@ -138,7 +138,7 @@ addresses and prefixes.
     (This cref will be removed by the RFC editor:)\\
     This is the editorial round that should lead to -27, focusing on editorial cleanup, specifically where that causes moving text around.
     It does not have WG input yet on any renaming decisions (CDN name, b1/t1 name).
-    
+
 --- middle
 
 Introduction        {#intro}
@@ -235,7 +235,7 @@ and learning complexity.
 
 ## Structure of This Document
 
-{{diagnostic-notation}} of this document 
+{{diagnostic-notation}} of this document
 defines CDN.
 After introductory material, {{app-lit}} further
 illustrates the concept of prefixed literals by
