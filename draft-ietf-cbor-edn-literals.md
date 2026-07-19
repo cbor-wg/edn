@@ -239,7 +239,7 @@ and learning complexity.
 defines CDN.
 After introductory material, {{app-ext}}
 illustrates the concept of prefixed literals by
-defining a number of them in application-extensions.
+defining a number of them in app-extensions.
 {{cdn-tags}} defines mechanisms
 for dealing with unknown prefixes as well as
 deliberately elided information.
@@ -356,7 +356,7 @@ or even deviating from the basic
 configuration in some systematic way, can further assist in comparing
 test data.
 Information obtained from a CDDL model can help in choosing
-application-oriented literals or specific string representations such
+prefix literals or specific string representations such
 as embedded CBOR or `b64''` in the appropriate places.
 
 ### Evolution {#evolution}
@@ -382,7 +382,7 @@ diagnostic value of fully escaped characters may be desired or in
 environments where non-ASCII characters may not enjoy full data
 transparency.
 Similar to JSON, CDN is designed to allow a simple tool to convert any
-CDN (including CDN with application extensions unknown to the tool)
+CDN (including CDN with app-extensions unknown to the tool)
 into a fully escaped (printable ASCII and newlines only) form, as well
 as to inversely recover unescaped characters for all escapes where
 this is possible or for certain subsets of the characters (such as
@@ -453,7 +453,7 @@ Validity of CBOR data items is discussed in {{Section 5.3 of RFC8949@-cbor}},
 with basic validity discussed in {{Section 5.3.1 of RFC8949@-cbor}}, and
 tag validity discussed in {{Section 5.3.2 of RFC8949@-cbor}}.
 Tag validity is more likely a subject for individual
-application-oriented extensions, while the two cases of basic validity
+app-extensions, while the two cases of basic validity
 (for text strings and for maps) are addressed in Sections
 {{<text-validity}} and {{<map-validity}} under the heading
 of *validity*.
@@ -468,15 +468,14 @@ Any additional detailed syntax discussion needed has been deferred to
 Additional information about implementation and use of CDN is
 continuously being collected by the community in {{CDN-WIKI}}.
 
-## Application-Oriented Extension Literals {#app-lit}
+## Prefixed Literals {#app-lit}
 
 CDN provides _literals_ that represent CBOR data items textually.
 Many of the forms of literals provided are predefined by this
 document, but it also defines an extension point that enables defining additional
-_application-oriented extension literals_, or _extension literals_ for short.
-
-Extension literals start with a _prefix_ that identifies the
-application-oriented extension, immediately followed by a sequence
+_application-oriented extension literals_.
+These are also known as _prefixed literals_, as they start with a _prefix_ that identifies the
+application-oriented extension and possibly a specific variant of that, immediately followed by a sequence
 literal ({{embedded}}) or a single-quoted or raw string literal ({{strings}}).
 The string-based forms use their string literal as a shorthand
 form for a sequence literal representing a sequence with exactly that
@@ -494,32 +493,32 @@ base64url).
 > This syntax can be thought to establish a name space, with the names
 "h", "b32", "h32", and "b64" taken, but other names being unallocated.
 The present specification allows registering additional names for this namespace,
-which it calls *application-extension identifiers*.
+which it calls *app-extension identifiers*.
 
-More precisely, an *application-extension identifier* is a registered name consisting of a
+More precisely, an *app-extension identifier* is a registered name consisting of a
 lowercase ASCII letter (`[a-z]`) and zero or more additional ASCII
 characters that are either lowercase letters, digits, or hyphens (`[a-z0-9-]`).
 »false«, »true«, »null«, and »undefined« cannot be used as such
 identifiers and are reserved.
 
-Application-extension identifiers are registered in the "Application-Extension Identifiers" registry
+app-extension identifiers are registered in the "App-Extension Identifiers" registry
 ({{appext-iana}}).
 
-An application-extension (such as `dt`) MAY also define the meaning of
-one additional prefix derived from its application-extension identifier by
+An app-extension (such as `dt`) MAY also define the meaning of
+one additional prefix derived from its app-extension identifier by
 replacing each lowercase character by its uppercase counterpart (such
 as `DT`).
 As a convention, using the all-uppercase variant implies making use of
-a CBOR tag appropriate for this application-oriented extension (such
+a CBOR tag appropriate for this app-extension (such
 as tag number 1 for `DT`, where in contrast the prefix `dt` stands for
 the unwrapped tag content).
 
-In summary, an application-extension identifier gives rise to one or two
-application-extension prefixes, one that is lexically identical to the
+In summary, an app-extension identifier gives rise to one or two
+prefixes, one that is lexically identical to the
 identifier (i.e., all lowercase), and potentially another one that is an
 all-uppercase variation of it.
 In addition to specifying which of these two variations exhibits which
-specific semantics, the application extension specifies what input the
+specific semantics, the app-extension specifies what input the
 extension takes.
 
 When the prefix is used immediately in front of a single-quoted or a raw
@@ -529,7 +528,7 @@ When used immediately in front of a sequence literal, the input is a
 CBOR sequence of elements of the sequence literal as input.
 (For a single parameter, this is equivalent to receiving a single CBOR
 data item as the argument.)
-The application extension can provide behavior that depends on the
+The app-extension can provide behavior that depends on the
 number of items supplied as input to it and their data types; it
 cannot distinguish between its prefix being used with a single-quoted
 string, a raw string, or a CBOR sequence composed of a single text
@@ -537,14 +536,14 @@ string data item (as illustrated for instance in Tables {{<tab-equiv-dt}},
 {{<tab-equiv-ip}}, and {{<tab-equiv-hash}}).
 
 This specification defines a number of generally applicable
-application-oriented extensions ({{app-ext}}), both to motivate
+app-extensions ({{app-ext}}), both to motivate
 making these extensions generally available, and to illustrate the
 concept.
 
-Of these, the application-oriented extensions `h`, `b64`, `t1`, `b1`, `dt` and `ip` are
+Of these, the app-extensions `h`, `b64`, `t1`, `b1`, `dt` and `ip` are
 mandatory to implement.
-(As mentioned, for simplicity we use the term "application-oriented
-extensions" for the mechanism discussed in this section even if it is
+(As mentioned, for simplicity we use the term "app-extensions" for the
+mechanism discussed in this section even if it is
 used to describe a part of base CDN.)
 
 ## Comments {#comments}
@@ -616,16 +615,16 @@ A CDN file used for configuration might look like this (employing
 
 {:aside}
 >
-Note that application-oriented extensions can define their own
+Note that app-extensions can define their own
 internal comment syntaxes for text inside strings, which may or may
 not mimic the overall comment syntax of CDN.
-The h'' syntax ({{h-grammar}}), which the framework for application-oriented
-extensions was designed to include as an instance, provides an
+The h'' syntax ({{h-grammar}}), which the framework for app-extensions
+was designed to include as an instance, provides an
 equivalent to the overall comment syntax inside its text strings.
 Similarly, b64'' ({{b64-grammar}}) provides a subset of that limited to
 "`#`" end-of-line comments (the slash character "`/`" is used in the
 alphabet in classic base64 encoding).
-None of the other application-oriented extensions supplied in this
+None of the other app-extensions supplied in this
 specification provides for such a kind of internal comment syntax.
 
 ### Discussion {#comment-discussion}
@@ -764,7 +763,7 @@ truncation or rounding that would change the data item encoded.
 >
 Truncation or rounding semantics imply performing changes at the data
 model level, which is outside the scope of encoding indicators.
-Such operations can be provided by application extensions.
+Such operations can be provided by app-extensions.
 
 The encoding indicator `_` (an underscore on its own) is used to
 indicate indefinite-length encoding.
@@ -885,7 +884,7 @@ See {{decnumber}} for additional details of the CDN number syntax.
 
 (Note that literals for further number formats, e.g., for representing
 rational numbers as fractions, or for other NaN values than the one called `NaN`, can
-be added as application-oriented literals.
+be added as app-extensions.
 Background information beyond that in {{-cbor}} about the representation
 of numbers in CBOR can be found in the informational document
 {{-numbers}}.)
@@ -903,23 +902,23 @@ single-quoted strings ({{sq-lit}}).
 The latter is useful for byte strings carrying
 bytes that can be meaningfully notated as UTF-8 text.
 
-Many strings are best notated as extension literals, which may
+Many strings are best notated as prefixed literals, which may
 provide detailed access to the bits within those bytes (see
 {{encoded-byte-strings}}).
-Using an application-extension
-prefix, extension literals can be constructed out of single-quoted strings and
+Using an app-extension
+prefix, prefixed literals can be constructed out of single-quoted strings and
 raw strings, as well as sequence literals (cf. {{app-lit}}).
 
-### No Special String Concatenation Syntax {#concat-removed}
+<aside markdown="1">
 
-Before extension literals were added to diagnostic notation, {{Appendix
+{: #concat-removed}
+Before prefixed literals were turned into a general extension point for diagnostic notation, {{Appendix
 G.4 of -cddl}} added a syntax for concatenating strings by just
 juxtaposing them.
 This syntax was not widely implemented and is problematic in the
-presence of optional commas; it is now entirely removed from CDN.
-(Previous revisions of the present document proposed yet another
-alternative syntax; this is now entirely withdrawn and replaced by
-application-extensions such as {{t1b1}}.)
+presence of optional commas; it is now entirely removed from CDN and replaced by app-extensions such as {{t1b1}}.
+
+</aside>
 
 ### Double-Quoted String Literals {#dq-lit}
 
@@ -981,7 +980,7 @@ string literals are available in single-quoted string literals.
 
 Single-quoted string literals can occur unprefixed and stand for the
 byte string that encodes its text string value (the "content"), or be
-prefixed by what looks like an application-extension prefix (see
+prefixed by what looks like an app-extension prefix (see
 {{app-lit}}).
 
 In a prefixed string literal, the text content of the single-quoted
@@ -992,13 +991,13 @@ not be, a byte string value.
 
 Prefixed string literals (whether single-quoted after the
 prefix or a raw string ({{raw-lit}})) are used both for base-encoded byte string literals (see {{encoded-byte-strings}}) and for
-application-oriented extension literals (see {{app-lit}}, called app-string).
+prefixed literals (see {{app-lit}}, called app-string).
 (Additional kinds of base-encoded string literals can be defined as
-application-oriented extension literals by registering their prefixes;
-there is no fundamental difference between the two predefined
+prefixed literals by registering their prefixes;
+there is no fundamental difference between the original two predefined
 base-encoded string literal prefixes (`h`, `b64`) and any such potential
 future extension literal prefixes; for simplicity of expression, both
-cases are referred to as "extension literals".)
+cases are referred to as "prefixed literals".)
 
 ### Raw String Literals {#raw-lit}
 
@@ -1124,8 +1123,8 @@ need to be notated as `(_ '')`, `(_ "")`, etc.,
 when it is desired to preserve the chunk structure.
 
 With this document, the `streamstring` syntax is now deprecated; new
-CDN documents should instead use the `ilbs`/`ilts` application
-extensions ({{ilxs}}) to build indefinite-length encoded strings.
+CDN documents should instead use the `ilbs`/`ilts` app-extensions
+({{ilxs}}) to build indefinite-length encoded strings.
 
 ### Base-Encoded Byte String Literals {#encoded-byte-strings}
 
@@ -1134,10 +1133,10 @@ extensions ({{ilxs}}) to build indefinite-length encoded strings.
 [^move2]: This section will move to new subsections of Section 3.
 
 Besides the unprefixed byte string literals that are analogous to JSON text
-string literals, CDN provides extension literals that can represent
+string literals, CDN provides prefixed literals that can represent
 byte strings by base-encoding them, typically notated as prefixed
 string literals.
-The application-extension identifier selects one of the base encodings
+The app-extension identifier selects one of the base encodings
 {{-base}}, without padding.
 Most often, the base encoding is
 enclosed in a single-quoted or raw string literal, prefixed by »h« for base16 or
@@ -1155,7 +1154,7 @@ base32 and »h32« for base32hex.
 This has not been implemented widely
 and therefore is not directly included in this specification.
 These and further byte string formats now can easily be added back as
-application-oriented extension literals.)
+prefixed literals.)
 
 Examples often benefit from some blank space (spaces, line breaks) in
 byte strings literals.
@@ -1200,16 +1199,16 @@ which is the same as `h'968C2C'`.
 
 In diagnostic notation, a sequence of zero or more CBOR data item literals can
 be enclosed in `<<` and `>>` and separated by comma or blank space, optionally prefixed by an
-application-extension prefix; this specification speaks of *sequence literals*.
+app-extension prefix; this specification speaks of *sequence literals*.
 CDN mainly deals with individual data items, not with CBOR sequences
 {{-seq}}, so the CBOR sequence represented by the sequence literal needs
 to be further processed to obtain the value of the literal.
 
-Prefixed sequence literals refer to the application extension (see
+Prefixed sequence literals refer to the app-extension (see
 {{app-lit}}) identified by the prefix and apply the extension to its
 sequence content, resulting in a single data item.
 This data item may be a string or not (always), depending on
-the definition of the application extension.
+the definition of the app-extension.
 
 An unprefixed sequence literal applies CBOR encoding to the
 data items in its content, taken as a CBOR sequence.
@@ -1238,11 +1237,11 @@ For instance, each pair of columns in the following are equivalent:
 ~~~~
 
 For prefixed sequence literals, the processing of encoding indicators
-on the arguments can be defined by the application extension being
+on the arguments can be defined by the app-extension being
 used.
 See {{ilxs}} for an example of where this is done.
-Encoding indicators on the arguments are ignored if the application
-extension does not define their handling.
+Encoding indicators on the arguments are ignored if the app-extension
+does not define their handling.
 
 ### Validity of Text Strings {#text-validity}
 
@@ -1259,7 +1258,7 @@ Double-quoted, single-quoted, and raw string literals have been defined
 such that they lead to byte sequences that are UTF-8: the source
 language of CDN is UTF-8, and all escaping mechanisms lead only to
 adding further UTF-8 characters.
-Only application-extensions (invoked in prefixed literals) can
+Only app-extensions (invoked in prefixed literals) can
 generate non-UTF-8 byte sequences.
 
 As discussed at the start of {{diagnostic-notation}}, CDN
@@ -1413,18 +1412,18 @@ indicates major type 7, value 42, and »`simple(20)`« indicates
 
 
 
-Application-Oriented Extension Literals {#app-ext}
+Prefixed Literals {#app-ext}
 =======================================
 
 This document extends the syntax used in diagnostic notation to also
-enable application-oriented extensions ({{app-lit}}).
-This section defines a number of application-oriented extensions.
+enable app-extensions ({{app-lit}}).
+This section defines a number of app-extensions.
 
 
 Date and Time: The "dt" Extension {#dt}
 ------------------
 
-The application-extension identifier "dt" is used to notate a
+The app-extension identifier "dt" is used to notate a
 date/time literal that can be used as an Epoch-Based Date/Time as per
 {{Section 3.4.2 of RFC8949@-cbor}}.
 
@@ -1441,7 +1440,7 @@ In the all-uppercase variant of the app-prefix, the value is enclosed
 in a tag number 1.
 
 Each row of {{tab-equiv-dt}} shows an example of "dt" notation and
-equivalent notation not using an application-extension identifier.
+equivalent notation not using a prefixed literal.
 
 | dt literal                   | plain CDN      |
 |------------------------------|----------------|
@@ -1461,7 +1460,7 @@ See {{dt-grammar}} for an ABNF definition for the text string input of `dt` lite
 IP Addresses and Related Structures: The "ip" Extension {#ip}
 ------------------
 
-The application-extension identifier "ip" is used to notate an IP
+The app-extension identifier "ip" is used to notate an IP
 address literal that can be used as an IP address as per {{Section 3 of
 -iptag}}.
 
@@ -1483,7 +1482,7 @@ For completeness, the lowercase variant `ip'2001:db8::/56'` or  `ip'192.0.2.0/24
 an unwrapped `[56,h'20010db8']` or `[24,h'c00002']`; however, in this case the information
 on whether an address is IPv4 or IPv6 often needs to come from the context.
 
-Note that this application-extension provides no direct representation
+Note that this app-extension provides no direct representation
 of the "Interface format"
 defined in {{Section 3.1.3 of -iptag}}, an address combined with an
 optional prefix length and an optional zone identifier, and therefore
@@ -1495,7 +1494,7 @@ interface format with zone identifier 42 as in
 `54([ip'fe80::0202:02ff:ffff:fe03:0303',64,42])`.)
 
 Each row of {{tab-equiv-ip}} shows an example of "ip" notation and
-equivalent notation not using an application-extension identifier.
+equivalent notation not using a prefixed literal.
 
 | ip literal          | plain CDN                                 |
 |---------------------|-------------------------------------------|
@@ -1514,7 +1513,7 @@ See {{ip-grammar}} for an ABNF definition for the content of `ip` literals.
 Cryptographic Hash Values: The "hash" Extension {#hash}
 --------------------
 
-The application-extension identifier "hash" is used to notate the
+The app-extension identifier "hash" is used to notate the
 input to a cryptographic hash function as well as to identify such a hash
 function.
 Its value is a byte string that represents the output of that
@@ -1529,7 +1528,7 @@ by its name used in the registry.
 If the second item is not given, the default algorithm used is -16
 ("SHA-256").
 
-No uppercase variant prefix is defined for the application-extension
+No uppercase variant prefix is defined for the app-extension
 identifier "hash".
 
 | hash literal               | plain CDN                                                                                                                              |
@@ -1548,10 +1547,10 @@ String Concatenation: The "b1" and "t1" Extensions {#t1b1}
 [^t1b1name]
 
 [^t1b1name]: This section uses the placeholders t1 and b1 as provisional
-    application extension names, allowing the text to stabilize while
+    app-extension identifiers, allowing the text to stabilize while
     the actual names are still being decided by the WG.
 
-The "b1" and "t1" Extensions allow a (byte or text) string to be built
+The "b1" and "t1" app-extensions allow a (byte or text) string to be built
 up from multiple (byte or text) string literals; these are then
 concatenated into a single string.
 
@@ -1579,7 +1578,7 @@ inside a sequence of concatenated text string notation literals, to
 encode characters that may be better represented in an encoded way.
 
 This is realized by simply joining together the bytes in the
-sequence of string arguments to the b1/t1 application extension,
+sequence of string arguments to the b1/t1 app-extension,
 proceeding from left to right.
 
 For "b1", the joining operation results in a byte string.
@@ -1617,7 +1616,7 @@ following rules:
 Creating Indefinite-length Encoded Strings: The "ilbs" and "ilts" Extensions {#ilxs}
 ----------------------------------------------------------------------------
 
-The `ilbs` and `ilts` application extensions are semantically
+The `ilbs` and `ilts` app-extensions are semantically
 identical to `t1` and `b1` at the data model level, but instead of
 concatenating the arguments to a single (byte/text) string data item,
 they build an indefinite length string out of the arguments, with one
@@ -1626,9 +1625,9 @@ chunk of the correct major type (byte string/text string for
 
 A diagnostic implementation would honor encoding indicators on each of
 the arguments, creating a chunk with the same encoding.
-As the application-extension is implying indefinite length encoding,
+As the app-extension is implying indefinite length encoding,
 there is no point in applying an encoding indicator to the entire
-application-extension literal.
+prefixed literal.
 
     'Hello world'                4b 48656c6c6f20776f726c64
     ilbs<<>>                     5f ff
@@ -1642,7 +1641,7 @@ Concise Resource Identifiers: The "cri" Extension {#cri}
 --------------------
 
 The
-application-extension identifier "`cri`" is used to notate
+app-extension identifier "`cri`" is used to notate
 a CDN literal for a CRI reference as defined in {{-cri}}.
 
 The input of the literal is a URI Reference as per {{-uri}} or an IRI
@@ -1678,15 +1677,15 @@ See {{cri-grammar}} for an ABNF definition for the content of `cri` literals.
 
 <!-- IEEE754-oriented literals for more floating point values -->
 
-The "`float`" application extension enables the notation of 2-byte,
+The "`float`" app-extension enables the notation of 2-byte,
 4-byte, and 8-byte byte strings to express floating point values
 (mt=7, ai=25/26/27 respectively) by giving their IEEE 754
 representation.
 A text string used as an argument is interpreted exactly as a hex
-literal (like the `h` application prefix); the result is used as the
+literal (like the `h` prefix); the result is used as the
 byte string.
 
-The application-oriented literal is interpreted as an encoded data
+The prefixed literal is interpreted as an encoded data
 item would be that prefixes the byte string by a single byte 0xF9
 (2 bytes, i.e., binary16), 0xFA (4 bytes, i.e., binary32), and 0xFB (8
 bytes, i.e., binary64), respectively.
@@ -1708,7 +1707,7 @@ Example (tool used: `edn-abnf -afloat -e`):
 ~~~
 {: post="fold"}
 
-The purpose of this application extension is to close a gap in CDN's
+The purpose of this app-extension is to close a gap in CDN's
 {{IEEE754}} binary64 support:
 Without this (or a similar) extension there is no way to represent NaN
 values different from the one called out at the end of {{Section 4.1 of
@@ -1726,7 +1725,7 @@ represent the CBOR data intended for eventual interchange.
 This document defines a CBOR tags-based representation for two such cases:
 
 * The CDN consumer does not know (or does not implement) an
-  application-extension identifier used in the CDN document
+  app-extension identifier used in the CDN document
   ({{unknown}}) but wants to preserve the information for a later
   processor.
 
@@ -1746,26 +1745,26 @@ specific processing options (e.g., command line flags) are given that
 indicate which of these CDN-related tags are expected at this stage in the
 chain.
 
-Handling unknown application-extension identifiers {#unknown}
+Handling unknown app-extension identifiers {#unknown}
 --------------------------------------------------
 
-When ingesting CDN,
-application-oriented extension literals are usually decoded and
-transformed into the corresponding data item during ingestion.
-If an application-extension is not known or not implemented by the
+During ingestion of CDN,
+prefixed literals are usually decoded and
+transformed into the corresponding data item.
+If an app-extension is not known or not implemented by the
 ingesting process, this is usually an error and processing has to
 stop.
 
 However, in certain cases, it can be desirable to exceptionally carry an
-uninterpreted application-oriented extension literal in an ingested
+uninterpreted app-extension literal in an ingested
 data item, allowing to postpone its decoding to a specific later
 stage of ingestion.
 
 This specification defines a CBOR Tag for this purpose:
-The Diagnostic Notation Unresolved Application-Extension Tag, tag
+The Diagnostic Notation Unresolved App-Extension Tag, tag
 number CPA999 ({{iana-tags}}).
 The content of this tag is an array of a text string for the
-application-extension prefix, and another array:
+app-extension prefix, and another array:
 
 * For app-strings, the second array contains a single item, a text
 string containing the text notated by the single-quoted string in the
@@ -1782,9 +1781,9 @@ For example, `cri'https://example.com'` can be represented as
 <!-- edn-abnf -fe 'hash<<"data", -44>>' -->
 
 If a stage of ingestion is not prepared to handle the Unresolved
-Application-Extension Tag, this is an error and processing has to
+App-Extension Tag, this is an error and processing has to
 stop, as if this stage had been ingesting an unknown or unimplemented
-application-extension literal itself.
+app-extension literal itself.
 
 [^cpa]
 
@@ -1864,7 +1863,7 @@ Elisions also can be used as part of a (text or byte) string:
 ~~~
 
 The examples "contract" and "bytes_in_IRI" combine (text and byte)
-string concatenation via the t1/b1 application extension ({{t1b1}}) with an
+string concatenation via the t1/b1 app-extension ({{t1b1}}) with an
 ellipsis.
 The example
 "signature" uses special syntax that allows the use of ellipses
@@ -1904,7 +1903,7 @@ ABNF Definitions {#grammars}
 
 This section collects grammars in ABNF form ({{-abnf}} as extended in
 {{-abnfcs}}) that serve to define the syntax of CDN and some
-application-oriented literals.
+prefixed literals.
 
 {:aside}
 >
@@ -1932,7 +1931,7 @@ with the rule name `app-string-p`.
 
 As an implementation note, some implementations may want to integrate
 the parsing and processing of app-string content for certain
-application extensions with the overall grammar.
+app-extensions with the overall grammar.
 Example grammars for such integrated parsers are provided with this
 specification in {{integrated-grammars}}.
 </aside>
@@ -2038,16 +2037,16 @@ The following additional items should help in the interpretation:
   >      alikerawdelim = rawdelim&{|(rd)|rd.text_value.length == @rdlen}
 
 
-ABNF Definitions for Application Extension Content {#app-grammars}
+ABNF Definitions for App-Extension Content {#app-grammars}
 ---------------------------------------
 
 This subsection provides ABNF definitions for the content of
-application-oriented extension literals defined in {{-cbor}} and in this
+prefixed literals defined in {{-cbor}} and in this
 specification, where applicable.
 These grammars describe the *decoded* content of the single-quoted or
 raw string components that
-combine with the application-extension identifiers used as prefixes to form
-application-oriented extension literals.
+combine with prefixes to form
+prefixed literals.
 Each of these may integrate ABNF rules defined in {{abnf-grammar}},
 which are not always repeated here.
 
@@ -2076,7 +2075,7 @@ which are not always repeated here.
 {: #tab-prefixes title="App-prefix Values Defined in this Document"}
 
 Note that implementation platforms may already provide implementations
-of grammars used in application-extensions, such as of RFC 3339 for
+of grammars used in app-extensions, such as of RFC 3339 for
 `dt''` and of IP address syntax for `ip''`.
 CDN-based tools may want to use these implementation libraries instead
 of using the grammars that are provided here as a reference.
@@ -2245,7 +2244,7 @@ title="ABNF Definition of Textual Representation of an IP Address"}
 
 ### cri: ABNF Definition of URI Representation of a CRI {#cri-grammar}
 
-It can be expected that implementations of the application-extension
+It can be expected that implementations of the app-extension
 identifier "`cri`" will make use of platform-provided URI
 implementations, which will include a URI parser.
 
@@ -2360,7 +2359,7 @@ parsers for the content of some prefixed string literals into
 the main parser, handling both the string literal syntax (e.g., escapes such
 as `\'` and `\\`) and the syntax of the extension content in one go.
 
-For application-extensions that only use printable ASCII characters
+For app-extensions that only use printable ASCII characters
 (from U+0020 to U+007E) minus single-quote `'` and backslash `\`, the ABNF
 such as that given in {{app-grammars}} can be directly used as an
 integrated parser, after adding some glue ABNF.
@@ -2409,7 +2408,7 @@ TWOHEX1  = ("8"/"9" / HEXDIGA) HEXDIG / "7F"
 {: #abnf-grammar-sq sourcecode-name="cdn-intcommon.abnf"
 title="ABNF Definitions Useful for Integrated Extension Parsers"}
 
-Similarly, for integrated parsers for extension literals built from raw strings, the ABNF
+Similarly, for integrated parsers for prefixed literals built from raw strings, the ABNF
 definitions in {{abnf-grammar-rs}} can be useful.
 `alikerawdelim` only matches sequences of backquotes that are exactly as
 long as a previous `startrawdelim`.
@@ -2422,11 +2421,11 @@ title="ABNF Definitions Useful for Raw String Integrated Extension Parsers"}
 
 Four subsections with ABNF for integrated parsers follow, a pair for
 `h''` and `b64''`, and a pair for ``` h`` ``` and ``` b64`` ```.
-There is no expectation for a new application-extension to supply ABNF
+There is no expectation for a new app-extension to supply ABNF
 for an integrated parser (or any ABNF at all!), in particular if the
 parsing function is likely to be fulfilled by a platform library.
 If ABNF for the content of a single-quoted string is available in an
-application-extension specification, ABNF for an integrated parser can
+app-extension specification, ABNF for an integrated parser can
 be written as a separate activity or also automatically derived (see
 also {{CDN-WIKI}}, where more information about implementing integrated
 parsers is being collected).
@@ -2546,22 +2545,22 @@ IANA Considerations {#sec-iana}
     reference to the new registry group, and remove this note.
 
 
-## Concise Diagnostic Notation Application-extension Identifiers Registry {#appext-iana}
+## Concise Diagnostic Notation App-extension Identifiers Registry {#appext-iana}
 
-IANA is requested to create an "Application-Extension Identifiers"
+IANA is requested to create an "App-Extension Identifiers"
 registry in a new "Concise Diagnostic Notation" registry group
 \[IANA.concise-diagnostic-notation], with the policy "expert review"
 ({{Section 4.5 of RFC8126@-ianacons}}).
 
 The experts are instructed to be frugal in the allocation of
-application-extension identifiers that are suggestive of generally applicable semantics,
-keeping them in reserve for application-extensions that are likely to enjoy wide
+app-extension identifiers that are suggestive of generally applicable semantics,
+keeping them in reserve for app-extensions that are likely to enjoy wide
 use and can make good use of their conciseness.
 The experts are also instructed to direct the registrant to provide a
 specification ({{Section 4.6 of RFC8126@-ianacons}}), but can make exceptions,
 for instance when a specification is not available at the time of
 registration but is likely forthcoming.
-If the experts become aware of application-extension identifiers that are deployed and
+If the experts become aware of app-extension identifiers that are deployed and
 in use, they may also initiate a registration on their own if
 they deem such a registration can avert potential future collisions.
 {: #de-instructions}
@@ -2569,11 +2568,11 @@ they deem such a registration can avert potential future collisions.
 Each entry in the registry must include:
 
 {:vspace}
-Application-Extension Identifier:
+App-Extension Identifier:
 : a lowercase ASCII {{-ascii}} string that starts with a letter and can
   contain letters, digits, and hyphens after that (`[a-z][a-z0-9-]*`).
   No other entry in the registry can have the same
-  application-extension identifier.
+  app-extension identifier.
 
 Description:
 : a brief description
@@ -2583,13 +2582,13 @@ Change Controller:
 
 Reference:
 : a reference document that provides a description of the
-  application-extension identifier
+  app-extension identifier
 
 
 The initial content of the registry is shown in {{tab-iana}}; all
 initial entries have the Change Controller "IETF".
 
-| Application-extension Identifier | Description                     | Reference        |
+| app-extension identifier | Description                     | Reference        |
 |----------------------------------|---------------------------------|------------------|
 | h                                | Reserved                        | RFC8949          |
 | b32                              | Reserved                        | RFC8949          |
@@ -2607,7 +2606,7 @@ initial entries have the Change Controller "IETF".
 | t1                               | Text String Concatenation       | RFC-XXXX         |
 | cri                              | Constrained Resource Identifier | RFC-XXXX, {{-cri}} |
 | float                            | Floating-Point Value            | RFC-XXXX         |
-{: #tab-iana title="Initial Content of Application-extension
+{: #tab-iana title="Initial Content of app-extension
 Identifier Registry"}
 
 ## Encoding Indicators {#reg-ei}
@@ -2646,7 +2645,7 @@ Change Controller:
 
 Reference:
 : a reference document that provides a description of the
-  application-extension identifier
+  app-extension identifier
 
 
 The initial content of the registry is shown in {{tab-iana-ei}}; all
@@ -2780,7 +2779,7 @@ specification reference.
 
 | Tag    | Data Item     | Semantics                                            | Reference |
 | CPA888 | null or array | Diagnostic Notation Ellipsis                         | RFC-XXXX  |
-| CPA999 | array         | Diagnostic Notation<br>Unresolved Application-Extension | RFC-XXXX  |
+| CPA999 | array         | Diagnostic Notation<br>Unresolved App-Extension | RFC-XXXX  |
 {: #tab-tag-values cols='r l l' title="Values for Tags"}
 
 
@@ -2794,7 +2793,7 @@ Security considerations documented in {{-cddl}} for the CDDL language
 often are also applicable to the CDN language in an analogous sense.
 
 The CDN specification defines two explicit extension points:
-application-extension identifiers ({{appext-iana}}) and encoding
+app-extension identifiers ({{appext-iana}}) and encoding
 indicators ({{reg-ei}}).
 Extensions introduced through these can have their own security
 considerations, which need to be considered in the specification for
@@ -2812,9 +2811,9 @@ is not on an allowlist.
 (This task can possibly be made less onerous by combining it with a
 mechanism for supplying any parameters that control such an extension.)
 
-Tools that process application extensions — directly from their use in
+Tools that process app-extensions — directly from their use in
 CDN or later via Tag CPA999 ({{unknown}}) — need to be configured out of
-band to enable processing each specific application extension only if
+band to enable processing each specific app-extension only if
 that is desired.
 An allowlist built out of the mandatory-to-implement application
 extensions may be an exception.
