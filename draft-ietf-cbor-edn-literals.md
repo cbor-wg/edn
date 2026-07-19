@@ -903,7 +903,6 @@ provide additional motivation why this is a good way to handle the
 various cases.)
 
 
-
 ### CBOR Sequence Literals {#embedded}
 
 In diagnostic notation, a sequence of zero or more CBOR data item literals can
