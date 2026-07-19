@@ -240,6 +240,11 @@ defines CDN.
 After introductory material, {{app-ext}}
 illustrates the concept of prefixed literals by
 defining a number of them in app-extensions.
+{{encoding-indicators}} describes syntax that can be interpreted by a
+diagnostic implementation to take note/take control of which of
+possibly several encoding variants is in use for a data item; this
+syntax always includes an underscore ("`_`") and therefore visually
+easy to ignore.
 {{cdn-tags}} defines mechanisms
 for dealing with unknown prefixes as well as
 deliberately elided information.
@@ -670,143 +675,6 @@ instead of the previously conventional, but often less familiar
 4 / HMAC 256//64 /
 ~~~
 
-## Encoding Indicators {#encoding-indicators}
-
-Sometimes it is useful to indicate in the diagnostic notation which of
-several alternative CBOR representations are actually used; for example, a
-data item written »1.5« by a diagnostic decoder might have been
-encoded in CBOR as a half-, single-, or double-precision float.
-
-Encoding indicators are always optional:
-CDN is usually used to describe CBOR data items at the data model
-level.
-For some diagnostic purposes, it is useful to represent the choice of
-a serialization variation by including encoding indicators.
-Implementations of CDN generally do not need to provide this
-functionality in full; if they do, they can be called "diagnostic
-implementations".
-To be able to process CDN that contains encoding indicators,
-a CDN-consuming implementation MUST accept them (i.e., process or
-ignore the presence or absence of each encoding indicator).
-It is RECOMMENDED to provide a warning for each encoding
-indicator value that is encountered but not further processed.
-
-When creating CDN as input for a diagnostic CBOR encoder in order to
-obtain specific encoding choices, encoding indicators may be placed
-manually or by the software generating the CDN.
-Where no encoding indicator is placed, a diagnostic CBOR encoder is expected to
-generate Preferred Serialization ({{Section 4.1 of RFC8949@-cbor}}) with
-definite-length encoding only.
-Similarly, when using CDN as output for a diagnostic CBOR decoder, a
-basic diagnostic configuration of the tool is expected to provide
-encoding indicators only in places where the CBOR input did not use
-Preferred Serialization with definite-length encoding (see also
-{{basic}}).
-Diagnostic implementations of CDN that process encoding indicators as
-discussed here are expected to document their diagnostic behavior and
-the processing options that can be selected.
-
-### Syntax, Semantics, Examples
-
-Encoding indicators start with
-an underscore and comprise all immediately following characters that are alphanumeric or
-underscore.
-For example, `_` or `_3`.
-Encoding indicators can be ignored by anyone not
-interested in this information.
-
-Encoding indicators are placed immediately to the right of the data
-item or of a syntactic feature that can stand for the data item the
-encoding of which the encoding indicator is controlling.
-{{tab-ei}} provides examples for data items with definite length
-encoding indicators used with various kinds of data items ("mt" = major
-type, "ignoring e.i." = example encoding when ignoring the encoding indicators).
-Examples for encoding indicators controlling indefinite length
-encoding can be found in the context of explanations in {{ei-string}}
-and {{ei-container}}.
-
-| mt | examples               | encoding (in hex)             | ignoring e.i.     |
-|  0 | `1_1`<br>`0x4711_3`       | 190001<br>1b0000000000004711     | 01<br>194711         |
-|  1 | `-1_1`                 | 390000                        | 20                |
-|  2 | `'A'_1`                | 59000141                      | 4141              |
-|  3 | `"A"_1`                | 79000161                      | 6161              |
-|  4 | `[_1 "bar"]`           | 99000163626172                | 8163626172        |
-|  5 | `{_1 "bar": 1}`        | b900016362617201              | a16362617201      |
-|  6 | `1_1(4711)`            | d90001191267                  | c1191267          |
-|  7 | `1.5_2`<br>`0x4711p+03_3` | fa3fc00000<br>fb4101c44000000000 | f93e00<br>fa480e2200 |
-{: #tab-ei title="Examples of Definite Length Encoding Indicators for
-Different Data Items"}
-
-(In the following, an abbreviation of the form `ai=`nn gives nn as
-the numeric value of the field _additional information_, the low-order 5
-bits of the initial byte: see {{Section 3 of RFC8949@-cbor}}.
-This field is used in encoding the "argument", i.e., the value, tag, or
-length; `ai=0` to `ai=23` mean that the value of the `ai` field
-immediately *is* the argument, `ai=24` to `ai=27` mean that the
-argument is carried in 2<sup>ai-24</sup> (1, 2, 4, or 8)
-additional bytes, and `ai=31` means that indefinite-length
-encoding is used.)
-
-An underscore followed by a decimal digit `n` indicates that the
-item was or is to be encoded with an additional information
-value of `ai=`24+`n`.
-(The item associated to the encoding indicator may be the preceding
-item, or, for arrays and maps, the item starting with the
-preceding bracket or brace.)
-For an example involving floating point values ({{Section 3.3 of RFC8949@-cbor}}),
-`1.5_1` is a half-precision floating-point
-number (2<sup>1</sup> = 2 additional bytes or 16 bits), while `1.5_3` is encoded as
-double precision (2<sup>3</sup> = 8 additional bytes or 64 bits).
-For a tool consuming CDN in a diagnostic mode, encountering an
-encoding indicator that does not provide enough space to correctly
-encode the unchanged data item given is an error; there is no
-truncation or rounding that would change the data item encoded.
-
-{:aside}
->
-Truncation or rounding semantics imply performing changes at the data
-model level, which is outside the scope of encoding indicators.
-Such operations can be provided by app-extensions.
-
-The encoding indicator `_` (an underscore on its own) is used to
-indicate indefinite-length encoding.
-Indefinite-length encoding uses `ai=31`, which could have been
-indicated by `_7`, which is therefore not used and marked as reserved
-(as are `_4`, `_5`, and `_6`, which would stand for `ai=28` to
-`ai=30`, values currently not in use in CBOR; these encoding
-indicators will be available if and when CBOR is extended to make use
-of them).
-
-Note that the encoding indicator `_` is only available behind the opening
-brace/bracket for `map` and `array` ({{ei-container}}): strings
-originally had a now deprecated special syntax
-`streamstring` for indefinite-length encoding except for the special
-cases `''_` and `""_` ({{ei-string}}).
-
-The encoding indicators `_0` to `_3` indicate `ai=24`
-to `ai=27`, respectively; they therefore stand for 1, 2, 4, and 8
-bytes of additional information (ai) following the initial byte in the
-head of the data item.
-
-Surprisingly, {{Section 8.1 of RFC8949@-cbor}} does not address `ai=0` to
-`ai=23` — the assumption seems to have been that Preferred Serialization
-({{Section 4.1 of RFC8949@-cbor}}) will be used when converting CBOR
-diagnostic notation to an encoded CBOR data item, so leaving out the
-encoding indicator for a data item with a Preferred Serialization
-will implicitly use `ai=0` to `ai=23` if that is possible.
-The present specification allows making this explicit:
-
-`_i` ("immediate") stands for encoding with `ai=0` to `ai=23`, i.e.,
-it indicates that the argument is encoded directly in the initial byte
-of the CBOR item.
-
-Encoding indicators are an extension point for CDN; {{reg-ei}} defines
-a registry for additional values.
-
-Specific forms of encoding indicators are discussed in further detail
-in {{ei-string}} for the deprecated syntax for indefinite-length strings
-and in {{ei-container}} for arrays and maps.
-
 ## Numbers
 
 <!--
@@ -856,9 +724,13 @@ written in JavaScript, although JSON does not allow them).
 `NaN` in CDN stands for the NaN value with a zero sign bit and an all-zero
 significand except for a set quiet bit; this is represented as
 `F9 7E 00` in CBOR Preferred Serialization.
-{{tab-float-encoding}} shows how the floating point numbers 1.1, 1.5 and
+
+<aside markdown="1">
+
+{{tab-float-encoding}} shows how the floating point numbers 1.1, 1.5
+and how
 these three values are encoded in preferred serialization and when
-encoding indicators are given.
+encoding indicators (please see {{encoding-indicators}}) are given.
 
 <!-- $ edn-abnf -e '1.5, 1.5_1, 1.5_2, 1.5_3' -tcbor | cborseq2pretty.rb
  -->
@@ -882,6 +754,8 @@ encoding indicators are given.
 | `NaN_3`                    | `fb 7ff8000000000000` |
 {: #tab-float-encoding title="Encoding indicators on floating
 point values" }
+
+</aside>
 
 See {{decnumber}} for additional details of the CDN number syntax.
 
@@ -1096,41 +970,6 @@ additional rules work; more complex examples would be necessary to
 provide additional motivation why this is a good way to handle the
 various cases.)
 
-
-### Deprecated: Indefinite-length Encoding Indicators for Strings {#ei-string}
-
-[^move1]
-
-[^move1]: This section will move to 2.3.2; it is left here at the
-    moment for easier comparison.
-
-In CBOR, indefinite-length encoded (byte or text) strings are composed of
-"chunks" ({{Section 3.2.3 of RFC8949@-cbor}}).
-
-The original diagnostic notation ({{Section 6.1 of -old-cbor}}) provided
-a special syntax `streamstring` for them, which was retained and
-further clarified in {{Section 8.1 of RFC8949@-cbor}}.
-This syntax represents the individual chunks in
-sequence within parentheses, each optionally followed by a comma, with
-an encoding indicator `_` immediately after the opening parenthesis:
-e.g., `(_ h'0123', h'4567')` or `(_ "foo", "bar")`.
-The overall type (byte string or text string) of the string is
-provided by the types of the individual chunks, which all need to be
-of the same type ({{Section 3.2.3 of RFC8949@-cbor}}).
-
-In this syntax, an indefinite-length string with no chunks inside, `(_ )`
-would be ambiguous as to whether a byte string (encoded `5f ff`) or a text string
-(encoded `7f ff`) is meant and is therefore not used.
-The basic forms `''_` and `""_` can be used instead and are reserved for
-the case of no chunks only — not as short forms for the (permitted,
-but not really useful) encodings with only empty chunks, which
-need to be notated as `(_ '')`, `(_ "")`, etc.,
-when it is desired to preserve the chunk structure.
-
-With this document, the `streamstring` syntax is now deprecated; new
-CDN documents should instead use the `ilbs`/`ilts` app-extensions
-({{ilxs}}) to build indefinite-length encoded strings.
-
 ### Base-Encoded Byte String Literals {#encoded-byte-strings}
 
 [^move2]
@@ -1231,6 +1070,7 @@ For instance, each pair of columns in the following are equivalent:
 ~~~~
 
 A diagnostic implementation is expected to honor encoding indicators
+(please see {{encoding-indicators}})
 on the individual items in the supplied sequence before assembling
 them into an encoded CBOR sequence.
 For instance, each pair of columns in the following are equivalent:
@@ -1345,19 +1185,6 @@ CDN, while »`[[][]]`« is not.
   In summary, comma use is now aligned between CDN and CDDL, in a
   fully backward compatible way.
   (CDDL does allow the stylistically questionable »`a = [[][]]`«, though.)
-
-### Encoding Indicators of Arrays and Maps {#ei-container}
-
-A single underscore can be written after the opening brace of a map or
-the opening bracket of an array to indicate that the data item was
-represented in indefinite-length format.  For example, `[_ 1, 2]`
-contains an indicator that an indefinite-length representation was
-used to represent the data item `[1, 2]`.
-
-At the same position, encoding indicators for specifying the size of
-the array or map head for definite-length format can be used instead,
-specifically `_i` or `_0` to `_3`.  For example, `[_0 false, true]` can be
-used to specify the encoding of the array `[false, true]` as `98 02 f4 f5`.
 
 ### Validity of Maps {#map-validity}
 
@@ -1630,7 +1457,7 @@ chunk of the correct major type (byte string/text string for
 
 A diagnostic implementation would honor encoding indicators on each of
 the arguments, creating a chunk with the same encoding.
-As the app-extension is implying indefinite length encoding,
+As the app-extension is already implying indefinite length encoding,
 there is no point in applying an encoding indicator to the entire
 prefixed literal.
 
@@ -1714,6 +1541,187 @@ values other than the NaN represented as 0xf97e00 (see {{Section 4.1 of
 RFC8949@-cbor}}).
 For finite floating point numbers, the decimal or hex floating point
 representations are preferred.
+
+
+# Encoding Indicators {#encoding-indicators}
+
+Sometimes it is useful to indicate in the diagnostic notation which of
+several alternative CBOR representations are actually used; for example, a
+data item written »1.5« by a diagnostic decoder might have been
+encoded in CBOR as a half-, single-, or double-precision float.
+
+Encoding indicators are always optional:
+CDN is usually used to describe CBOR data items at the data model
+level.
+For some diagnostic purposes, it is useful to represent the choice of
+a serialization variation by including encoding indicators.
+Implementations of CDN generally do not need to provide this
+functionality in full; if they do, they can be called "diagnostic
+implementations".
+To be able to process CDN that contains encoding indicators,
+a CDN-consuming implementation MUST accept them (i.e., process or
+ignore the presence or absence of each encoding indicator).
+It is RECOMMENDED to provide a warning for each encoding
+indicator value that is encountered but not further processed.
+
+When creating CDN as input for a diagnostic CBOR encoder in order to
+obtain specific encoding choices, encoding indicators may be placed
+manually or by the software generating the CDN.
+Where no encoding indicator is placed, a diagnostic CBOR encoder is expected to
+generate Preferred Serialization ({{Section 4.1 of RFC8949@-cbor}}) with
+definite-length encoding only.
+Similarly, when using CDN as output for a diagnostic CBOR decoder, a
+basic diagnostic configuration of the tool is expected to provide
+encoding indicators only in places where the CBOR input did not use
+Preferred Serialization with definite-length encoding (see also
+{{basic}}).
+Diagnostic implementations of CDN that process encoding indicators as
+discussed here are expected to document their diagnostic behavior and
+the processing options that can be selected.
+
+## Syntax, Semantics, Examples
+
+Encoding indicators start with
+an underscore and comprise all immediately following characters that are alphanumeric or
+underscore.
+For example, `_` or `_3`.
+Encoding indicators can be ignored by anyone not
+interested in this information.
+
+Encoding indicators are placed immediately to the right of the data
+item or of a syntactic feature that can stand for the data item the
+encoding of which the encoding indicator is controlling.
+{{tab-ei}} provides examples for data items with definite length
+encoding indicators used with various kinds of data items ("mt" = major
+type, "ignoring e.i." = example encoding when ignoring the encoding indicators).
+Examples for encoding indicators controlling indefinite length
+encoding can be found in the context of explanations in
+{{ei-container}} and {{ei-string}}.
+
+| mt | examples               | encoding (in hex)             | ignoring e.i.     |
+|  0 | `1_1`<br>`0x4711_3`       | 190001<br>1b0000000000004711     | 01<br>194711         |
+|  1 | `-1_1`                 | 390000                        | 20                |
+|  2 | `'A'_1`                | 59000141                      | 4141              |
+|  3 | `"A"_1`                | 79000161                      | 6161              |
+|  4 | `[_1 "bar"]`           | 99000163626172                | 8163626172        |
+|  5 | `{_1 "bar": 1}`        | b900016362617201              | a16362617201      |
+|  6 | `1_1(4711)`            | d90001191267                  | c1191267          |
+|  7 | `1.5_2`<br>`0x4711p+03_3` | fa3fc00000<br>fb4101c44000000000 | f93e00<br>fa480e2200 |
+{: #tab-ei title="Examples of Definite Length Encoding Indicators for
+Different Data Items"}
+
+(In the following, an abbreviation of the form `ai=`nn gives nn as
+the numeric value of the field _additional information_, the low-order 5
+bits of the initial byte: see {{Section 3 of RFC8949@-cbor}}.
+This field is used in encoding the "argument", i.e., the value, tag, or
+length; `ai=0` to `ai=23` mean that the value of the `ai` field
+immediately *is* the argument, `ai=24` to `ai=27` mean that the
+argument is carried in 2<sup>ai-24</sup> (1, 2, 4, or 8)
+additional bytes, and `ai=31` means that indefinite-length
+encoding is used.)
+
+An underscore followed by a decimal digit `n` indicates that the
+item was or is to be encoded with an additional information
+value of `ai=`24+`n`.
+(The item associated to the encoding indicator may be the preceding
+item, or, for arrays and maps, the item starting with the
+preceding bracket or brace.)
+For an example involving floating point values ({{Section 3.3 of RFC8949@-cbor}}),
+`1.5_1` is a half-precision floating-point
+number (2<sup>1</sup> = 2 additional bytes or 16 bits), while `1.5_3` is encoded as
+double precision (2<sup>3</sup> = 8 additional bytes or 64 bits).
+For a tool consuming CDN in a diagnostic mode, encountering an
+encoding indicator that does not provide enough space to correctly
+encode the unchanged data item given is an error; there is no
+truncation or rounding that would change the data item encoded.
+
+{:aside}
+>
+Truncation or rounding semantics imply performing changes at the data
+model level, which is outside the scope of encoding indicators.
+Such operations can be provided by app-extensions.
+
+The encoding indicator `_` (an underscore on its own) is used to
+indicate indefinite-length encoding.
+Indefinite-length encoding uses `ai=31`, which could have been
+indicated by `_7`, which is therefore not used and marked as reserved
+(as are `_4`, `_5`, and `_6`, which would stand for `ai=28` to
+`ai=30`, values currently not in use in CBOR; these encoding
+indicators will be available if and when CBOR is extended to make use
+of them).
+
+Note that the encoding indicator `_` is only available behind the opening
+brace/bracket for `map` and `array` ({{ei-container}}): strings
+originally had a now deprecated special syntax
+`streamstring` for indefinite-length encoding except for the special
+cases `''_` and `""_` ({{ei-string}}).
+
+The encoding indicators `_0` to `_3` indicate `ai=24`
+to `ai=27`, respectively; they therefore stand for 1, 2, 4, and 8
+bytes of additional information (ai) following the initial byte in the
+head of the data item.
+
+{{Section 8.1 of RFC8949@-cbor}} does not address `ai=0` to
+`ai=23` — the assumption seems to have been that Preferred Serialization
+({{Section 4.1 of RFC8949@-cbor}}) will be used when converting CBOR
+diagnostic notation to an encoded CBOR data item, so leaving out the
+encoding indicator for a data item with a Preferred Serialization
+will implicitly use `ai=0` to `ai=23` if that is possible.
+The present specification allows making this explicit:
+
+`_i` ("immediate") stands for encoding with `ai=0` to `ai=23`, i.e.,
+it indicates that the argument is encoded directly in the initial byte
+of the CBOR item.
+
+Encoding indicators are an extension point for CDN; {{reg-ei}} defines
+a registry for additional values.
+
+Specific forms of encoding indicators are discussed in further detail
+in {{ei-container}} for arrays and maps and in {{ei-string}} for the
+deprecated syntax for indefinite-length strings.
+
+## Encoding Indicators of Arrays and Maps {#ei-container}
+
+A single underscore can be written after the opening brace of a map or
+the opening bracket of an array to indicate that the data item was
+represented in indefinite-length format.  For example, `[_ 1, 2]`
+contains an indicator that an indefinite-length representation was
+used to represent the data item `[1, 2]`.
+
+At the same position, encoding indicators for specifying the size of
+the array or map head for definite-length format can be used instead,
+specifically `_i` or `_0` to `_3`.  For example, `[_0 false, true]` can be
+used to specify the encoding of the array `[false, true]` as `98 02 f4 f5`.
+
+## Deprecated: Indefinite-length Encoding Indicators for Strings {#ei-string}
+
+In CBOR, indefinite-length encoded (byte or text) strings are composed of
+"chunks" ({{Section 3.2.3 of RFC8949@-cbor}}).
+
+The original diagnostic notation ({{Section 6.1 of -old-cbor}}) provided
+a special syntax `streamstring` for them, which was retained and
+further clarified in {{Section 8.1 of RFC8949@-cbor}}.
+This syntax represents the individual chunks in
+sequence within parentheses, each optionally followed by a comma, with
+an encoding indicator `_` immediately after the opening parenthesis:
+e.g., `(_ h'0123', h'4567')` or `(_ "foo", "bar")`.
+The overall type (byte string or text string) of the string is
+provided by the types of the individual chunks, which all need to be
+of the same type ({{Section 3.2.3 of RFC8949@-cbor}}).
+
+In this syntax, an indefinite-length string with no chunks inside, `(_ )`
+would be ambiguous as to whether a byte string (encoded `5f ff`) or a text string
+(encoded `7f ff`) is meant and is therefore not used.
+The basic forms `''_` and `""_` can be used instead and are reserved for
+the case of no chunks only — not as short forms for the (permitted,
+but not really useful) encodings with only empty chunks, which
+need to be notated as `(_ '')`, `(_ "")`, etc.,
+when it is desired to preserve the chunk structure.
+
+With this document, the `streamstring` syntax is now deprecated; new
+CDN documents should instead use the `ilbs`/`ilts` app-extensions
+({{ilxs}}) to build indefinite-length encoded strings.
+
 
 
 Tag-based Representations of CDN Input in Binary CBOR {#cdn-tags}
