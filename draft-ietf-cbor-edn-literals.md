@@ -136,25 +136,9 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    -26 is intended to address the May/June 2026
-    Working Group Last Call comments on `-25` and the ensuing WG discussions.\\
-    Specifically, this update:\\
-    • is going further with the idea to entirely replace the non-backwards
-    compatible update considered for the RFC 8610/G.4 concatenation by two new
-    application extensions (temporarily named `b1`/`t1`), and to add
-    related application-oriented extensions
-    that deprecate the original `streamstring` syntax.\\
-    • includes the float'' application-extension so that the entire
-    CBOR format can be covered.\\
-    • now uses rules closer to those of markdown for handling data
-      transparency in raw strings, simplifying their implementation.\\
-    • adds security considerations.\\
-    • proactively reserves the application-extension identifier
-      "pragma" for potential future standardization.
-    • This update does not address certain comments that propose some
-    editorial restructuring requiring moving text around; this is best
-    done in a next revision after the technical comments are addressed.
-
+    This is the editorial round that should lead to -27, focusing on editorial cleanup, specifically where that causes moving text around.
+    It does not have WG input yet on any renaming decisions (CDN name, b1/t1 name).
+    
 --- middle
 
 Introduction        {#intro}
