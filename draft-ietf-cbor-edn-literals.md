@@ -136,8 +136,8 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    This is the editorial round that should lead to -27, focusing on editorial cleanup, specifically where that causes moving text around.
-    It does not have WG input yet on any renaming decisions (CDN name, b1/t1 name).
+    This is the editorial round focusing on editorial cleanup, specifically where that causes moving text around.\\
+    It does not have WG input yet on any renaming decisions (CDN name, b1/t1 name), ABNF cleanup, or Rohan's suggestion to fix the questionable figure in {{<floating-point-values-float}}.
 
 --- middle
 

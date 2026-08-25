@@ -65,9 +65,6 @@
 {{tab-equiv-hash}}:
 : {{<<tab-equiv-hash}}
 
-{{tab-float}}:
-: {{<<tab-float}}
-
 {{tab-ei}}:
 : {{<<tab-ei}}
 
