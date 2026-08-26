@@ -11,7 +11,7 @@ ellipsis        = 3*"." ; "..." or more dots
 number          = (hexfloat / hexint / octint / binint
                    / decnumber / nonfin) spec
 sign            = "+" / "-"
-decnumber       = [sign] (1*DIGIT ["." *DIGIT] / "." 1*DIGIT)
+decnumber       = [sign] (("0" / DIGIT1 *DIGIT) ["." *DIGIT] / "." 1*DIGIT)
                          ["e" [sign] 1*DIGIT]
 hexfloat        = [sign] "0x" (1*HEXDIG ["." *HEXDIG] / "." 1*HEXDIG)
                          "p" [sign] 1*DIGIT
