@@ -117,6 +117,7 @@ informative:
   CDN-WIKI:
     target: https://github.com/cbor-wg/edn/wiki
     title: CDN Wiki
+  XSD2: W3C.REC-xmlschema11-2-20120405
 
 --- abstract
 
@@ -136,8 +137,8 @@ addresses and prefixes.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    This is the editorial round focusing on editorial cleanup, specifically where that causes moving text around.\\
-    It does not have WG input yet on any renaming decisions (CDN name, b1/t1 name), ABNF cleanup, or Rohan's suggestion to fix the questionable figure in {{<floating-point-values-float}}.
+    This is a pull request relative to `-27`, avoiding the octal
+    ambiguity to C-style numbers.
 
 --- middle
 
@@ -623,10 +624,34 @@ interpreted as CBOR integers (major type 0/1, or where the number
 cannot be represented in this way, major type 6 with tag 2/3).
 A leading "`+`" sign is a no-op, and a leading "`-`" sign inverts the
 sign of the number.
-So `0`, `000`, `+0` all represent the same integer zero, as does `-0`.
+So `0` and `+0` represent the same integer zero, as does `-0`.
 Similarly,
-`1`, `001`, `+1` and `+0001` all stand for the same positive integer one, and
-`-1` and `-0001` both designate the same negative integer minus one.
+`1` and `+1` stand for the same positive integer one, and
+`-1` designates the negative integer minus one.
+
+<aside markdown="1">
+
+<!-- `(\+|-)?([0-9]+(\.[0-9]*)?|\.[0-9]+)([Ee](\+|-)?[0-9]+)?` -->
+
+In addition to being a superset of JSON decimal numbers, the grammar
+for decimal (base-10) numbers is inspired by similar grammars, such as
+those for `decimal` and `double` in Sections {{XSD2}}{: section="3.3.3"
+relative="#decimal" sectionFormat="bare"} and {{XSD2}}{: section="3.3.5"
+relative="#double" sectionFormat="bare"} of {{XSD2}}.
+Such grammars typically allow removing as well as adding insignificant zero
+digits from/to a number representation that would be well-formed in
+JSON.
+However, there is one pitfall: the original C language convention for
+indicating octal numbers simply precedes the octal number with a leading
+zero digit.
+When copying data from and to data sources that use this convention,
+there would be ambiguity (e.g., in C, `030` is the number 24 decimal,
+but in other languages the number 30 decimal); in effect, the semantics of numbers
+with leading zeros often silently differ.
+Therefore, the CDN grammar restricts the grammar to not allow any
+leading zeros in the integer part, except for a single digit zero.
+
+</aside>
 
 Using a decimal point (`.`) and/or an exponent (`e` for decimal, `p`
 for hexadecimal) turns the number into a floating point number (part
