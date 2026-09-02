@@ -646,7 +646,7 @@ indicating octal numbers simply precedes the octal number with a leading
 zero digit.
 When copying data from and to data sources that use this convention,
 there would be ambiguity (e.g., in C, `030` is the number 24 decimal,
-but in XSD the number 30 decimal); in effect, the semantics of numbers
+but in other languages the number 30 decimal); in effect, the semantics of numbers
 with leading zeros often silently differ.
 Therefore, the CDN grammar restricts the grammar to not allow any
 leading zeros in the integer part, except for a single digit zero.
